@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dressly — YouTube Comment Intelligence Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F3EE;
+    --card: #F0EAE1;
+    --border: #DDD5CC;
+    --brown: #3B2F25;
+    --brown-mid: #6B5548;
+    --brown-light: #C4B5A8;
+    --green: #4CAF72;
+    --green-light: #E8F5EE;
+    --red-light: #FDE8E8;
+    --red-text: #8B2020;
+    --purple-light: #EEEDFE;
+    --purple-text: #3C3489;
+    --amber-light: #FEF3E2;
+    --amber-text: #7A4500;
+    --teal-light: #E1F5EE;
+    --teal-text: #0A5F43;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--brown);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--brown);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    color: var(--bg);
+    font-size: 22px;
+    letter-spacing: 0.02em;
+  }
+  .logo span { color: var(--green); }
+  .header-meta {
+    font-size: 12px;
+    color: var(--brown-light);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 52px 40px 36px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .hero-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brown-mid);
+    margin-bottom: 12px;
+  }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.15;
+    color: var(--brown);
+    margin-bottom: 16px;
+    max-width: 680px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--brown-mid);
+  }
+  .hero-desc {
+    font-size: 15px;
+    color: var(--brown-mid);
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+
+  /* ── STATS ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+    padding: 0 40px;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+  }
+  .stat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: var(--brown);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-lbl {
+    font-size: 12px;
+    color: var(--brown-mid);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── CONTROLS ── */
+  .controls-wrap {
+    max-width: 1100px;
+    margin: 0 auto 28px;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .ctrl-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brown-mid);
+    margin-right: 6px;
+  }
+  .fbtn {
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--brown-mid);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-weight: 400;
+  }
+  .fbtn:hover { border-color: var(--brown); color: var(--brown); }
+  .fbtn.on { background: var(--brown); color: var(--bg); border-color: var(--brown); }
+
+  /* ── COLUMN HEADERS ── */
+  .col-headers {
+    max-width: 1100px;
+    margin: 0 auto 8px;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 52px 1fr 1fr 1fr 1fr;
+    gap: 0 12px;
+  }
+  .col-h {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    padding: 0 4px;
+  }
+  .col-h:first-child { grid-column: 1 / 3; }
+
+  /* ── INSIGHTS ── */
+  .insights-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .insight {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .insight:hover { border-color: var(--brown-light); }
+  .insight.open { border-color: var(--brown); }
+
+  /* Row header */
+  .ihead {
+    display: grid;
+    grid-template-columns: 52px 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .inum {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--card);
+    color: var(--brown);
+    font-size: 13px;
+    font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .insight.open .inum { background: var(--brown); color: var(--bg); }
+
+  .ititle-wrap {}
+  .ititle {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--brown);
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+  .isource {
+    font-size: 11px;
+    color: var(--brown-light);
+  }
+
+  .ibadge {
+    font-size: 10px;
+    padding: 4px 11px;
+    border-radius: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .b-fit  { background: var(--red-light);    color: var(--red-text); }
+  .b-col  { background: var(--purple-light); color: var(--purple-text); }
+  .b-emo  { background: var(--amber-light);  color: var(--amber-text); }
+  .b-sty  { background: var(--teal-light);   color: var(--teal-text); }
+  .b-sz   { background: #FEF0E8;             color: #7A3000; }
+
+  .ichev {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    color: var(--brown-mid);
+    flex-shrink: 0;
+    transition: transform 0.2s, background 0.15s;
+  }
+  .insight.open .ichev { transform: rotate(180deg); background: var(--brown); color: var(--bg); }
+
+  /* Expanded body — 4 columns */
+  .ibody {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+  .ibody.open {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .icell {
+    padding: 18px 20px;
+    border-right: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--brown-mid);
+  }
+  .icell:last-child { border-right: none; }
+  .clabel {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brown-light);
+    margin-bottom: 10px;
+  }
+
+  /* Voice quote */
+  .quote {
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--brown);
+    border-left: 2.5px solid var(--brown);
+    border-radius: 0;
+    padding-left: 12px;
+    margin-bottom: 8px;
+  }
+  .ysource {
+    font-size: 11px;
+    color: var(--brown-light);
+    margin-top: 4px;
+  }
+
+  /* Brand gap */
+  .gap-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 10px;
+    background: var(--red-light);
+    color: var(--red-text);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  /* Feature pill */
+  .feat-pill {
+    display: inline-block;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 10px;
+    background: var(--card);
+    color: var(--brown);
+    font-weight: 500;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+
+  /* Hook text */
+  .hook {
+    font-style: italic;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--brown);
+    line-height: 1.55;
+    margin-bottom: 12px;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  /* CTA pill */
+  .cta-pill {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: var(--green);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* Visual box */
+  .vis-box {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--brown);
+    line-height: 1.65;
+    border: 1px solid var(--border);
+  }
+  .vis-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--brown-light);
+    margin-bottom: 6px;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    padding: 0 40px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .legend-label {
+    font-size: 11px;
+    color: var(--brown-light);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--brown-mid);
+  }
+  .leg-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--brown);
+    padding: 28px 40px;
+    text-align: center;
+  }
+  .footer-text {
+    font-size: 12px;
+    color: var(--brown-light);
+    letter-spacing: 0.04em;
+  }
+  .footer-text strong { color: var(--bg); font-weight: 500; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .site-header { padding: 0 20px; }
+    .hero { padding: 36px 20px 24px; }
+    .stats-row { grid-template-columns: 1fr 1fr; padding: 0 20px; }
+    .controls-wrap { padding: 0 20px; }
+    .col-headers { display: none; }
+    .insights-wrap { padding: 0 20px 60px; }
+    .ihead { grid-template-columns: 44px 1fr auto; }
+    .ibadge { display: none; }
+    .ibody.open { grid-template-columns: 1fr; }
+    .icell { border-right: none; border-bottom: 1px solid var(--border); }
+    .icell:last-child { border-bottom: none; }
+    .legend { padding: 0 20px; }
+    .site-footer { padding: 24px 20px; }
+  }
+
+  @media (max-width: 500px) {
+    .stats-row { grid-template-columns: 1fr; }
+  }
+
+  /* Hidden util */
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">Dressly<span>.</span></div>
+  <div class="header-meta">YouTube Comment Intelligence — UA Creative Brief</div>
+</header>
+
+<section class="hero">
+  <div class="hero-label">Senior UA Strategist · Simulated deep-dive</div>
+  <h1 class="hero-title">10 <em>recurring complaints</em> from fashion YouTube comments — women 35–60</h1>
+  <p class="hero-desc">Simulated from high-engagement comment threads across channels: Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style. Each insight maps the raw voice to a brand gap, a Dressly hook, and a first-3-second visual trigger.</p>
+</section>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-val">10</div>
+    <div class="stat-lbl">Insights mapped</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val">5</div>
+    <div class="stat-lbl">Friction categories</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val">5</div>
+    <div class="stat-lbl">Dressly features activated</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val">35–60</div>
+    <div class="stat-lbl">Target demographic</div>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="legend-label">Categories:</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#FDE8E8;border:1px solid #c8a0a0"></span>Fit &amp; sizing</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#EEEDFE;border:1px solid #a0a0d0"></span>Color &amp; aging</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#FEF3E2;border:1px solid #d0b870"></span>Emotional</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#E1F5EE;border:1px solid #80c8a8"></span>Styling skill</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#FEF0E8;border:1px solid #d0a080"></span>Shopping fails</span>
+</div>
+
+<div class="controls-wrap">
+  <span class="ctrl-label">Filter:</span>
+  <button class="fbtn on" onclick="filterBy('all',this)">All 10</button>
+  <button class="fbtn" onclick="filterBy('fit',this)">Fit &amp; sizing</button>
+  <button class="fbtn" onclick="filterBy('col',this)">Color &amp; aging</button>
+  <button class="fbtn" onclick="filterBy('emo',this)">Emotional</button>
+  <button class="fbtn" onclick="filterBy('sty',this)">Styling skill</button>
+  <button class="fbtn" onclick="filterBy('sz',this)">Shopping fails</button>
+</div>
+
+<div class="col-headers" aria-hidden="true">
+  <div class="col-h" style="grid-column:1/3">Insight + literal voice</div>
+  <div class="col-h">Brand gap</div>
+  <div class="col-h">Dressly hook + CTA</div>
+  <div class="col-h">Visual trigger (first 3 sec)</div>
+</div>
+
+<div class="insights-wrap" id="insights-list">
+
+  <!-- 1 -->
+  <article class="insight" data-cat="fit">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">1</div>
+      <div class="ititle-wrap">
+        <div class="ititle">The arm coverage problem — "why does every sleeve end at the worst possible place?"</div>
+        <div class="isource">Alyssa Beltempo · Justine Leconte · "how to dress over 40" threads</div>
+      </div>
+      <div class="ibadge b-fit">Fit &amp; sizing</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"Every top I find either has no sleeves at all or full length — why is there literally no in-between for those of us who just want to cover our upper arms without looking like a nun?"</div>
+        <div class="ysource">Simulated from Busbee Style / Alyssa Beltempo comment threads — arm coverage is a top-5 complaint in over-40 fashion videos</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">Zara / Mango / H&amp;M</div>
+        Sleeve proportions are designed on a size 8 fit model, 5'9". Elbow-length sleeves hit differently on shorter arms or fuller biceps. Brands never show sleeve placement on diverse arm proportions. Zero filtering exists for "arm-friendly" styles at point of purchase.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">Body scanner + Virtual try-on</div>
+        <div class="hook">"Finally found tops that hit at the right spot. The app scans my arms and only shows sleeves that actually flatter."</div>
+        <div><span class="cta-pill">Find arm-friendly styles in 60 sec</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Close-up of a woman's arm in a cap sleeve stopping mid-bicep — her face in the mirror: grimace. Hard cut to Dressly showing her exact arm measurement overlaid on a sleeve-length filter. Reveal: elbow-length top, her face: relief.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="insight" data-cat="fit">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">2</div>
+      <div class="ititle-wrap">
+        <div class="ititle">Hem length chaos — "midi hits my calf wrong on every single body"</div>
+        <div class="isource">Justine Leconte · Erin Elizabeth · "midsize fashion over 40" threads</div>
+      </div>
+      <div class="ibadge b-fit">Fit &amp; sizing</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"Every 'flattering midi' video shows it on someone 5'8" — on my 5'4" frame it hits exactly at the widest part of my calf and makes me look like a sausage. Why does no one show this?"</div>
+        <div class="ysource">Simulated from Justine Leconte / Erin Elizabeth comments — hem length is a recurring thread in every petite/midsize over-40 video</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">Mango / Zara / &amp; Other Stories</div>
+        Midi skirts are hemmed for a single height. "Petite" lines are shortened uniformly, not re-proportioned. Websites show one model height. Zero leg-to-torso ratio filtering exists anywhere online.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">Body scanner + Virtual try-on</div>
+        <div class="hook">"The app told me exactly which hem length works for my height and leg ratio. No more calf disasters."</div>
+        <div><span class="cta-pill">See your ideal hem length free</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Side-by-side: same midi skirt on 5'8" model (elegant) vs. woman 5'4" in same skirt (calf-widening). Text overlay: "Same skirt. Completely different result." Cut to Dressly showing personalized hem recommendation.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="insight" data-cat="col">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">3</div>
+      <div class="ititle-wrap">
+        <div class="ititle">The "black is aging me but I own nothing else" trap</div>
+        <div class="isource">Color analysis channels · "why black is aging you" · Justine Leconte</div>
+      </div>
+      <div class="ibadge b-col">Color &amp; aging</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"I just realized 80% of my wardrobe is black because I thought it was slimming and sophisticated — and now I find out it's washing me out and ageing me by 10 years. I feel completely betrayed by every fashion rule I ever followed."</div>
+        <div class="ysource">Simulated from color analysis YouTube comment sections — this is consistently the most-pinned comment type in color analysis videos</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">All fast fashion brands</div>
+        Brands never show how garment colors interact with skin tone — they show one model on a white background. "Slimming black" is a blanket rule that actively damages women with warm or light undertones. No color-to-skin-tone guidance exists at point of purchase.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">Color scanner</div>
+        <div class="hook">"I spent 20 years in black thinking it was elegant. One color scan changed everything — and I look 10 years younger."</div>
+        <div><span class="cta-pill">Scan your colors — takes 90 seconds</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Woman's face split-screen: left in black top (dull, drawn), right in her recommended color (radiant, lifted). No filter, no makeup change — just color. Text: "Same woman. 2 minutes apart." Highest-probability scroll-stopper for 45+ on Meta.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="insight" data-cat="col">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">4</div>
+      <div class="ititle-wrap">
+        <div class="ititle">The "I got professionally color analyzed and now I can't shop" paradox</div>
+        <div class="isource">"I got my colors done" videos · r/coloranalysis · Alyssa Beltempo</div>
+      </div>
+      <div class="ibadge b-col">Color &amp; aging</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"I paid £180 for a color analysis session, found out I'm a Soft Summer, and now I cannot shop because everything online is described as 'blue' not 'muted dusty blue' and I have no idea if it qualifies. Knowledge without a tool to use it is useless."</div>
+        <div class="ysource">Simulated from color analysis video comments — a top-3 frustration in every "I got my colors done" video with 100K+ views</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">All online retailers</div>
+        Color descriptions are marketing language, not spectral reality. "Navy" means six different things. No retailer maps its catalog to seasonal palettes. The £150+ color analysis investment becomes stranded without a shopping filter that understands palette nuance.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">Color scanner</div>
+        <div class="hook">"I spent £180 on color analysis and still couldn't shop. Dressly finally made that knowledge usable — it filters everything to my exact palette."</div>
+        <div><span class="cta-pill">Put your color palette to work</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Woman holds up her color drapes / palette card from her analysis session — looking confused at her phone showing a product labeled just "blue." Cut to Dressly filtering a shopping feed showing only palette-matched results highlighted in green.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 5 -->
+  <article class="insight" data-cat="emo">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">5</div>
+      <div class="ititle-wrap">
+        <div class="ititle">"Dressing for my age" vs. "dressing for my soul" — the false choice</div>
+        <div class="isource">Busbee Style · "dressing for your age vs soul" · r/AskWomenOver30</div>
+      </div>
+      <div class="ibadge b-emo">Emotional</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"I'm 51, I love bold prints, and everyone keeps telling me to 'dress my age' like I should be wearing beige linen and sensible shoes. My soul is 32. My body is 51. I need someone to help me thread that needle without looking like I'm trying too hard or completely giving up."</div>
+        <div class="ysource">Simulated from Busbee Style / Erin Elizabeth comments — "dress your age vs soul" framing generates the highest comment volume on this demographic's channels</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">Talbots / Chico's / M&amp;S</div>
+        "Mature" brands assume age = conservative. Fast fashion assumes youth = bold. Nobody serves the 50-year-old who wants a printed blazer to a board meeting. The market forces a false binary between frumpy and try-hard — with no middle path.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">AI stylist chat</div>
+        <div class="hook">"I told the AI I love bold prints but hate looking like I'm trying too hard at 52. It found the exact balance I'd been searching for for years."</div>
+        <div><span class="cta-pill">Describe your style — AI finds the balance</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Two racks: left labeled "dress your age" (beige, shapeless), right "dress your soul" (bold, chaotic). Woman stands between them, arms crossed. Cut to Dressly generating a third option — bold but sophisticated. Her face: "yes."
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 6 -->
+  <article class="insight" data-cat="emo">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">6</div>
+      <div class="ititle-wrap">
+        <div class="ititle">The "invisible woman" syndrome — dressing to be seen again</div>
+        <div class="isource">"Invisible woman syndrome fashion" · r/AskWomenOver30 · Erin Elizabeth</div>
+      </div>
+      <div class="ibadge b-emo">Emotional</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"I walked into a shop last week and the 22-year-old assistant looked right through me. I used to turn heads. Now I'm furniture. I don't know when it happened, but I want it back — I just don't know how."</div>
+        <div class="ysource">Simulated from "invisible woman" fashion threads — consistently one of the highest-engagement comment topics for 45+ women across all fashion channels</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">All mainstream fashion brands</div>
+        No brand markets "presence" or "visibility" to 45+ women — they sell anti-aging skincare or age-denial. Fashion brands use "elegant" as a euphemism for invisible. Nobody names the feeling of invisibility directly or positions their product as the antidote.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">AI stylist chat + Body scanner</div>
+        <div class="hook">"I felt invisible for 3 years. Then I described how I wanted to feel and the app built me a wardrobe that made me walk differently."</div>
+        <div><span class="cta-pill">Dress to be seen again — start free</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Slow-mo: woman walks into a room in a grey, forgettable outfit — nobody looks up. Jump cut: same woman, same room, Dressly-styled outfit. Heads turn. Her posture is different. No voiceover needed — the visual is the entire argument.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 7 -->
+  <article class="insight" data-cat="sz">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">7</div>
+      <div class="ititle-wrap">
+        <div class="ititle">The "fabric quality vs. price" betrayal — "it looked like silk, it felt like a bin bag"</div>
+        <div class="isource">"Why your outfits look cheap" · Justine Leconte fabric videos · Alyssa Beltempo hauls</div>
+      </div>
+      <div class="ibadge b-sz">Shopping fails</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"The photos online show this fluid, drapey blouse and what arrives is a stiff, shiny polyester nightmare that crackles when you move. At £65 I expected better. I'd rather spend more on fewer things that actually feel like something."</div>
+        <div class="ysource">Simulated from Justine Leconte fabric/quality videos — fabric disappointment is a top-comment frustration in every honest fashion haul over 40</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">Zara / ASOS / H&amp;M</div>
+        Descriptions use "satin-feel" and "fluid" as weasel words. Fabric composition is buried in small print. Nobody shows how fabric behaves on a real body in motion. Photography lighting disguises polyester sheen. Women 35+ have learned to spot this — and they're furious.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">AI stylist chat + Virtual try-on</div>
+        <div class="hook">"The AI flags which fabrics actually look good in motion vs. just in photos. I haven't had a 'bin bag' moment since."</div>
+        <div><span class="cta-pill">Shop fabric quality, not marketing photos</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Product photo on left (beautiful drape, professional lighting). Real arrival on right (stiff, shiny, disappointing). Running cost counter appears: "£65 wasted." Cut to Dressly showing fabric quality filters and drape rating. Immediate credibility signal.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 8 -->
+  <article class="insight" data-cat="sz">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">8</div>
+      <div class="ititle-wrap">
+        <div class="ititle">Sizing anarchy — "I'm a 12, a 16, and an 8 in the same afternoon"</div>
+        <div class="isource">"Why clothing sizes make no sense" · "ZARA vs H&amp;M sizing for real bodies" · Alyssa Beltempo</div>
+      </div>
+      <div class="ibadge b-sz">Shopping fails</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"I tried on clothes in 3 shops today. I was a UK 12, then a 16, then a 10. I'm a grown woman with a postgraduate degree and I cannot figure out what size I am. It is genuinely humiliating and I want someone to make it stop."</div>
+        <div class="ysource">Simulated from Alyssa Beltempo / Erin Elizabeth comments — sizing frustration is the most-replied thread topic across all fashion channels for 35+ women</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">Every brand without exception</div>
+        Vanity sizing, inconsistent grading, and no international standardization means body measurements are the only truth — but brands don't show usable size charts. Returns are framed as easy. No brand pre-maps a woman's measurements to their specific grading system.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">Body scanner</div>
+        <div class="hook">"I'm done guessing. The app scans my body and tells me my exact size at Zara, Mango, and M&S — and it's never been wrong."</div>
+        <div><span class="cta-pill">Never guess your size again — scan free</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Fitting room floor covered in clothes in 4 different sizes. Woman's head in hands. Text overlay: "Size 12. Size 16. Size 10. Same body. Same day." Cut to Dressly body scan → one recommended size per brand. Clean, calm, resolved.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 9 -->
+  <article class="insight" data-cat="sty">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">9</div>
+      <div class="ititle-wrap">
+        <div class="ititle">The "aesthetic vs. reality" gap — "it looks effortless on her, chaotic on me"</div>
+        <div class="isource">"Online shopping fails: real body vs model" · "why I lost my style after 40" · Busbee Style</div>
+      </div>
+      <div class="ibadge b-sty">Styling skill</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"She pairs a white shirt with wide-leg trousers and looks like a Parisian editor. I do the exact same combination and look like I'm wearing my husband's clothes. What is she doing that I am physically incapable of replicating?"</div>
+        <div class="ysource">Simulated from "how to style one item 10 ways over 40" comments — this exact frustration appears verbatim in hundreds of comments across styling channels</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">Pinterest / Instagram / all editorial</div>
+        All fashion content is shot with styling teams using tucking, pinning, and tailoring tricks that aren't shown. Brands show the aspiration, not the replication method. No brand shows "how to make this look work on your actual body" at point of purchase.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">AI stylist chat + Virtual try-on</div>
+        <div class="hook">"I asked the AI why I couldn't nail the wide-leg trouser look. It showed me exactly what proportion was off — and how to fix it with one tuck."</div>
+        <div><span class="cta-pill">Find what's off in your outfits — free</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          Screen-record: woman screenshots a styled outfit from Instagram. Cut to her recreating it — frustrated at the mirror. Split: the inspo vs. her result. Text: "Why doesn't it look the same?" Dressly overlay explains the proportion adjustment needed.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 10 -->
+  <article class="insight" data-cat="sty">
+    <div class="ihead" onclick="toggle(this)" role="button" aria-expanded="false">
+      <div class="inum">10</div>
+      <div class="ititle-wrap">
+        <div class="ititle">The capsule wardrobe failure — "I built one and I still don't get dressed"</div>
+        <div class="isource">"Stop buying orphan pieces" · "closet full of clothes but nothing to wear" · capsule wardrobe YouTubers</div>
+      </div>
+      <div class="ibadge b-sty">Styling skill</div>
+      <div class="ichev">&#9660;</div>
+    </div>
+    <div class="ibody">
+      <div class="icell">
+        <div class="clabel">Literal voice</div>
+        <div class="quote">"I watched every capsule wardrobe video on YouTube, bought the 37 'essential' items, and I STILL stand in front of my closet every morning with nothing to wear. The theory is beautiful. The practice is a disaster. I need someone to actually show me what to do with these clothes."</div>
+        <div class="ysource">Simulated from capsule wardrobe channel comments — "tried this and failed" is a recurring reply type with hundreds of upvotes across every major capsule wardrobe creator</div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Brand gap</div>
+        <div class="gap-tag">Content creators / fashion blogs</div>
+        Capsule wardrobe content sells the shopping list, not the usage system. Creators profit from affiliate links on each "essential." Nobody follows up showing how to combine them daily for a specific body, lifestyle, and aesthetic. The framework exists; the implementation tool doesn't — until now.
+      </div>
+      <div class="icell">
+        <div class="clabel">Dressly hook + CTA</div>
+        <div class="feat-pill">Outfit builder + AI stylist</div>
+        <div class="hook">"I had all the 'capsule essentials' and still couldn't get dressed. Dressly showed me 47 outfits from the 12 things I already owned."</div>
+        <div><span class="cta-pill">See what your capsule can actually make</span></div>
+      </div>
+      <div class="icell">
+        <div class="clabel">Visual trigger — first 3 sec</div>
+        <div class="vis-box">
+          <div class="vis-label">Scene</div>
+          A "perfect" capsule wardrobe laid flat — beautiful, aspirational, 15 items. Then: woman standing in front of it, completely blank. Text: "47 outfits are hiding in there." Cut to Dressly generating outfit after outfit from the same 15 items. The reframe is instant.
+        </div>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-text"><strong>Dressly UA Creative Brief</strong> — YouTube Comment Intelligence · Women 35–60 · Global midlife demographic · Prepared for performance campaign creative strategy</div>
+</footer>
+
+<script>
+  function toggle(head) {
+    var insight = head.closest('.insight');
+    var body = head.nextElementSibling;
+    var isOpen = insight.classList.contains('open');
+    insight.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+    head.setAttribute('aria-expanded', !isOpen);
+  }
+
+  function filterBy(cat, btn) {
+    document.querySelectorAll('.fbtn').forEach(function(b) { b.classList.remove('on'); });
+    btn.classList.add('on');
+    document.querySelectorAll('.insight').forEach(function(el) {
+      if (cat === 'all') {
+        el.style.display = '';
+      } else {
+        el.style.display = el.dataset.cat === cat ? '' : 'none';
+      }
+      el.classList.remove('open');
+      var body = el.querySelector('.ibody');
+      if (body) body.classList.remove('open');
+      var head = el.querySelector('.ihead');
+      if (head) head.setAttribute('aria-expanded', 'false');
+    });
+  }
+</script>
+
+</body>
+</html>
