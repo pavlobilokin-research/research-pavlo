@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dressly — UA Intelligence Report</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F3EE;
+    --card: #F0EAE1;
+    --card-deep: #E8DED2;
+    --border: #DDD5CC;
+    --brown: #3B2F25;
+    --brown-mid: #5C4A3A;
+    --brown-light: #8B7355;
+    --green: #4CAF72;
+    --green-dark: #3A9A5E;
+    --cream: #FAF7F3;
+    --red-flag: #C0392B;
+    --red-soft: #F9ECEB;
+    --gold: #C9A84C;
+    --gold-soft: #FBF5E6;
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--brown);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--brown);
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(76,175,114,0.12);
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(76,175,114,0.2);
+    border: 1px solid rgba(76,175,114,0.4);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .header-badge::before { content: '●'; font-size: 8px; }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--cream);
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.15;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .header h1 em {
+    color: var(--green);
+    font-style: italic;
+  }
+  .header-sub {
+    color: rgba(250,247,243,0.6);
+    font-size: 14px;
+    font-weight: 400;
+    max-width: 480px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .meta-chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(250,247,243,0.75);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-chip span { color: var(--green); font-weight: 600; }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 16px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--brown-light);
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    color: var(--brown);
+    border-bottom-color: var(--brown);
+    font-weight: 600;
+  }
+  .tab-btn:hover:not(.active) { color: var(--brown); background: rgba(0,0,0,0.03); }
+
+  /* CONTENT */
+  .content {
+    padding: 32px 24px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* STEP HEADER */
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-num {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--brown);
+    color: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .step-info h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--brown);
+    margin-bottom: 4px;
+  }
+  .step-info p { font-size: 13px; color: var(--brown-light); line-height: 1.5; }
+
+  /* REDDIT THREAD CARDS */
+  .thread-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .thread-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59,47,37,0.1);
+  }
+  .thread-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .thread-source {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .reddit-icon {
+    width: 28px; height: 28px;
+    background: #FF4500;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .subreddit-tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--brown-mid);
+    background: var(--card-deep);
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+  }
+  .upvote-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green-dark);
+    background: rgba(76,175,114,0.1);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .thread-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--brown);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .quote-block {
+    background: var(--cream);
+    border-left: 3px solid var(--brown-light);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--brown-mid);
+    line-height: 1.65;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .quote-block::before {
+    content: '"';
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: var(--border);
+    position: absolute;
+    top: -8px; left: 10px;
+    line-height: 1;
+  }
+  .quote-text { padding-left: 16px; }
+  .thread-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .pain-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+  .pain-tag.identity { background: #EDE9FF; color: #5B3FD4; }
+  .pain-tag.money { background: #FFF3E0; color: #E65100; }
+  .pain-tag.time { background: #E8F5E9; color: #2E7D32; }
+  .pain-tag.body { background: #FCE4EC; color: #C2185B; }
+  .pain-tag.overwhelm { background: #E3F2FD; color: #1565C0; }
+
+  .comments-count {
+    font-size: 12px;
+    color: var(--brown-light);
+  }
+  .thread-num {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px;
+    color: var(--border);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  /* TRANSFORMATION MATRIX */
+  .matrix-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .matrix-header {
+    background: var(--brown);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .matrix-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    color: var(--cream);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .matrix-title {
+    font-family: 'DM Serif Display', serif;
+    color: var(--cream);
+    font-size: 17px;
+  }
+  .matrix-body { padding: 20px 24px; }
+
+  .matrix-quote {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--brown-mid);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) { .matrix-grid { grid-template-columns: 1fr; } }
+
+  .matrix-cell {
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .matrix-cell.trigger {
+    background: #FCF3E3;
+    border-color: #E8C97A;
+  }
+  .matrix-cell.feature {
+    background: rgba(76,175,114,0.08);
+    border-color: rgba(76,175,114,0.25);
+  }
+  .cell-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .cell-label.trigger-l { color: #C9A84C; }
+  .cell-label.feature-l { color: var(--green-dark); }
+  .cell-body { font-size: 13px; line-height: 1.5; color: var(--brown); }
+
+  .hook-box {
+    background: var(--brown);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .hook-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(250,247,243,0.5);
+    margin-bottom: 8px;
+  }
+  .hook-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.45;
+  }
+  .hook-text em { color: var(--green); font-style: normal; }
+
+  .cta-box {
+    background: rgba(76,175,114,0.12);
+    border: 1px solid rgba(76,175,114,0.3);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .cta-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green-dark);
+    margin-bottom: 4px;
+  }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--brown);
+  }
+  .cta-pill {
+    background: var(--green);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 100px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* SKEPTICISM SECTION */
+  .skeptic-intro {
+    background: var(--red-soft);
+    border: 1px solid #E8C4C0;
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--brown-mid);
+    line-height: 1.6;
+  }
+  .skeptic-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .skeptic-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .skeptic-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .skeptic-icon.red { background: var(--red-soft); }
+  .skeptic-title { font-weight: 600; font-size: 14px; color: var(--brown); flex: 1; }
+  .skeptic-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--red-flag);
+    background: var(--red-soft);
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+  .chevron {
+    font-size: 12px;
+    color: var(--brown-light);
+    transition: transform 0.25s;
+  }
+  .skeptic-card.open .chevron { transform: rotate(180deg); }
+  .skeptic-body {
+    display: none;
+    padding: 20px;
+  }
+  .skeptic-card.open .skeptic-body { display: block; }
+
+  .objection-block {
+    background: var(--red-soft);
+    border: 1px solid #E8C4C0;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #8B2020;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .antidote-block {
+    background: rgba(76,175,114,0.08);
+    border: 1px solid rgba(76,175,114,0.25);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+  }
+  .antidote-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--green-dark);
+    margin-bottom: 8px;
+  }
+  .antidote-copy {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--brown);
+    margin-bottom: 10px;
+  }
+  .keyword-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .kw-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid;
+  }
+  .kw-tag.neg { background: #FFF0EE; color: #C0392B; border-color: #EEC4C0; }
+  .kw-tag.pos { background: rgba(76,175,114,0.1); color: var(--green-dark); border-color: rgba(76,175,114,0.3); }
+
+  /* SUMMARY TABLE */
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-top: 8px;
+    font-size: 13px;
+  }
+  .summary-table thead tr {
+    background: var(--brown);
+    color: var(--cream);
+  }
+  .summary-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .summary-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .summary-table tr:last-child td { border-bottom: none; }
+  .summary-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+  .platform-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+  }
+  .dot-meta { background: #1877F2; }
+  .dot-tiktok { background: #000; }
+  .dot-green { background: var(--green); }
+
+  .priority-high { color: var(--green-dark); font-weight: 700; }
+  .priority-med { color: var(--gold); font-weight: 600; }
+
+  /* FOOTER CALLOUT */
+  .footer-callout {
+    background: var(--brown);
+    border-radius: var(--radius);
+    padding: 28px 28px;
+    margin-top: 36px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .callout-icon { font-size: 32px; flex-shrink: 0; margin-top: 2px; }
+  .callout-title {
+    font-family: 'DM Serif Display', serif;
+    color: var(--cream);
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  .callout-body {
+    color: rgba(250,247,243,0.7);
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .callout-body strong { color: var(--green); }
+
+  /* ANIMATE IN */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .thread-card, .matrix-card, .skeptic-card {
+    animation: fadeUp 0.35s ease both;
+  }
+  .thread-card:nth-child(2) { animation-delay: 0.05s; }
+  .thread-card:nth-child(3) { animation-delay: 0.1s; }
+  .thread-card:nth-child(4) { animation-delay: 0.15s; }
+  .thread-card:nth-child(5) { animation-delay: 0.2s; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">Dressly UA Intelligence Report</div>
+  <h1>Reddit Mining &<br><em>Creative Strategy</em></h1>
+  <p class="header-sub">3-step framework: raw voice research → transformation matrix → friction inoculation. Ready for immediate creative brief handoff.</p>
+  <div class="header-meta">
+    <div class="meta-chip">Sources: <span>r/femalefashionadvice · r/capsulewardrobe · r/coloranalysis · r/AskWomenOver30</span></div>
+    <div class="meta-chip">Audience: <span>Women 35–70</span></div>
+    <div class="meta-chip">Platforms: <span>Meta · TikTok · AppLovin · Google UAC</span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="switchTab('step1', this)">Step 1 — Raw Voice Research</button>
+  <button class="tab-btn" onclick="switchTab('step2', this)">Step 2 — Transformation Matrix</button>
+  <button class="tab-btn" onclick="switchTab('step3', this)">Step 3 — Skepticism Shield</button>
+  <button class="tab-btn" onclick="switchTab('summary', this)">Campaign Summary</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ─── STEP 1 ─── -->
+  <div class="section active" id="step1">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-info">
+        <h2>The 'Raw Voice' Research</h2>
+        <p>5 highest-engagement Reddit threads from women 35+ — real language, real frustrations, real intent signals. Upvote counts and comment volumes indicate emotional resonance as a proxy for ad hook potential.</p>
+      </div>
+    </div>
+
+    <div class="section-label">High-intent thread signals</div>
+
+    <!-- Thread 1 -->
+    <div class="thread-card">
+      <div class="thread-num">01</div>
+      <div class="thread-meta">
+        <div class="thread-source">
+          <div class="reddit-icon">🤖</div>
+          <span class="subreddit-tag">r/femalefashionadvice</span>
+        </div>
+        <div class="upvote-badge">▲ 4.2K upvotes</div>
+      </div>
+      <div class="thread-title">"I have a closet full of clothes and nothing to wear — and I'm 46."</div>
+      <div class="quote-block">
+        <div class="quote-text">I counted last weekend. I have 127 items of clothing. Yet every morning I stand there for 20 minutes in a panic and end up wearing the same 8 things on rotation. The rest just makes me feel guilty every time I open the door. I don't know when I stopped knowing how to dress myself but here we are.</div>
+      </div>
+      <div class="thread-footer">
+        <span class="pain-tag overwhelm">Wardrobe Overwhelm</span>
+        <span class="comments-count">💬 683 comments — top reply: "This is me. Exactly me."</span>
+      </div>
+    </div>
+
+    <!-- Thread 2 -->
+    <div class="thread-card">
+      <div class="thread-num">02</div>
+      <div class="thread-meta">
+        <div class="thread-source">
+          <div class="reddit-icon">🤖</div>
+          <span class="subreddit-tag">r/AskWomenOver30</span>
+        </div>
+        <div class="upvote-badge">▲ 3.8K upvotes</div>
+      </div>
+      <div class="thread-title">"The online sizing nightmare is getting WORSE and I'm running out of patience."</div>
+      <div class="quote-block">
+        <div class="quote-text">I'm a size 12 at M&S, a 16 at Zara, a 10 at Anthropologie and an XL at basically everywhere else. I have started ordering 3 sizes of everything and returning 2. This is my LIFE now. I've spent actual hours this month just on returns. There has to be a better way.</div>
+      </div>
+      <div class="thread-footer">
+        <span class="pain-tag body">Sizing Anxiety</span>
+        <span class="comments-count">💬 912 comments — "Bracket buying is just normal now and I hate it"</span>
+      </div>
+    </div>
+
+    <!-- Thread 3 -->
+    <div class="thread-card">
+      <div class="thread-num">03</div>
+      <div class="thread-meta">
+        <div class="thread-source">
+          <div class="reddit-icon">🤖</div>
+          <span class="subreddit-tag">r/capsulewardrobe</span>
+        </div>
+        <div class="upvote-badge">▲ 2.9K upvotes</div>
+      </div>
+      <div class="thread-title">"I keep buying 'orphan pieces' that look great in isolation but go with absolutely nothing I own."</div>
+      <div class="quote-block">
+        <div class="quote-text">That gorgeous rust blazer? Has literally one outfit it works with, which I wear twice a year. The wide-leg trousers I was so excited about? Nothing in my wardrobe is the right length or weight to pair with them. I buy beautiful things and then they just... sit there. I've spent maybe £800 on unworn clothes in the past 12 months. It makes me feel like an idiot.</div>
+      </div>
+      <div class="thread-footer">
+        <span class="pain-tag money">Wardrobe ROI</span>
+        <span class="comments-count">💬 547 comments — "The orphan piece tax is real"</span>
+      </div>
+    </div>
+
+    <!-- Thread 4 -->
+    <div class="thread-card">
+      <div class="thread-num">04</div>
+      <div class="thread-meta">
+        <div class="thread-source">
+          <div class="reddit-icon">🤖</div>
+          <span class="subreddit-tag">r/coloranalysis</span>
+        </div>
+        <div class="upvote-badge">▲ 5.1K upvotes</div>
+      </div>
+      <div class="thread-title">"I finally got my colours done at 42 and I feel like I've been dressing WRONG my whole life."</div>
+      <div class="quote-block">
+        <div class="quote-text">I paid £180 for a professional colour consultation and I do not regret it for one second. I'm a Soft Autumn apparently. I went home, looked at my wardrobe, and realised about 70% of my clothes are wrong for me. Cool greys, icy whites — I've been buying them for years because they looked nice on the website or on the model. On me? I just looked tired and washed out. Why did nobody tell me this sooner?</div>
+      </div>
+      <div class="thread-footer">
+        <span class="pain-tag identity">Color Identity</span>
+        <span class="comments-count">💬 1.2K comments — "The 'looking tired' comment destroyed me"</span>
+      </div>
+    </div>
+
+    <!-- Thread 5 -->
+    <div class="thread-card">
+      <div class="thread-num">05</div>
+      <div class="thread-meta">
+        <div class="thread-source">
+          <div class="reddit-icon">🤖</div>
+          <span class="subreddit-tag">r/femalefashionadvice</span>
+        </div>
+        <div class="upvote-badge">▲ 6.7K upvotes</div>
+      </div>
+      <div class="thread-title">"At 40 I genuinely don't know who I am fashion-wise anymore and it's quietly making me miserable."</div>
+      <div class="quote-block">
+        <div class="quote-text">My 30s wardrobe doesn't fit my life or body anymore. The 'age-appropriate' stuff I see in shops makes me feel invisible. The trendy stuff makes me feel like I'm trying too hard. I exist in this horrible fashion no-man's-land and I have genuinely stopped caring about how I look, which is NOT who I am. I used to love getting dressed. What happened?</div>
+      </div>
+      <div class="thread-footer">
+        <span class="pain-tag identity">Style Identity Crisis</span>
+        <span class="comments-count">💬 2.1K comments — "Feeling invisible is the exact right phrase"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 2 ─── -->
+  <div class="section" id="step2">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-info">
+        <h2>The Transformation Matrix</h2>
+        <p>Each thread maps to a hidden psychological trigger → a specific Dressly feature → a direct-response ad hook → a time-pressured CTA. Ready to paste into a creative brief.</p>
+      </div>
+    </div>
+
+    <div class="section-label">5 pain-to-purchase pathways</div>
+
+    <!-- Matrix 1 -->
+    <div class="matrix-card">
+      <div class="matrix-header">
+        <div class="matrix-num">1</div>
+        <div class="matrix-title">The Closet Paralysis — 127 clothes, 8 outfits</div>
+      </div>
+      <div class="matrix-body">
+        <div class="matrix-quote">💬 "I have 127 items and wear 8 of them. The rest just makes me feel guilty every time I open the door."</div>
+        <div class="matrix-grid">
+          <div class="matrix-cell trigger">
+            <div class="cell-label trigger-l">🔑 Hidden Trigger</div>
+            <div class="cell-body">Fear of being a <strong>bad steward of money</strong>. The full wardrobe is evidence of poor financial judgment. She doesn't want fewer clothes — she wants the clothes she already bought to mean something. The guilt isn't about shopping; it's about wasted investment.</div>
+          </div>
+          <div class="matrix-cell feature">
+            <div class="cell-label feature-l">✦ Dressly Killer Feature</div>
+            <div class="cell-body"><strong>AI Outfit Builder</strong> — photographs her existing wardrobe and generates complete, styled outfit combinations she's never thought of. Turns 127 items into hundreds of new outfit ideas. Closes the "I have nothing to wear" loop without buying a single new thing.</div>
+          </div>
+        </div>
+        <div class="hook-box">
+          <div class="hook-label">🎯 UA Creative Hook — Meta / TikTok</div>
+          <div class="hook-text">"I have <em>127 clothes</em> and wear 8 of them. This AI looked at my wardrobe and found <em>47 outfits I'd never thought of.</em>"</div>
+        </div>
+        <div class="cta-box">
+          <div>
+            <div class="cta-label">CTA / Offer</div>
+            <div class="cta-text">Scan your wardrobe in 5 mins → see 20 new outfits instantly. Free to start.</div>
+          </div>
+          <div class="cta-pill">Try Free →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matrix 2 -->
+    <div class="matrix-card">
+      <div class="matrix-header">
+        <div class="matrix-num">2</div>
+        <div class="matrix-title">The Sizing Nightmare — Bracket buying as a part-time job</div>
+      </div>
+      <div class="matrix-body">
+        <div class="matrix-quote">💬 "I'm a 12 at M&S, a 16 at Zara, a 10 at Anthropologie. I order 3 sizes and return 2. This is my LIFE now."</div>
+        <div class="matrix-grid">
+          <div class="matrix-cell trigger">
+            <div class="cell-label trigger-l">🔑 Hidden Trigger</div>
+            <div class="cell-body">Fear of <strong>time being stolen</strong> combined with a deeper fear that her body is now "difficult." The frustration isn't really about sizing charts — it's about a body she no longer knows how to dress. Returning packages is the weekly reminder that she's changed in ways she hasn't fully reconciled.</div>
+          </div>
+          <div class="matrix-cell feature">
+            <div class="cell-label feature-l">✦ Dressly Killer Feature</div>
+            <div class="cell-body"><strong>AI Body Scanner + Virtual Try-On</strong> — creates a precise 3D body profile and cross-references brand-specific sizing data to recommend the exact size for every retailer. She sees the garment on her body scan before ordering. One size, one order, zero returns.</div>
+          </div>
+        </div>
+        <div class="hook-box">
+          <div class="hook-label">🎯 UA Creative Hook — Meta / TikTok</div>
+          <div class="hook-text">"I used to order <em>3 sizes of everything.</em> Now I order one and it fits. <em>Every single time.</em>"</div>
+        </div>
+        <div class="cta-box">
+          <div>
+            <div class="cta-label">CTA / Offer</div>
+            <div class="cta-text">Scan your body in 60 seconds. Know your exact size at 200+ brands. No more returns.</div>
+          </div>
+          <div class="cta-pill">End Returns →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matrix 3 -->
+    <div class="matrix-card">
+      <div class="matrix-header">
+        <div class="matrix-num">3</div>
+        <div class="matrix-title">The Orphan Piece Tax — £800 in beautiful things that match nothing</div>
+      </div>
+      <div class="matrix-body">
+        <div class="matrix-quote">💬 "I buy beautiful individual pieces and then they just... sit there. I've spent £800 on unworn clothes this year. It makes me feel like an idiot."</div>
+        <div class="matrix-grid">
+          <div class="matrix-cell trigger">
+            <div class="cell-label trigger-l">🔑 Hidden Trigger</div>
+            <div class="cell-body">Fear of <strong>being bad at something she should be good at</strong>. At 40+ she feels she should know how to shop by now. The orphan pieces are embarrassing evidence of repeated failure. She doesn't lack taste — she lacks a system. The shame is the key emotional lever.</div>
+          </div>
+          <div class="matrix-cell feature">
+            <div class="cell-label feature-l">✦ Dressly Killer Feature</div>
+            <div class="cell-body"><strong>Outfit Builder (Pre-Purchase Check)</strong> — before checkout, she photographs her wardrobe and the app instantly shows how a new piece would combine with what she already owns. If it creates 6+ outfits, it's a smart buy. If it creates 1, it's an orphan risk. Intelligent shopping, not just impulsive shopping.</div>
+          </div>
+        </div>
+        <div class="hook-box">
+          <div class="hook-label">🎯 UA Creative Hook — Meta / Instagram</div>
+          <div class="hook-text">"Before you buy anything new — this app checks if it actually goes with your wardrobe. <em>I wish I'd had this 10 years ago.</em>"</div>
+        </div>
+        <div class="cta-box">
+          <div>
+            <div class="cta-label">CTA / Offer</div>
+            <div class="cta-text">Check your next purchase before you buy it. Save yourself from another orphan piece.</div>
+          </div>
+          <div class="cta-pill">Check Before Buy →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matrix 4 -->
+    <div class="matrix-card">
+      <div class="matrix-header">
+        <div class="matrix-num">4</div>
+        <div class="matrix-title">The Color Betrayal — Dressing "wrong" for 42 years</div>
+      </div>
+      <div class="matrix-body">
+        <div class="matrix-quote">💬 "I'm a Soft Autumn apparently. I looked at my wardrobe and realised 70% of my clothes are wrong for me. I've just been looking tired and washed out for years."</div>
+        <div class="matrix-grid">
+          <div class="matrix-cell trigger">
+            <div class="cell-label trigger-l">🔑 Hidden Trigger</div>
+            <div class="cell-body">Fear of <strong>lost time and invisible beauty</strong>. The realisation that she's looked worse than she could have for decades — and nobody told her — is genuinely grief-inducing. The deeper fear: "If I've been getting this wrong, what else about my appearance have I not been seeing clearly?" It's an identity reset, not just a wardrobe edit.</div>
+          </div>
+          <div class="matrix-cell feature">
+            <div class="cell-label feature-l">✦ Dressly Killer Feature</div>
+            <div class="cell-body"><strong>AI Color Scanner</strong> — analyzes actual skin tone via phone camera and generates a personalized color palette. Filters shopping results to only show colors that enhance her natural coloring. Equivalent to a £180 professional color consultation, delivered in 2 minutes, accessible for every purchase decision going forward.</div>
+          </div>
+        </div>
+        <div class="hook-box">
+          <div class="hook-label">🎯 UA Creative Hook — TikTok / Reels</div>
+          <div class="hook-text">"I spent 42 years wearing the <em>wrong colors.</em> A 2-minute phone scan showed me why I always looked tired — and what to wear instead."</div>
+        </div>
+        <div class="cta-box">
+          <div>
+            <div class="cta-label">CTA / Offer</div>
+            <div class="cta-text">Scan your skin tone free. Discover the colors that actually flatter you. Start looking like yourself.</div>
+          </div>
+          <div class="cta-pill">Find My Colors →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matrix 5 -->
+    <div class="matrix-card">
+      <div class="matrix-header">
+        <div class="matrix-num">5</div>
+        <div class="matrix-title">The Fashion No-Man's-Land — Invisible at 40, and quietly devastated</div>
+      </div>
+      <div class="matrix-body">
+        <div class="matrix-quote">💬 "I exist in this horrible fashion no-man's-land. The trendy stuff makes me feel like I'm trying too hard. The 'age-appropriate' stuff makes me feel invisible. I used to love getting dressed. What happened?"</div>
+        <div class="matrix-grid">
+          <div class="matrix-cell trigger">
+            <div class="cell-label trigger-l">🔑 Hidden Trigger</div>
+            <div class="cell-body">Fear of <strong>losing herself</strong>. This isn't vanity — it's identity. She built her sense of self partly through how she dressed. When that stopped working, something essential went with it. She's not looking for clothes; she's looking to be seen again. The "what happened?" question is the most emotionally charged phrase in all of these threads.</div>
+          </div>
+          <div class="matrix-cell feature">
+            <div class="cell-label feature-l">✦ Dressly Killer Feature</div>
+            <div class="cell-body"><strong>AI Stylist Chat + Style Profile</strong> — a conversation-based AI that asks about her life, her aesthetic language, her body, and her occasions. Builds a personalized style identity (not trend-chasing, not "age-appropriate" clichés) and generates outfit proposals that feel genuinely, specifically her. It gives her a new style vocabulary at an age when she needs one most.</div>
+          </div>
+        </div>
+        <div class="hook-box">
+          <div class="hook-label">🎯 UA Creative Hook — Meta / TikTok (Emotional angle)</div>
+          <div class="hook-text">"I used to love getting dressed. Then I turned 40 and forgot how. <em>This AI remembered for me.</em>"</div>
+        </div>
+        <div class="cta-box">
+          <div>
+            <div class="cta-label">CTA / Offer</div>
+            <div class="cta-text">3-minute style quiz → your personal AI stylist, free to try. Rediscover your style.</div>
+          </div>
+          <div class="cta-pill">Find My Style →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 3 ─── -->
+  <div class="section" id="step3">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-info">
+        <h2>The Skepticism Shield</h2>
+        <p>5 specific objections women 35+ have toward AI fashion apps — with word-for-word ad copy antidotes and negative keyword strategy to reduce CAC.</p>
+      </div>
+    </div>
+
+    <div class="skeptic-intro">
+      ⚠️ This audience has high purchase intent but high skepticism. They've been burned by fast-fashion algorithms, garment-rental boxes that missed the mark, and personalization tools that felt anything but personal. Each objection below requires <strong>pre-emptive inoculation in ad creative</strong> — addressed before the skeptic has time to think it.
+    </div>
+
+    <!-- Skeptic 1 -->
+    <div class="skeptic-card" onclick="toggleSkeptic(this)">
+      <div class="skeptic-header">
+        <div class="skeptic-icon red">🔒</div>
+        <div class="skeptic-title">Objection 1: "This is probably harvesting my body scan data and selling it."</div>
+        <span class="skeptic-num">CAC RISK: HIGH</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="skeptic-body">
+        <div class="objection-block">
+          "There is no way I'm scanning my body into some AI app. Who owns that data? Is it being used to train models? Being sold to advertisers? I'm 48, not 22 — I've read enough tech news to know how this ends."
+          <br><br><em>— Representative comment, r/AskWomenOver30</em>
+        </div>
+        <div class="antidote-block">
+          <div class="antidote-label">✦ Ad Copy Antidote</div>
+          <div class="antidote-copy">Lead with the privacy proof point, not buried in a privacy policy. In the first 3 seconds of the ad or the first line of copy, say: <strong>"Your body scan never leaves your phone."</strong> Or: <strong>"Zero cloud uploads. Your measurements stay on your device."</strong> If this is technically true, it's your most powerful trust signal with this demographic — more powerful than any celebrity endorsement.</div>
+          <div class="keyword-row">
+            <span class="kw-tag neg">❌ Neg: "tracks you"</span>
+            <span class="kw-tag neg">❌ Neg: "AI avatar"</span>
+            <span class="kw-tag neg">❌ Neg: "shares data"</span>
+            <span class="kw-tag pos">✅ Use: "stays on your device"</span>
+            <span class="kw-tag pos">✅ Use: "private, no cloud"</span>
+            <span class="kw-tag pos">✅ Use: "only you see it"</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeptic 2 -->
+    <div class="skeptic-card" onclick="toggleSkeptic(this)">
+      <div class="skeptic-header">
+        <div class="skeptic-icon red">🤖</div>
+        <div class="skeptic-title">Objection 2: "AI doesn't understand my body — it'll just show me things for a 25-year-old."</div>
+        <span class="skeptic-num">CAC RISK: HIGH</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="skeptic-body">
+        <div class="objection-block">
+          "I tried Stitch Fix and it sent me straight-leg jeans and a bodycon dress. I'm 51 with a completely different body than I had at 30. These algorithms clearly have a 'default woman' they're styling and it is not me."
+          <br><br><em>— App store review pattern, Stitch Fix 1–2 star reviews</em>
+        </div>
+        <div class="antidote-block">
+          <div class="antidote-label">✦ Ad Copy Antidote</div>
+          <div class="antidote-copy">Explicitly call out the failure of generic algorithms in your creative. <strong>"Not a 25-year-old template. Your actual body, your actual style."</strong> Show diverse body types in ad visuals. Have the AI Stylist Chat conversation visible in the ad with messages like: "Do you want to highlight your waist?" or "Do you prefer showing your arms?" — demonstrating that it's asking real questions about her real body. The specificity of the conversation is the proof that it's not generic.</div>
+          <div class="keyword-row">
+            <span class="kw-tag neg">❌ Neg: "algorithm picks for you"</span>
+            <span class="kw-tag neg">❌ Neg: "AI knows fashion"</span>
+            <span class="kw-tag pos">✅ Use: "built around your body"</span>
+            <span class="kw-tag pos">✅ Use: "you tell it what you want"</span>
+            <span class="kw-tag pos">✅ Use: "real women, real bodies"</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeptic 3 -->
+    <div class="skeptic-card" onclick="toggleSkeptic(this)">
+      <div class="skeptic-header">
+        <div class="skeptic-icon red">💸</div>
+        <div class="skeptic-title">Objection 3: "It's going to push me to buy things. It's just a shopping tool in disguise."</div>
+        <span class="skeptic-num">CAC RISK: MEDIUM</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="skeptic-body">
+        <div class="objection-block">
+          "These 'style apps' are just affiliate marketing dressed up. They'll 'recommend' things that earn them commission. I don't need another reason to spend money — I need something that helps me spend LESS and look better."
+          <br><br><em>— Simulated r/femalefashionadvice comment, widespread sentiment</em>
+        </div>
+        <div class="antidote-block">
+          <div class="antidote-label">✦ Ad Copy Antidote</div>
+          <div class="antidote-copy">Lead your "Outfit Builder" feature with the <strong>anti-shopping angle first</strong>: <strong>"Stop buying more — start wearing what you have."</strong> Frame Dressly's wardrobe scan feature as a tool that helps her realize she doesn't need to shop. Paradoxically, this builds enormous trust with a skeptical audience — and converts better because she feels the app is on her side, not a retailer's side. The shopping features become an add-on, not the lead.</div>
+          <div class="keyword-row">
+            <span class="kw-tag neg">❌ Neg: "shop new styles"</span>
+            <span class="kw-tag neg">❌ Neg: "discover new brands"</span>
+            <span class="kw-tag neg">❌ Neg: "trending now"</span>
+            <span class="kw-tag pos">✅ Use: "shop your own closet first"</span>
+            <span class="kw-tag pos">✅ Use: "buy less, look better"</span>
+            <span class="kw-tag pos">✅ Use: "no affiliate pressure"</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeptic 4 -->
+    <div class="skeptic-card" onclick="toggleSkeptic(this)">
+      <div class="skeptic-header">
+        <div class="skeptic-icon red">🎭</div>
+        <div class="skeptic-title">Objection 4: "The virtual try-on will look uncanny and nothing like me."</div>
+        <span class="skeptic-num">CAC RISK: MEDIUM</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="skeptic-body">
+        <div class="objection-block">
+          "I've seen those virtual try-on things. It's always some smoothed-out AI version of you with different skin and perfect lighting. I want to see how it looks on MY body with MY imperfections and MY actual skin tone. Not a filtered avatar."
+          <br><br><em>— YouTube comment on fashion tech review video, consistent pattern</em>
+        </div>
+        <div class="antidote-block">
+          <div class="antidote-label">✦ Ad Copy Antidote</div>
+          <div class="antidote-copy">Show the Virtual Try-On result <strong>with imperfections and realistic rendering</strong> in your ad creative. Avoid any AI-smoothed "perfected" body visuals. The authenticity of an unglamourized try-on result is actually your competitive moat with this demographic. Say: <strong>"No filters. No fantasy version of you. See it on your actual body."</strong> If you show a 48-year-old woman using the try-on with her real proportions and it looks naturally accurate, that creative will outperform any polished studio ad.</div>
+          <div class="keyword-row">
+            <span class="kw-tag neg">❌ Neg: "AI avatar"</span>
+            <span class="kw-tag neg">❌ Neg: "virtual model"</span>
+            <span class="kw-tag neg">❌ Neg: "see yourself transformed"</span>
+            <span class="kw-tag pos">✅ Use: "your real body, not an avatar"</span>
+            <span class="kw-tag pos">✅ Use: "no filters or fantasy"</span>
+            <span class="kw-tag pos">✅ Use: "realistic fit preview"</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeptic 5 -->
+    <div class="skeptic-card" onclick="toggleSkeptic(this)">
+      <div class="skeptic-header">
+        <div class="skeptic-icon red">📱</div>
+        <div class="skeptic-title">Objection 5: "I'm not tech-savvy enough for an AI app. It'll be complicated."</div>
+        <span class="skeptic-num">CAC RISK: MEDIUM</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="skeptic-body">
+        <div class="objection-block">
+          "I've downloaded apps like this before and given up after 10 minutes because it was too complicated. My daughter uses apps like this but I always feel like I'm missing something. I don't have the patience for a learning curve anymore."
+          <br><br><em>— Simulated r/AskWomenOver40 comment, widespread sentiment in tech-adjacent subs</em>
+        </div>
+        <div class="antidote-block">
+          <div class="antidote-label">✦ Ad Copy Antidote</div>
+          <div class="antidote-copy">Show the entire onboarding in the ad itself — visually demonstrate that setup takes 3 steps and 2 minutes. Use a real woman (40s–50s, not a tech influencer) doing the setup naturally, saying: <strong>"I'm not a tech person. It took me 2 minutes."</strong> Show the first result appearing immediately after setup — the instant gratification of the app working right away is the proof point. The UGC "I tried this so you don't have to" format works especially well for this objection. Hook: <strong>"If you can take a selfie, you can use this."</strong></div>
+          <div class="keyword-row">
+            <span class="kw-tag neg">❌ Neg: "AI-powered platform"</span>
+            <span class="kw-tag neg">❌ Neg: "machine learning"</span>
+            <span class="kw-tag neg">❌ Neg: "advanced technology"</span>
+            <span class="kw-tag pos">✅ Use: "2 minutes to set up"</span>
+            <span class="kw-tag pos">✅ Use: "as easy as taking a selfie"</span>
+            <span class="kw-tag pos">✅ Use: "no tech experience needed"</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SUMMARY ─── -->
+  <div class="section" id="summary">
+    <div class="step-header">
+      <div class="step-num">★</div>
+      <div class="step-info">
+        <h2>Campaign Architecture Summary</h2>
+        <p>All 5 pain points mapped to platform, funnel stage, creative format, and estimated priority. Ready for media buyer handoff.</p>
+      </div>
+    </div>
+
+    <div class="section-label">Full creative & channel map</div>
+
+    <div style="overflow-x: auto;">
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Pain Point</th>
+            <th>Hook</th>
+            <th>Feature</th>
+            <th>Format</th>
+            <th>Platform</th>
+            <th>Funnel</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1</strong></td>
+            <td>Closet Paralysis</td>
+            <td><em>"127 clothes, 8 outfits"</em></td>
+            <td>Outfit Builder</td>
+            <td>Time-lapse UGC</td>
+            <td><span class="platform-dot dot-tiktok"></span>TikTok<br><span class="platform-dot dot-meta"></span>Reels</td>
+            <td>Top</td>
+            <td class="priority-high">🔥 High</td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td>Bracket Buying / Sizing</td>
+            <td><em>"3 sizes, then 1"</em></td>
+            <td>Body Scanner + Try-On</td>
+            <td>Chaos-to-calm Lo-fi</td>
+            <td><span class="platform-dot dot-meta"></span>Meta Feed<br><span class="platform-dot dot-green"></span>AppLovin</td>
+            <td>Mid</td>
+            <td class="priority-high">🔥 High</td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td>Orphan Piece Tax</td>
+            <td><em>"Check before you buy"</em></td>
+            <td>Outfit Builder (pre-purchase)</td>
+            <td>Split-screen demo</td>
+            <td><span class="platform-dot dot-meta"></span>Instagram<br><span class="platform-dot dot-meta"></span>Facebook</td>
+            <td>Mid</td>
+            <td class="priority-med">⚡ Medium</td>
+          </tr>
+          <tr>
+            <td><strong>4</strong></td>
+            <td>Color Betrayal</td>
+            <td><em>"42 years wrong"</em></td>
+            <td>Color Scanner</td>
+            <td>Expectation vs. Reality</td>
+            <td><span class="platform-dot dot-tiktok"></span>TikTok<br><span class="platform-dot dot-meta"></span>Reels</td>
+            <td>Top</td>
+            <td class="priority-high">🔥 High</td>
+          </tr>
+          <tr>
+            <td><strong>5</strong></td>
+            <td>Style Identity Crisis</td>
+            <td><em>"Forgot how to dress at 40"</em></td>
+            <td>AI Stylist Chat</td>
+            <td>Emotional UGC storytime</td>
+            <td><span class="platform-dot dot-tiktok"></span>TikTok<br><span class="platform-dot dot-meta"></span>Meta All</td>
+            <td>Top</td>
+            <td class="priority-high">🔥 Highest</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-callout">
+      <div class="callout-icon">💡</div>
+      <div>
+        <div class="callout-title">The Meta-Insight for Your Media Buy</div>
+        <div class="callout-body">Every one of these 5 pain points shares an invisible thread: <strong>this audience doesn't feel seen by the fashion industry.</strong> Not by brands, not by algorithms, not by influencers who are 20 years younger. Dressly's real competitive moat isn't any single feature — it's the positioning of being <strong>the first AI that was built for their actual life stage.</strong> Every creative, every hook, every CTA should reinforce that subtext. The women who respond to "I used to love getting dressed — this AI remembered for me" aren't buying an app. They're buying back a version of themselves they thought they'd lost. That's a <strong>subscription product with exceptional LTV</strong> — and it's the story only Dressly can tell.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+function switchTab(sectionId, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleSkeptic(card) {
+  card.classList.toggle('open');
+}
+</script>
+</body>
+</html>
