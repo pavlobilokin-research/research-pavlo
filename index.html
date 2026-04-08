@@ -5,116 +5,103 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background-color: #f6f8fa;
+            background-color: #f8f9fa;
             padding: 40px;
         }
 
-        h2 {
-            font-size: 32px;
-            margin-bottom: 30px;
-        }
+        h2 { font-size: 32px; margin-bottom: 30px; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 25px; max-width: 900px; }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 20px;
-            max-width: 800px;
-        }
-
-        /* Основний контейнер картки */
+        /* Контейнер картки */
         .card {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            background: white;
-            border: 1px solid #d0d7de;
-            border-radius: 12px;
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        /* Верхня панель зі стрілкою */
+        /* Верхня частина зі стрілкою */
         .card-header {
+            height: 30px;
             display: flex;
-            padding-left: 200px; /* Відступ, щоб стрілка була після кнопки */
+            padding-left: 230px; /* Початок стрілки після кнопки */
         }
 
-        details {
-            width: 100%;
-        }
-
+        /* Сама стрілочка (details/summary) */
+        details { width: 100%; }
+        
         summary {
-            display: block;
             width: 60px;
-            height: 25px;
-            background-color: #5ba360; /* Колір як на скріншоті */
-            border-radius: 0 0 4px 4px;
-            margin-left: 20px;
+            height: 30px;
+            background-color: #6a9e6d; /* Твій колір */
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             list-style: none;
-            position: relative;
-            transition: background-color 0.2s;
+            border-radius: 0 0 6px 6px;
+            transition: background 0.2s;
+            margin-left: 15px;
         }
-
         summary::-webkit-details-marker { display: none; }
+        summary:hover { background-color: #58855a; }
 
-        /* Малюємо білу галочку */
+        /* Малюємо галочку */
         summary::after {
             content: '';
-            position: absolute;
-            top: 6px;
-            left: 25px;
             width: 8px;
             height: 8px;
             border-right: 2px solid white;
             border-bottom: 2px solid white;
             transform: rotate(45deg);
-            transition: transform 0.3s;
+            margin-bottom: 4px;
+            transition: 0.3s;
         }
-
         details[open] summary::after {
             transform: rotate(-135deg);
-            top: 10px;
+            margin-bottom: -4px;
         }
 
-        /* Контентна частина */
+        /* Середня частина: кнопка + місце для тексту */
         .card-body {
             display: flex;
-            min-height: 80px;
             align-items: stretch;
+            min-height: 100px;
         }
 
-        /* Зелена кнопка зліва */
+        /* Зелена кнопка-посилання */
         .btn-link {
             width: 250px;
-            background-color: #5ba360;
+            min-width: 250px;
+            background-color: #6a9e6d;
             color: white;
             text-decoration: none;
-            padding: 15px 20px;
-            font-weight: 600;
+            padding: 20px;
+            font-weight: bold;
             font-size: 18px;
             display: flex;
             align-items: center;
-            border-radius: 8px 0 0 8px;
-            transition: background-color 0.2s;
-        }
-
-        .btn-link:hover {
-            background-color: #4e8d52;
+            border-radius: 0 12px 12px 0; /* Скруглення як на скрині */
+            margin-top: -30px; /* Підтягуємо кнопку вгору */
+            z-index: 2;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.05);
         }
 
         /* Текст висновків */
-        .conclusion-text {
-            padding: 15px 25px;
-            font-size: 16px;
-            color: #24292f;
-            flex-grow: 1;
-            display: none; /* Приховано за замовчуванням */
+        .conclusions {
+            padding: 10px 25px;
+            font-size: 15px;
+            color: #374151;
+            display: none; /* Сховано */
+            align-self: center;
         }
 
-        details[open] ~ .conclusion-text {
+        /* Магія CSS: якщо details відкритий, показуємо сусідній блок з текстом */
+        details[open] ~ .conclusions {
             display: block;
         }
 
@@ -130,13 +117,13 @@
                 <div class="card-header">
                     <details>
                         <summary></summary>
-                    </details>
+                        </details>
+                    <div class="conclusions">
+                        <strong>Висновок:</strong> Користувачі Reddit цінують автентичність. Потрібно заходити через корисні поради, а не пряму рекламу.
+                    </div>
                 </div>
                 <div class="card-body">
                     <a href="reddit-research-08.04.2026.html" class="btn-link">Reddit research<br>08.04.2026</a>
-                    <div class="conclusion-text">
-                        Тут будуть ваші висновки по Reddit research. Наприклад: Аудиторія активна, але вимагає чесного підходу.
-                    </div>
                 </div>
             </div>
         </li>
@@ -147,12 +134,12 @@
                     <details>
                         <summary></summary>
                     </details>
+                    <div class="conclusions">
+                        <strong>Висновок:</strong> UA-сегмент YouTube зараз активно росте в ніші оглядів одягу. Конверсія з описів під відео — висока.
+                    </div>
                 </div>
                 <div class="card-body">
                     <a href="dressly-youtube-ua-brief.html" class="btn-link">Youtube research<br>08.04.2026</a>
-                    <div class="conclusion-text">
-                        Висновки по Youtube: Shorts дають на 40% більше охоплень, ніж звичайні відео.
-                    </div>
                 </div>
             </div>
         </li>
@@ -163,12 +150,12 @@
                     <details>
                         <summary></summary>
                     </details>
+                    <div class="conclusions">
+                        <strong>Висновок:</strong> Найбільше "тертя" — на етапі вибору розміру. Треба додати візуальний гід.
+                    </div>
                 </div>
                 <div class="card-body">
                     <a href="7-hidden-shopping-frictions.html" class="btn-link">7 hidden shopping frictions 08.04.2026</a>
-                    <div class="conclusion-text">
-                        Головна проблема — занадто довга форма реєстрації при оформленні замовлення.
-                    </div>
                 </div>
             </div>
         </li>
@@ -179,12 +166,12 @@
                     <details>
                         <summary></summary>
                     </details>
+                    <div class="conclusions">
+                        <strong>Висновок:</strong> Позиціювання має базуватися на екологічності пакування. Це ключовий запит аудиторії.
+                    </div>
                 </div>
                 <div class="card-body">
                     <a href="strategic-positioning-08.04.2026.html" class="btn-link">strategic positioning researh 08.04.2026</a>
-                    <div class="conclusion-text">
-                        Стратегічні висновки: Потрібно змістити фокус на преміальну упаковку та швидкість доставки.
-                    </div>
                 </div>
             </div>
         </li>
