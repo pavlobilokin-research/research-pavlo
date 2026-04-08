@@ -5,8 +5,13 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            padding: 20px;
             background-color: #f6f8fa;
+            padding: 40px;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
         }
 
         ul {
@@ -15,105 +20,104 @@
         }
 
         li {
-            margin-bottom: 15px;
-            max-width: 600px;
+            margin-bottom: 20px;
+            max-width: 800px;
         }
 
-        /* Контейнер для кнопки та деталей */
-        .research-item {
+        /* Основний контейнер картки */
+        .card {
+            display: flex;
+            flex-direction: column;
             background: white;
             border: 1px solid #d0d7de;
-            border-radius: 6px;
-            overflow: hidden;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        /* Рядок з посиланням та стрілкою */
-        .item-header {
+        /* Верхня панель зі стрілкою */
+        .card-header {
             display: flex;
-            align-items: stretch;
+            padding-left: 200px; /* Відступ, щоб стрілка була після кнопки */
         }
 
-        /* Основна кнопка-посилання */
-        .btn {
-            flex-grow: 1;
-            display: inline-block;
-            padding: 12px 20px;
-            background-color: #2da44e;
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: background-color 0.2s; 
-            border: none;
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn:hover {
-            background-color: #2c974b;
-        }
-
-        /* Стиль для розгортання (details) */
         details {
             width: 100%;
         }
 
-        /* Стиль "стрілочки" */
         summary {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            background-color: #2da44e;
-            color: white;
+            display: block;
+            width: 60px;
+            height: 25px;
+            background-color: #5ba360; /* Колір як на скріншоті */
+            border-radius: 0 0 4px 4px;
+            margin-left: 20px;
             cursor: pointer;
-            list-style: none; /* Прибираємо стандартну стрілку браузера */
+            list-style: none;
+            position: relative;
             transition: background-color 0.2s;
         }
 
-        summary::-webkit-details-marker {
-            display: none; /* Для Safari */
-        }
+        summary::-webkit-details-marker { display: none; }
 
-        summary:hover {
-            background-color: #2c974b;
-        }
-
-        /* Малюємо власну стрілочку через CSS */
+        /* Малюємо білу галочку */
         summary::after {
             content: '';
-            display: inline-block;
+            position: absolute;
+            top: 6px;
+            left: 25px;
             width: 8px;
             height: 8px;
             border-right: 2px solid white;
             border-bottom: 2px solid white;
             transform: rotate(45deg);
             transition: transform 0.3s;
-            margin-bottom: 4px;
         }
 
-        /* Поворот стрілки при відкритті */
         details[open] summary::after {
             transform: rotate(-135deg);
-            margin-bottom: -4px;
+            top: 10px;
         }
 
-        /* Блок з висновками */
-        .conclusions {
-            padding: 15px;
-            font-size: 14px;
+        /* Контентна частина */
+        .card-body {
+            display: flex;
+            min-height: 80px;
+            align-items: stretch;
+        }
+
+        /* Зелена кнопка зліва */
+        .btn-link {
+            width: 250px;
+            background-color: #5ba360;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px 0 0 8px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-link:hover {
+            background-color: #4e8d52;
+        }
+
+        /* Текст висновків */
+        .conclusion-text {
+            padding: 15px 25px;
+            font-size: 16px;
             color: #24292f;
-            background-color: #ffffff;
-            border-top: 1px solid #d0d7de;
-            line-height: 1.5;
+            flex-grow: 1;
+            display: none; /* Приховано за замовчуванням */
         }
 
-        .conclusions strong {
+        details[open] ~ .conclusion-text {
             display: block;
-            margin-bottom: 5px;
-            color: #57606a;
-            text-transform: uppercase;
-            font-size: 11px;
         }
+
     </style>
 </head>
 <body>
@@ -121,42 +125,67 @@
     <h2>Рісьорчі:</h2>
 
     <ul>
-        <li class="research-item">
-            <div class="item-header">
-                <a href="reddit-research-08.04.2026.html" class="btn">Reddit research 08.04.2026</a>
-                <details>
-                    <summary title="Дивитися висновки"></summary>
-                    <div class="conclusions">
-                        <strong>Висновки:</strong>
-                        Користувачі Reddit найбільше скаржаться на довгу доставку. Основна аудиторія — чоловіки 25-35 років. Потрібно звернути увагу на сабредіт /r/shopping.
+        <li>
+            <div class="card">
+                <div class="card-header">
+                    <details>
+                        <summary></summary>
+                    </details>
+                </div>
+                <div class="card-body">
+                    <a href="reddit-research-08.04.2026.html" class="btn-link">Reddit research<br>08.04.2026</a>
+                    <div class="conclusion-text">
+                        Тут будуть ваші висновки по Reddit research. Наприклад: Аудиторія активна, але вимагає чесного підходу.
                     </div>
-                </details>
+                </div>
             </div>
         </li>
 
-        <li class="research-item">
-            <div class="item-header">
-                <a href="dressly-youtube-ua-brief.html" class="btn">Youtube research 08.04.2026</a>
-                <details>
-                    <summary title="Дивитися висновки"></summary>
-                    <div class="conclusions">
-                        <strong>Висновки:</strong>
-                        Відео-огляди працюють краще за пряму рекламу. Конверсія з Shorts зросла на 15% за останній місяць.
+        <li>
+            <div class="card">
+                <div class="card-header">
+                    <details>
+                        <summary></summary>
+                    </details>
+                </div>
+                <div class="card-body">
+                    <a href="dressly-youtube-ua-brief.html" class="btn-link">Youtube research<br>08.04.2026</a>
+                    <div class="conclusion-text">
+                        Висновки по Youtube: Shorts дають на 40% більше охоплень, ніж звичайні відео.
                     </div>
-                </details>
+                </div>
             </div>
         </li>
 
-        <li class="research-item">
-            <div class="item-header">
-                <a href="7-hidden-shopping-frictions.html" class="btn">7 hidden shopping frictions 08.04.2026</a>
-                <details>
-                    <summary title="Дивитися висновки"></summary>
-                    <div class="conclusions">
-                        <strong>Висновки:</strong>
-                        Головний бар'єр — обов'язкова реєстрація перед покупкою. Також клієнти плутаються у виборі розмірної сітки.
+        <li>
+            <div class="card">
+                <div class="card-header">
+                    <details>
+                        <summary></summary>
+                    </details>
+                </div>
+                <div class="card-body">
+                    <a href="7-hidden-shopping-frictions.html" class="btn-link">7 hidden shopping frictions 08.04.2026</a>
+                    <div class="conclusion-text">
+                        Головна проблема — занадто довга форма реєстрації при оформленні замовлення.
                     </div>
-                </details>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <div class="card">
+                <div class="card-header">
+                    <details>
+                        <summary></summary>
+                    </details>
+                </div>
+                <div class="card-body">
+                    <a href="strategic-positioning-08.04.2026.html" class="btn-link">strategic positioning researh 08.04.2026</a>
+                    <div class="conclusion-text">
+                        Стратегічні висновки: Потрібно змістити фокус на преміальну упаковку та швидкість доставки.
+                    </div>
+                </div>
             </div>
         </li>
     </ul>
