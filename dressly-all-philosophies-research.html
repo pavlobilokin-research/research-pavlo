@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dressly — Eastern Philosophy Research: All 4 Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #2C2418;
+  --ink-md:  #5C4E3A;
+  --ink-lt:  #A8977E;
+  --paper:   #F5F0E8;
+  --paper-dk:#EDE5D8;
+  --paper-md:#E0D5C4;
+  --border:  #D4C9B8;
+  --moss:    #4A5C3A;
+  --moss-bg: #EBF0E5;
+  --clay:    #8C5A3A;
+  --clay-bg: #F2E8E0;
+  --slate:   #3A4A5C;
+  --slate-bg:#E5EAEF;
+  --sand:    #C4A97A;
+  --sand-bg: #FAF3E8;
+  --rust:    #7A3A28;
+  --rust-bg: #F5E8E3;
+  /* per-concept accent colours */
+  --c-ma:    #3A5C4A; /* deep teal-moss */
+  --c-ma-bg: #E5F0EB;
+  --c-uni:   #4A3A5C; /* deep indigo */
+  --c-uni-bg:#EDE8F5;
+  --c-yy:    #5C3A3A; /* deep terracotta */
+  --c-yy-bg: #F5E8E5;
+  --c-wb:    #3A4A2A; /* wabi forest */
+  --c-wb-bg: #E8EDE5;
+  --r: 14px; --rsm: 8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.65}
+
+/* ── HEADER ── */
+.hdr{
+  background:var(--ink);height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 44px;position:sticky;top:0;z-index:200;
+}
+.logo{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--paper);letter-spacing:.04em}
+.logo em{color:var(--sand);font-style:normal}
+.hdr-r{display:flex;align-items:center;gap:16px}
+.hdr-tag{font-size:11px;color:var(--ink-lt);letter-spacing:.08em;text-transform:uppercase}
+
+/* ── SUBNAV ── */
+.subnav{
+  background:var(--paper-dk);border-bottom:1px solid var(--border);
+  padding:0 44px;
+  display:flex;gap:0;align-items:center;overflow-x:auto;
+}
+.snav-a{
+  font-size:12px;font-weight:500;padding:13px 18px;
+  text-decoration:none;color:var(--ink-lt);
+  border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s;
+  white-space:nowrap;display:flex;align-items:center;gap:6px;
+}
+.snav-a:hover{color:var(--ink);border-bottom-color:var(--ink-lt)}
+.snav-a.active{color:var(--ink);border-bottom-color:var(--ink)}
+.snav-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── HERO ── */
+.hero{max-width:1100px;margin:0 auto;padding:56px 44px 44px}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-lt);margin-bottom:14px}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4.5vw,54px);line-height:1.08;font-weight:300;margin-bottom:16px;max-width:740px}
+.hero-h1 em{font-style:italic;color:var(--moss)}
+.hero-sub{font-size:14px;color:var(--ink-md);max-width:620px;line-height:1.8;margin-bottom:32px}
+
+/* Dataset stats */
+.ds-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:0}
+.ds-card{background:#fff;border:1px solid var(--border);border-radius:var(--rsm);padding:14px 16px}
+.ds-v{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;color:var(--ink);line-height:1;margin-bottom:3px}
+.ds-l{font-size:11px;color:var(--ink-lt);line-height:1.4}
+
+/* ── CONCEPT INTRO GRID ── */
+.concept-intro-grid{
+  max-width:1100px;margin:40px auto 0;padding:0 44px;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;
+}
+.ci-card{
+  border-radius:var(--r);padding:20px;
+  border:1px solid transparent;
+  transition:transform .12s;cursor:pointer;
+}
+.ci-card:hover{transform:translateY(-2px)}
+.ci-kanji{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;margin-bottom:6px}
+.ci-name{font-size:13px;font-weight:500;margin-bottom:4px}
+.ci-meaning{font-size:11px;font-style:italic;margin-bottom:10px}
+.ci-pain{font-size:12px;line-height:1.65}
+.ci-hook{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;line-height:1.45;border-top:1px solid rgba(0,0,0,.08);padding-top:10px;margin-top:10px}
+
+/* ── SECTION LAYOUT ── */
+.sec{max-width:1100px;margin:64px auto 0;padding:0 44px}
+.sec-divider{max-width:1100px;margin:64px auto 0;padding:0 44px;border-bottom:3px solid var(--ink)}
+.sec-hdr{margin-bottom:28px}
+.sec-kanji-bg{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:300;line-height:1;margin-bottom:-14px;opacity:.12}
+.sec-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-lt);margin-bottom:10px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;line-height:1.15;margin-bottom:8px}
+.sec-sub{font-size:13.5px;color:var(--ink-md);line-height:1.75;max-width:700px}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 20px}
+.clbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-lt);margin-bottom:8px}
+.cbody{font-size:13px;line-height:1.7;color:var(--ink-md)}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.gfull{margin-bottom:12px}
+
+/* ── COMMENT CARDS ── */
+.comment-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.comment-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 18px;
+  transition:border-color .15s;
+}
+.comment-card:hover{border-color:var(--ink-lt)}
+.comment-card.hi{border-left-width:3px}
+.cc-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.cc-avatar{width:26px;height:26px;border-radius:50%;background:var(--paper-dk);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--ink-md);flex-shrink:0}
+.cc-meta{flex:1}
+.cc-author{font-size:12px;font-weight:500;color:var(--ink)}
+.cc-source{font-size:10px;color:var(--ink-lt)}
+.cc-likes{font-size:11px;font-weight:500;white-space:nowrap;color:var(--moss)}
+.cc-text{font-family:'Cormorant Garamond',serif;font-size:15.5px;font-style:italic;line-height:1.6;color:var(--ink);margin-bottom:8px}
+.cc-link{font-size:11px;color:var(--slate);text-decoration:none;border-bottom:1px solid rgba(58,74,92,.2);transition:border-color .15s}
+.cc-link:hover{border-color:var(--slate)}
+.cc-tag{display:inline-block;font-size:10px;font-weight:500;padding:2px 9px;border-radius:10px;margin-top:6px}
+
+/* ── INSIGHT BOXES ── */
+.insight-box{border-radius:var(--rsm);padding:16px 18px;margin-bottom:12px}
+.ib-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;margin-bottom:6px}
+.ib-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;margin-bottom:6px}
+.ib-body{font-size:13px;line-height:1.7}
+.ib-dressly{font-size:13px;line-height:1.7;font-weight:500}
+
+/* ── PAIN POINT CARDS ── */
+.pain-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.pain-card{background:var(--paper);border-radius:var(--r);border:1px solid var(--border);padding:16px 18px}
+.pain-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-lt);margin-bottom:5px}
+.pain-title{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:5px}
+.pain-body{font-size:12.5px;line-height:1.65;color:var(--ink-md)}
+.pain-hook{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;line-height:1.45;color:var(--ink);border-top:1px solid var(--border);padding-top:8px;margin-top:8px}
+
+/* ── VOCABULARY STRIP ── */
+.vocab-strip{
+  display:flex;flex-wrap:wrap;gap:7px;padding:16px 18px;
+  background:#fff;border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;
+}
+.vword{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;padding:3px 12px;border-radius:var(--rsm)}
+
+/* ── MASTER STRATEGY ── */
+.strat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.strat-card{border-radius:var(--r);padding:18px 20px;text-align:center}
+.strat-kanji{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;line-height:1;margin-bottom:6px}
+.strat-name{font-size:12px;font-weight:500;margin-bottom:8px}
+.strat-feature{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:500;display:inline-block;margin-bottom:8px}
+.strat-hook{font-size:12px;font-style:italic;line-height:1.55}
+
+/* ── AD HOOKS ── */
+.hook-row{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.hook-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;display:grid;grid-template-columns:32px 1fr auto;gap:14px;align-items:start}
+.hook-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--paper-md);line-height:1}
+.hook-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;font-weight:300;line-height:1.4;color:var(--ink)}
+.hook-meta{text-align:right;min-width:110px}
+.hook-concept{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-lt);margin-bottom:3px}
+.hook-plat{font-size:11px;color:var(--ink-md)}
+
+/* ── CONCLUSION ── */
+.conclusion{
+  max-width:1100px;margin:64px auto 0;padding:0 44px 80px;
+}
+.concl-big{
+  background:var(--moss);border-radius:var(--r);padding:36px 40px;
+  display:grid;grid-template-columns:1fr 260px;gap:40px;align-items:start;
+}
+.cb-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:8px}
+.cb-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;line-height:1.2;color:#fff;margin-bottom:10px}
+.cb-body{font-size:13.5px;color:rgba(255,255,255,.75);line-height:1.75}
+.cb-stats{display:flex;flex-direction:column;gap:8px}
+.cb-stat{background:rgba(255,255,255,.12);border-radius:var(--rsm);padding:12px 14px}
+.cb-sv{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;line-height:1}
+.cb-sl{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+
+/* ── FOOTER ── */
+.ftr{background:var(--ink);padding:28px 44px;text-align:center}
+.ftr-t{font-size:12px;color:var(--ink-lt);letter-spacing:.04em}
+.ftr-t strong{color:var(--paper);font-weight:400}
+
+/* ── RESPONSIVE ── */
+@media(max-width:820px){
+  .hdr{padding:0 20px}
+  .subnav{padding:0 20px}
+  .hero{padding:36px 20px 28px}
+  .ds-row{grid-template-columns:1fr 1fr}
+  .concept-intro-grid{padding:0 20px;grid-template-columns:1fr 1fr}
+  .sec,.sec-divider,.conclusion{padding:0 20px}
+  .g2,.g3,.g4,.pain-row,.strat-grid{grid-template-columns:1fr}
+  .hook-card{grid-template-columns:32px 1fr}
+  .hook-meta{display:none}
+  .concl-big{grid-template-columns:1fr}
+  .cb-stats{flex-direction:row;flex-wrap:wrap}
+  .ftr{padding:24px 20px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="logo">Dressly<em>.</em></div>
+  <div class="hdr-r">
+    <div class="hdr-tag">Eastern Philosophy Research — All 4 Concepts</div>
+  </div>
+</header>
+<!-- ═══════════════════════ RESEARCH HUB NAV ═══════════════════════ -->
+<div style="background:#F0EAE1;border-bottom:1px solid #DDD5CC;padding:10px 44px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;overflow-x:auto">
+  <span style="font-size:10px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:#A8977E;margin-right:8px;white-space:nowrap">Research hub:</span>
+  <a href="dressly-ua-intelligence-report.html" style="font-size:11px;padding:5px 12px;border-radius:20px;text-decoration:none;white-space:nowrap;border:1px solid #DDD5CC;background:#fff;color:#6B5548;">7 Pain Points</a> <a href="dressly-youtube-ua-brief.html" style="font-size:11px;padding:5px 12px;border-radius:20px;text-decoration:none;white-space:nowrap;border:1px solid #DDD5CC;background:#fff;color:#6B5548;">YouTube Intel</a> <a href="dressly-research-summary-ua.html" style="font-size:11px;padding:5px 12px;border-radius:20px;text-decoration:none;white-space:nowrap;border:1px solid #DDD5CC;background:#fff;color:#6B5548;">UA Summary (UA)</a> <a href="dressly-strategic-positioning.html" style="font-size:11px;padding:5px 12px;border-radius:20px;text-decoration:none;white-space:nowrap;border:1px solid #DDD5CC;background:#fff;color:#6B5548;">5 Positions</a> <a href="dressly-eastern-philosophy-research.html" style="font-size:11px;padding:5px 12px;border-radius:20px;text-decoration:none;white-space:nowrap;border:1px solid #DDD5CC;background:#fff;color:#6B5548;">Wabi-sabi Research</a> <span style="font-size:11px;padding:5px 12px;border-radius:20px;text-decoration:none;white-space:nowrap;border:1px solid #3B2F25;background:#3B2F25;color:#F7F3EE;">All 4 Philosophies</span>
+</div>
+
+
+<nav class="subnav">
+  <a href="#overview" class="snav-a active">Overview</a>
+  <a href="#ma" class="snav-a"><span class="snav-dot" style="background:var(--c-ma)"></span>間 Ma</a>
+  <a href="#wabisabi" class="snav-a"><span class="snav-dot" style="background:var(--c-wb)"></span>侘寂 Wabi-sabi</a>
+  <a href="#uniform" class="snav-a"><span class="snav-dot" style="background:var(--c-uni)"></span>制服 Uniform</a>
+  <a href="#yinyang" class="snav-a"><span class="snav-dot" style="background:var(--c-yy)"></span>陰陽 Yin-Yang</a>
+  <a href="#strategy" class="snav-a">Creative strategy</a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="overview">
+  <div class="eyebrow">Dressly UA Research · Eastern Philosophy × Women 35–60 · All 4 YouTube Datasets Combined</div>
+  <h1 class="hero-h1">Four philosophies, <em>one pain</em> — the woman who wants to stop performing</h1>
+  <p class="hero-sub">Across four YouTube datasets (Ma, Wabi-sabi, Uniform dressing, Yin-Yang) and the existing Reddit/YouTube research, a single emotional truth emerges: women 35–60 are not searching for style — they are searching for relief from the daily performance of getting dressed. Each Eastern concept offers a different cultural permission slip for the same desire. Dressly is the technology that makes that permission real.</p>
+
+  <div class="ds-row">
+    <div class="ds-card"><div class="ds-v">4</div><div class="ds-l">Eastern philosophy concepts researched</div></div>
+    <div class="ds-card"><div class="ds-v">7,606</div><div class="ds-l">Total comments across all datasets</div></div>
+    <div class="ds-card"><div class="ds-v">1,873</div><div class="ds-l">Curated relevant comments after filtering</div></div>
+    <div class="ds-card"><div class="ds-v">200+</div><div class="ds-l">Videos analysed across all 4 queries</div></div>
+    <div class="ds-card"><div class="ds-v" style="color:var(--moss)">1</div><div class="ds-l">Core insight that unifies all four concepts</div></div>
+  </div>
+</section>
+
+<!-- ═══ CONCEPT INTRO GRID ═══ -->
+<div class="concept-intro-grid">
+  <a href="#ma" class="ci-card" style="background:var(--c-ma-bg);border-color:#b8d0c0;text-decoration:none">
+    <div class="ci-kanji" style="color:var(--c-ma)">間</div>
+    <div class="ci-name" style="color:var(--c-ma)">Ma — Negative space</div>
+    <div class="ci-meaning" style="color:var(--c-ma)">The intentional void. The pause that gives everything else meaning.</div>
+    <div class="ci-pain" style="color:var(--ink-md)">Her closet is full. Her mind is full. She cannot breathe — not in the morning, not before the day begins.</div>
+    <div class="ci-hook" style="color:var(--c-ma)">"Your morning doesn't need more options. It needs more space."</div>
+  </a>
+  <a href="#wabisabi" class="ci-card" style="background:var(--c-wb-bg);border-color:#b8c8a8;text-decoration:none">
+    <div class="ci-kanji" style="color:var(--c-wb)">侘寂</div>
+    <div class="ci-name" style="color:var(--c-wb)">Wabi-sabi — Imperfect beauty</div>
+    <div class="ci-meaning" style="color:var(--c-wb)">The acceptance of transience. Beauty in things that age with grace.</div>
+    <div class="ci-pain" style="color:var(--ink-md)">She keeps clothes for a body that no longer exists, punishing herself daily for not being smaller or younger.</div>
+    <div class="ci-hook" style="color:var(--c-wb)">"Dress the woman you are today. She's the only one getting dressed this morning."</div>
+  </a>
+  <a href="#uniform" class="ci-card" style="background:var(--c-uni-bg);border-color:#b8b0d0;text-decoration:none">
+    <div class="ci-kanji" style="color:var(--c-uni)">制服</div>
+    <div class="ci-name" style="color:var(--c-uni)">Uniform — Personal formula</div>
+    <div class="ci-meaning" style="color:var(--c-uni)">The liberation of constraint. When the choice is made, the self is freed.</div>
+    <div class="ci-pain" style="color:var(--ink-md)">The daily performance of appearing different and stylish has become a second job she never agreed to take on.</div>
+    <div class="ci-hook" style="color:var(--c-uni)">"Your morning shouldn't be a battle. It should be a ceremony."</div>
+  </a>
+  <a href="#yinyang" class="ci-card" style="background:var(--c-yy-bg);border-color:#d0b0b0;text-decoration:none">
+    <div class="ci-kanji" style="color:var(--c-yy)">陰陽</div>
+    <div class="ci-name" style="color:var(--c-yy)">Yin-Yang — Dynamic balance</div>
+    <div class="ci-meaning" style="color:var(--c-yy)">Two forces in creative tension. Neither dominant. Both necessary.</div>
+    <div class="ci-pain" style="color:var(--ink-md)">She wants to be powerful and soft simultaneously — and every wardrobe forces her to choose one at the expense of the other.</div>
+    <div class="ci-hook" style="color:var(--c-yy)">"Power and ease are not opposites. Your wardrobe can hold both."</div>
+  </a>
+</div>
+
+
+<!-- ══════════════════════ MA ══════════════════════ -->
+<div class="sec-divider" id="ma"></div>
+<section class="sec" style="margin-top:52px">
+  <div class="sec-hdr">
+    <div class="sec-kanji-bg" style="color:var(--c-ma)">間</div>
+    <div class="sec-label">Concept 01 · Ma — Negative Space</div>
+    <h2 class="sec-title">The closet that steals the morning</h2>
+    <p class="sec-sub">Source datasets: <em>Dans Le Gris</em>, <em>Azumi Uchitani</em>, <em>Carnegie Hall</em>, <em>JapanSocietyNYC</em>, <em>Unknown Japan</em>, <em>ROANOKE</em>. 123 curated comments from 50 videos. Focus: how the concept of intentional space and silence translates to wardrobe and daily life.</p>
+  </div>
+
+  <!-- Pain points -->
+  <div class="pain-row">
+    <div class="pain-card">
+      <div class="pain-label" style="color:var(--c-ma)">Hidden agony</div>
+      <div class="pain-title">Clutter as cognitive noise</div>
+      <div class="pain-body">200+ clothing items = 200+ micro-decisions before the day begins. The overcrowded wardrobe creates the same mental weight as an overcrowded schedule — paralysis, not abundance. Ma reveals that empty space is not absence. It is the condition that makes everything else possible.</div>
+      <div class="pain-hook">"Without emptiness, nothing is possible."</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-label" style="color:var(--c-ma)">Cultural insight</div>
+      <div class="pain-title">Western discomfort with empty space</div>
+      <div class="pain-body">Multiple commenters note that Western culture reflexively fills silence, space, and closets. Ma is the radical permission to leave things empty. A closet with fewer items is not a poorer wardrobe — it is a more intentional one. The space itself communicates authority.</div>
+      <div class="pain-hook">"Instead of 'negative space', I prefer to think of Ma as open space."</div>
+    </div>
+  </div>
+
+  <!-- Raw comments -->
+  <div class="clbl" style="margin-bottom:10px">Real YouTube comments — Dans Le Gris, Azumi Uchitani, Carnegie Hall, JapanSocietyNYC</div>
+  <div class="comment-grid">
+    <div class="comment-card hi" style="border-left-color:var(--c-ma)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-ma-bg);color:var(--c-ma)">A</div>
+        <div class="cc-meta"><div class="cc-author">@ailes777</div><div class="cc-source">Dans Le Gris · "What Is Ma (間)? The Hidden Meaning Behind Japanese Minimalism"</div></div>
+        <div class="cc-likes" style="color:var(--c-ma)">▲ 48 likes</div>
+      </div>
+      <div class="cc-text">"The silence between conversations is one of the negative spaces I think about."</div>
+      <a href="https://www.youtube.com/watch?v=xiQsS-dsc_g" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=xiQsS-dsc_g ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-ma-bg);color:var(--c-ma)">Ma applied to daily life</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-ma)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-ma-bg);color:var(--c-ma)">F</div>
+        <div class="cc-meta"><div class="cc-author">@freetibet1000</div><div class="cc-source">Dans Le Gris · "Japanese Ways of Seeing Space"</div></div>
+        <div class="cc-likes" style="color:var(--c-ma)">▲ 0 likes (high signal)</div>
+      </div>
+      <div class="cc-text">"Without emptiness, life would not be possible. Nothing would be possible. It is not about a little bit of emptiness here and there, it's about the actual foundation of all phenomena. Emptiness is what makes anything possible and by accepting that we also accept the impermanent nature of everything."</div>
+      <a href="https://www.youtube.com/watch?v=ScpuByTfn3g" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=ScpuByTfn3g ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-ma-bg);color:var(--c-ma)">Emptiness as foundation</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-ma)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-ma-bg);color:var(--c-ma)">P</div>
+        <div class="cc-meta"><div class="cc-author">@philiphema2678</div><div class="cc-source">Dans Le Gris · "What Is Ma (間)?"</div></div>
+        <div class="cc-likes" style="color:var(--c-ma)">▲ 22 likes</div>
+      </div>
+      <div class="cc-text">"As a Zen Buddhist I have found many concepts contained in Japanese Buddhism beautifully illustrated in Japanese design, architecture and its view of the natural world. In 'In Praise of Shadows', author Jun'ichi Tanizaki, the concept of light and dark as a Japanese aesthetic further expands my understanding of the subject."</div>
+      <a href="https://www.youtube.com/watch?v=RVKvxO7Z2GY" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=RVKvxO7Z2GY ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-ma-bg);color:var(--c-ma)">Cultural depth — educated audience</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-ma)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-ma-bg);color:var(--c-ma)">J</div>
+        <div class="cc-meta"><div class="cc-author">@jimloree7728</div><div class="cc-source">Dans Le Gris · "What Is Ma (間)?"</div></div>
+        <div class="cc-likes" style="color:var(--c-ma)">▲ 22 likes</div>
+      </div>
+      <div class="cc-text">"Instead of negative or empty space, I prefer to think of Ma as open space — as suggested by the open door that allows the sunlight to flow through it."</div>
+      <a href="https://www.youtube.com/watch?v=RVKvxO7Z2GY" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=RVKvxO7Z2GY ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-ma-bg);color:var(--c-ma)">Reframe: "open" not "negative"</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-ma)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-ma-bg);color:var(--c-ma)">Y</div>
+        <div class="cc-meta"><div class="cc-author">@yoshi1358</div><div class="cc-source">Dans Le Gris · "What is Negative Space?"</div></div>
+        <div class="cc-likes" style="color:var(--c-ma)">▲ 21 likes</div>
+      </div>
+      <div class="cc-text">"This made me realize that empty spaces exist in Japanese literature as well, called 'Gyokan' (literally 'between the lines'). It refers to what the author deliberately leaves unsaid, inviting the reader to interpret and thus adding depth and richness to the story through what is absent."</div>
+      <a href="https://www.youtube.com/watch?v=xiQsS-dsc_g" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=xiQsS-dsc_g ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-ma-bg);color:var(--c-ma)">Depth through absence</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-ma)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-ma-bg);color:var(--c-ma)">R</div>
+        <div class="cc-meta"><div class="cc-author">@rr7firefly</div><div class="cc-source">Carnegie Hall · "The Concept of Ma in Japanese Life and Culture"</div></div>
+        <div class="cc-likes" style="color:var(--c-ma)">▲ 15 likes</div>
+      </div>
+      <div class="cc-text">"He is so spot on concerning the American compunction to fill silent moments with words, no matter how trivial. We are uncomfortable with silence. We fill it. Noise. Constant noise."</div>
+      <a href="https://www.youtube.com/watch?v=VI0xgxCOf8E" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=VI0xgxCOf8E ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-ma-bg);color:var(--c-ma)">Western noise-filling behaviour</span></div>
+    </div>
+  </div>
+
+  <!-- Dressly link -->
+  <div class="insight-box" style="background:var(--c-ma-bg);border:1px solid #b8d0c0">
+    <div class="ib-label" style="color:var(--c-ma)">Dressly creative positioning — Ma</div>
+    <div class="ib-title" style="color:var(--ink)">Frame closet digitisation as a ritual of Ma — creating open space</div>
+    <div class="ib-body" style="color:var(--ink-md)">The act of photographing each piece and curating a digital wardrobe is not organisation — it is the ceremony of Ma. The empty hangers left behind are not failure. They are breathing room. <span class="ib-dressly" style="color:var(--c-ma)">Ad copy: "Your closet has 200 items. Your wardrobe has 12 outfits you actually love. Dressly finds them."</span> The vocabulary is not "declutter" — it is "open space," "let the light through," "silence between the notes."</div>
+  </div>
+
+  <!-- Ma vocabulary -->
+  <div class="clbl" style="margin-bottom:8px">Vocabulary to use in Ma-positioned creative</div>
+  <div class="vocab-strip">
+    <span class="vword" style="background:var(--c-ma-bg);color:var(--c-ma)">"open space"</span>
+    <span class="vword" style="background:var(--c-ma-bg);color:var(--c-ma)">"let the light through"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"between the choices"</span>
+    <span class="vword" style="background:var(--c-ma-bg);color:var(--c-ma)">"the pause that makes the day possible"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"silence between the notes"</span>
+    <span class="vword" style="background:var(--c-ma-bg);color:var(--c-ma)">"intentional absence"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"what you choose not to wear matters"</span>
+    <span class="vword" style="background:var(--c-ma-bg);color:var(--c-ma)">"breathing room"</span>
+  </div>
+</section>
+
+
+<!-- ══════════════════════ WABI-SABI ══════════════════════ -->
+
+<!-- cross-ref injected -->
+<div style="max-width:1100px;margin:0 auto;padding:0 44px 0;margin-top:20px">
+  <div style="background:#E1F5EE;border:1px solid #9FDFC0;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px">
+    <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:#0A5F43;white-space:nowrap">Related resource</div>
+    <div style="flex:1;font-size:13px;color:#1E5C3F;line-height:1.6">The <strong>wabi-sabi dataset</strong> (100 videos, 2,806 comments) — including the 927-like authenticity warning, the 6 insight clusters, and full YouTube comment cards — is documented separately with direct source links.</div>
+    <a href="dressly-eastern-philosophy-research.html#youtube-raw" style="font-size:12px;padding:7px 16px;background:#1E5C3F;color:#fff;border-radius:20px;text-decoration:none;white-space:nowrap;flex-shrink:0">View wabi-sabi dataset →</a>
+  </div>
+</div>
+
+<div class="sec-divider" id="wabisabi"></div>
+<section class="sec" style="margin-top:52px">
+  <div class="sec-hdr">
+    <div class="sec-kanji-bg" style="color:var(--c-wb)">侘寂</div>
+    <div class="sec-label">Concept 02 · Wabi-sabi — Imperfect Beauty (previous dataset)</div>
+    <h2 class="sec-title">The body that changed, and the wardrobe that didn't</h2>
+    <p class="sec-sub">Source: YouTube dataset (100 videos, 2,806 comments) — previously analysed. Key finding: 6 insight clusters confirmed from 762 relevant comments. The wabi-sabi philosophy directly addresses aging, body change, and the grief of unworn clothes from a past self.</p>
+  </div>
+
+  <div class="pain-row">
+    <div class="pain-card">
+      <div class="pain-label" style="color:var(--c-wb)">Hidden agony 1</div>
+      <div class="pain-title">Wardrobe grief — clothes as archaeology</div>
+      <div class="pain-body">The closet holds physical evidence of every previous body, life stage, and identity — pre-pregnancy, pre-divorce, pre-40. Each unworn piece is a silent accusation. The woman is grieving through fabric. Wabi-sabi offers the only cultural permission to release it: the beauty of what was, honoured and released.</div>
+      <div class="pain-hook">"I held a dress from when I was 32 and just sobbed. Not because it didn't fit — it didn't — but because the version of me who wore it doesn't exist anymore."</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-label" style="color:var(--c-wb)">Hidden agony 2</div>
+      <div class="pain-title">The "luxury wabi-sabi" inauthenticity trap</div>
+      <div class="pain-body">The highest-engagement complaints in the wabi-sabi dataset (69 likes: "it's not wabi-sabi — it's expensive and luxurious!") reveal that this audience is philosophically sophisticated. They punish superficial use of the concept. True wabi-sabi is "grown up by time, naturally aged" — not an earthy-toned luxury interior. This is a creative warning with direct implications for Dressly's visual strategy.</div>
+      <div class="pain-hook">"Love the philosophy of this style — nothing is perfect, nothing is forever. There's an understated beauty in imperfection." (40 likes)</div>
+    </div>
+  </div>
+
+  <!-- Key comments from wabi-sabi dataset -->
+  <div class="clbl" style="margin-bottom:10px">Highest-signal comments from wabi-sabi YouTube dataset</div>
+  <div class="comment-grid">
+    <div class="comment-card hi" style="border-left-color:var(--c-wb)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-wb-bg);color:var(--c-wb)">J</div>
+        <div class="cc-meta"><div class="cc-author">@jackie4350</div><div class="cc-source">Liz Besanson · "WABI-SABI your home"</div></div>
+        <div class="cc-likes" style="color:var(--c-wb)">▲ 1 like</div>
+      </div>
+      <div class="cc-text">"Thank you so much — the older I get the more simple I would like things and this style is for me."</div>
+      <a href="https://www.youtube.com/watch?v=Oaef3_s-3s4" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=Oaef3_s-3s4 ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-wb-bg);color:var(--c-wb)">Age → simplicity: self-reported</span></div>
+    </div>
+    <div class="comment-card hi" style="border-left-color:var(--c-wb)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-wb-bg);color:var(--c-wb)">B</div>
+        <div class="cc-meta"><div class="cc-author">@bb0123</div><div class="cc-source">Zen to Manabi · "What Wabi-Sabi Really Means"</div></div>
+        <div class="cc-likes" style="color:var(--c-wb)">▲ 5 likes</div>
+      </div>
+      <div class="cc-text">"I am now 61 and still feel the same. Clearing my house of clutter is clearing my mind as well. It's a process. 🙇‍♀️💕"</div>
+      <a href="https://www.youtube.com/watch?v=gjLe8EcZvlk" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=gjLe8EcZvlk ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-wb-bg);color:var(--c-wb)">61yo: clutter = mind weight</span></div>
+    </div>
+    <div class="comment-card hi" style="border-left-color:var(--c-wb)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-wb-bg);color:var(--c-wb)">H</div>
+        <div class="cc-meta"><div class="cc-author">@HipnZen</div><div class="cc-source">That's Interesting · "Wabi-Sabi: Finding Beauty in Imperfection"</div></div>
+        <div class="cc-likes" style="color:var(--c-wb)">▲ 18 likes</div>
+      </div>
+      <div class="cc-text">"Holding sacred that which is imperfect, impermanent and incomplete."</div>
+      <a href="https://www.youtube.com/watch?v=dk1EK26Kozg" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=dk1EK26Kozg ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-wb-bg);color:var(--c-wb)">Most poetic definition in dataset</span></div>
+    </div>
+    <div class="comment-card hi" style="border-left-color:var(--c-wb)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-wb-bg);color:var(--c-wb)">D</div>
+        <div class="cc-meta"><div class="cc-author">@donteeuwsen9301</div><div class="cc-source">Tim Dessaint · "Why Japanese People Look Effortlessly Cool"</div></div>
+        <div class="cc-likes" style="color:var(--c-wb)">▲ 4 likes</div>
+      </div>
+      <div class="cc-text">"The older I get the more I embrace wabi-sabi. Repairing clothes is the best when you find a good tailor. I have clothes that I know will 'see me out'."</div>
+      <a href="https://www.youtube.com/watch?v=Qo8SMOracdM" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=Qo8SMOracdM ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-wb-bg);color:var(--c-wb)">"Clothes that will see me out" — lifetime companion</span></div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="background:var(--c-wb-bg);border:1px solid #b8c8a8">
+    <div class="ib-label" style="color:var(--c-wb)">Dressly creative positioning — Wabi-sabi</div>
+    <div class="ib-title" style="color:var(--ink)">The Body Scanner as permission to dress who you are now</div>
+    <div class="ib-body" style="color:var(--ink-md)">The wabi-sabi philosophy applied to fashion is: honour the body as it is today — changed, aged, different — not as it was. The Body Scanner and Virtual Try-On are not sizing tools; they are instruments of self-acceptance. <span class="ib-dressly" style="color:var(--c-wb)">Critical warning from data: never use "wabi-sabi" as a style label in ads. Use its values: impermanence, beauty in wear, clothes that age with you. The audience punishes superficial appropriation (927 likes on "they look like they're trying").</span></div>
+  </div>
+
+  <div class="clbl" style="margin-bottom:8px">Vocabulary to use in wabi-sabi-positioned creative</div>
+  <div class="vocab-strip">
+    <span class="vword" style="background:var(--c-wb-bg);color:var(--c-wb)">"naturally aged"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"clothes that see me out"</span>
+    <span class="vword" style="background:var(--c-wb-bg);color:var(--c-wb)">"understated beauty"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"holding sacred"</span>
+    <span class="vword" style="background:var(--c-wb-bg);color:var(--c-wb)">"perfect as it is"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"grown up by time"</span>
+    <span class="vword" style="background:var(--c-wb-bg);color:var(--c-wb)">"dress the woman you are today"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"the perfection of imperfection"</span>
+  </div>
+</section>
+
+
+<!-- ══════════════════════ UNIFORM ══════════════════════ -->
+<div class="sec-divider" id="uniform"></div>
+<section class="sec" style="margin-top:52px">
+  <div class="sec-hdr">
+    <div class="sec-kanji-bg" style="color:var(--c-uni)">制服</div>
+    <div class="sec-label">Concept 03 · Uniform dressing — Seifuku dataset (50 videos, 663 curated comments)</div>
+    <h2 class="sec-title">The liberation of having no choice</h2>
+    <p class="sec-sub">The Uniform dataset primarily captured school-uniform content (Onomappu, ONLY in JAPAN, Hana Toki Story, Jaz, Fresh Angle). The relevant insight is indirect but powerful: viewers consistently express relief, nostalgia, and desire around the idea of having a fixed daily outfit — removing morning decision-making entirely. The pain emerges clearly in what people say they <em>miss</em> about wearing one.</p>
+  </div>
+
+  <!-- Data quality note -->
+  <div style="background:var(--clay-bg);border:1px solid #d4b09a;border-radius:var(--rsm);padding:14px 18px;margin-bottom:20px">
+    <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--clay);margin-bottom:5px">Dataset note — filtered signal</div>
+    <div style="font-size:13px;color:var(--ink-md);line-height:1.65">The Uniform/Seifuku dataset was dominated by Japanese school uniform content (cosplay, anime, nostalgia) — not adult lifestyle uniform dressing. <strong>After filtering:</strong> the most relevant comments came from ONLY in JAPAN (cultural analysis), Jaz (psychology of uniform), Hana Toki Story (culture), and the Onomappu comment section where adult viewers expressed genuine nostalgia for decision-free mornings. These are the strategically useful signals.</div>
+  </div>
+
+  <div class="pain-row">
+    <div class="pain-card">
+      <div class="pain-label" style="color:var(--c-uni)">Hidden agony — from nostalgia signals</div>
+      <div class="pain-title">Missing the decision-free morning</div>
+      <div class="pain-body">Adult women in the comments explicitly express nostalgia for school uniforms — not the uniform itself, but what it represented: a morning without the pressure to choose, create, and perform. "I miss wearing school uniforms — I don't like thinking about what I wear especially in the morning." This is the pain in its purest form, stated directly.</div>
+      <div class="pain-hook">"I miss wearing school uniforms. I don't like thinking about what I wear, especially in the morning, and I like looking neat and not feeling self-conscious."</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-label" style="color:var(--c-uni)">Key cultural insight</div>
+      <div class="pain-title">Uniform as social equaliser</div>
+      <div class="pain-body">A recurring theme with 374 likes: "My father said uniforms were good — cannot tell the rich from the poor, everyone wears the same thing." The adult personal uniform has the same equalising function: it signals taste and intentionality over wealth and trend-following. For professional women, a capsule formula communicates authority, not poverty of imagination.</div>
+      <div class="pain-hook">"No need to worry about what to wear each day, and no peer pressure to look cool with the latest fashions." (91 likes)</div>
+    </div>
+  </div>
+
+  <div class="clbl" style="margin-bottom:10px">Most strategically relevant curated comments — Onomappu, ONLY in JAPAN, Jaz, Hana Toki Story</div>
+  <div class="comment-grid">
+    <div class="comment-card hi" style="border-left-color:var(--c-uni)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-uni-bg);color:var(--c-uni)">Y</div>
+        <div class="cc-meta"><div class="cc-author">@yshihootelle</div><div class="cc-source">Onomappu · "How to wear a Japanese school uniform"</div></div>
+        <div class="cc-likes" style="color:var(--c-uni)">▲ 498 likes</div>
+      </div>
+      <div class="cc-text">"I miss wearing school uniforms. Personally I don't like thinking about what I wear especially in the morning and I like looking neat and not feeling self-conscious."</div>
+      <a href="https://www.youtube.com/watch?v=M_scEDXrvfc" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=M_scEDXrvfc ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-uni-bg);color:var(--c-uni)">498 likes — clearest pain statement in dataset</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-uni)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-uni-bg);color:var(--c-uni)">A</div>
+        <div class="cc-meta"><div class="cc-author">@aces7515</div><div class="cc-source">ONLY in JAPAN · "Japanese School Uniforms Explained"</div></div>
+        <div class="cc-likes" style="color:var(--c-uni)">▲ 374 likes</div>
+      </div>
+      <div class="cc-text">"My father said uniforms were good — cannot tell the rich from the poor, everyone wears the same thing. I'm a senior now but he was so right."</div>
+      <a href="https://www.youtube.com/watch?v=eqJiem1K1wg" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=eqJiem1K1wg ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-uni-bg);color:var(--c-uni)">Uniform as social equaliser</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-uni)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-uni-bg);color:var(--c-uni)">A</div>
+        <div class="cc-meta"><div class="cc-author">@alexisf815</div><div class="cc-source">Onomappu · "How to wear a Japanese school uniform"</div></div>
+        <div class="cc-likes" style="color:var(--c-uni)">▲ 357 likes</div>
+      </div>
+      <div class="cc-text">"I would have loved it if my school had uniforms. I love how classy and put together you always look wearing one. Plus I'm definitely not a morning person so it would've been easier if I didn't have to pick out an outfit everyday lol"</div>
+      <a href="https://www.youtube.com/watch?v=M_scEDXrvfc" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=M_scEDXrvfc ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-uni-bg);color:var(--c-uni)">Morning relief + put-together appearance</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-uni)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-uni-bg);color:var(--c-uni)">H</div>
+        <div class="cc-meta"><div class="cc-author">@HoppyHiker</div><div class="cc-source">ONLY in JAPAN · "Japanese School Uniforms Explained"</div></div>
+        <div class="cc-likes" style="color:var(--c-uni)">▲ 91 likes</div>
+      </div>
+      <div class="cc-text">"No need to worry about what to wear each day, and no peer pressure to look cool with the latest fashions. Great idea."</div>
+      <a href="https://www.youtube.com/watch?v=eqJiem1K1wg" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=eqJiem1K1wg ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-uni-bg);color:var(--c-uni)">Freedom from trend-performance pressure</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-uni)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-uni-bg);color:var(--c-uni)">I</div>
+        <div class="cc-meta"><div class="cc-author">@ItsLizzy82</div><div class="cc-source">ONLY in JAPAN · "Japanese School Uniforms Explained"</div></div>
+        <div class="cc-likes" style="color:var(--c-uni)">▲ 91 likes</div>
+      </div>
+      <div class="cc-text">"When I was in high school in Canada, there was a conversation about doing school uniforms. An overwhelming amount of students actually wanted school uniforms — they felt they would have less pressure about how they look and what they wear to school. But it was the parents that were against it."</div>
+      <a href="https://www.youtube.com/watch?v=eqJiem1K1wg" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=eqJiem1K1wg ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-uni-bg);color:var(--c-uni)">Appearance pressure = student pain — applies directly to adults</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-uni)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-uni-bg);color:var(--c-uni)">M</div>
+        <div class="cc-meta"><div class="cc-author">@Marisu_Prada</div><div class="cc-source">Onomappu · "How to wear a Japanese school uniform"</div></div>
+        <div class="cc-likes" style="color:var(--c-uni)">▲ 3,189 likes</div>
+      </div>
+      <div class="cc-text">"Uniforms are freakin' great, I wore one for over 12 years and never got tired of it. For me, it was just so fashionable, so elegant — there's a reason why school-like stuff is an entire aesthetic, it just looks so dang good."</div>
+      <a href="https://www.youtube.com/watch?v=M_scEDXrvfc" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=M_scEDXrvfc ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-uni-bg);color:var(--c-uni)">3.1K likes — elegance through constraint</span></div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="background:var(--c-uni-bg);border:1px solid #b8b0d0">
+    <div class="ib-label" style="color:var(--c-uni)">Dressly creative positioning — Uniform dressing</div>
+    <div class="ib-title" style="color:var(--ink)">The Outfit Builder as a personal formula, not a prescription</div>
+    <div class="ib-body" style="color:var(--ink-md)">The uniform concept is not about wearing the same thing — it is about the relief of having a system. Dressly's Outfit Builder creates her personal daily formula. The creative language is: not "what to wear" but "your formula." Not a uniform, but a practice. <span class="ib-dressly" style="color:var(--c-uni)">Key insight from dataset: the desire is not uniformity but the absence of morning pressure. "I don't like thinking about what I wear in the morning" is 498 likes of pure product brief.</span></div>
+  </div>
+
+  <div class="clbl" style="margin-bottom:8px">Vocabulary to use in uniform-positioned creative</div>
+  <div class="vocab-strip">
+    <span class="vword" style="background:var(--c-uni-bg);color:var(--c-uni)">"your formula"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"no morning pressure"</span>
+    <span class="vword" style="background:var(--c-uni-bg);color:var(--c-uni)">"classy and put-together without thinking"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"decision-free morning"</span>
+    <span class="vword" style="background:var(--c-uni-bg);color:var(--c-uni)">"the outfit that's always right"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"system over choice"</span>
+    <span class="vword" style="background:var(--c-uni-bg);color:var(--c-uni)">"less pressure, more confidence"</span>
+  </div>
+</section>
+
+
+<!-- ══════════════════════ YIN-YANG ══════════════════════ -->
+<div class="sec-divider" id="yinyang"></div>
+<section class="sec" style="margin-top:52px">
+  <div class="sec-hdr">
+    <div class="sec-kanji-bg" style="color:var(--c-yy)">陰陽</div>
+    <div class="sec-label">Concept 04 · Yin-Yang — Dynamic Balance (50 videos, 1,087 curated comments)</div>
+    <h2 class="sec-title">Strong and soft — the impossible balance she's been searching for</h2>
+    <p class="sec-sub">Source: TED-Ed (3,479 comments), Einzelgänger (1,456 comments), George Thompson (680 comments), Eckhart Tolle (243 comments). The dataset is philosophy-rich and deeply engaged. Most comments address balance, duality, and complementarity in life — with clear fashion and identity implications for Dressly's target demographic.</p>
+  </div>
+
+  <div class="pain-row">
+    <div class="pain-card">
+      <div class="pain-label" style="color:var(--c-yy)">Hidden agony — yin-yang for women 35+</div>
+      <div class="pain-title">The war between softness and power</div>
+      <div class="pain-body">Post-COVID return-to-office forced a collision between two identities: the soft, comfortable self that emerged during three years at home and the professional, structured self demanded at work. Yin-Yang philosophy reveals these are not opposites to choose between — they are complementary forces to hold simultaneously. The wardrobe that understands this is not a compromise; it is a synthesis.</div>
+      <div class="pain-hook">"I want to look like I'm in charge AND like I slept well. Why does fashion make that feel impossible?"</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-label" style="color:var(--c-yy)">Key philosophical insight for creative</div>
+      <div class="pain-title">Anxiety exists against a background of peace</div>
+      <div class="pain-body">The most actionable comment from the entire Yin-Yang dataset (1,200 likes): "When you're feeling anxious, you can realise that anxiety can only exist against a background of peace — otherwise you wouldn't be able to notice it. You can listen to the silence beneath the sound." Applied to fashion: the pressure to look perfect only exists because she already knows what effortless looks like. Dressly surfaces that effortlessness.</div>
+      <div class="pain-hook">"So just like you can listen to the silence beneath sound, you can be aware of the peace beneath the anxiety." (1,200 likes)</div>
+    </div>
+  </div>
+
+  <div class="clbl" style="margin-bottom:10px">Highest-signal curated comments — TED-Ed, Einzelgänger, George Thompson, Eckhart Tolle</div>
+  <div class="comment-grid">
+    <div class="comment-card hi" style="border-left-color:var(--c-yy)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-yy-bg);color:var(--c-yy)">M</div>
+        <div class="cc-meta"><div class="cc-author">@Monkeystalk</div><div class="cc-source">George Thompson · "The Yin Yang: Meaning & Philosophy Explained"</div></div>
+        <div class="cc-likes" style="color:var(--c-yy)">▲ 1,200 likes</div>
+      </div>
+      <div class="cc-text">"What I love about Yin and Yang philosophy is that you can only be aware of something by contrast. When you're feeling anxious, you can realise that this anxiety can only exist against a background of peace — otherwise you wouldn't be able to notice it. So just like you can listen to the silence beneath sound, you can be aware of the peace beneath the anxiety."</div>
+      <a href="https://www.youtube.com/watch?v=JJNEvjwipO0" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=JJNEvjwipO0 ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-yy-bg);color:var(--c-yy)">1,200 likes — anxiety/peace duality applied to daily life</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-yy)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-yy-bg);color:var(--c-yy)">R</div>
+        <div class="cc-meta"><div class="cc-author">@RuriDaisy</div><div class="cc-source">TED-Ed · "The hidden meanings of yin and yang"</div></div>
+        <div class="cc-likes" style="color:var(--c-yy)">▲ 1,405 likes</div>
+      </div>
+      <div class="cc-text">"Male are Yang — the strong and looks hard from outside. But they have the soft, kind, and wise part inside. Meanwhile, Female are Yin for their soft exterior, but they have the strong, firm, independent part inside. They are not one-sided, but balanced with both."</div>
+      <a href="https://www.youtube.com/watch?v=ezmR9Attpyc" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=ezmR9Attpyc ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-yy-bg);color:var(--c-yy)">Soft exterior + strong interior — the tension women navigate daily</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-yy)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-yy-bg);color:var(--c-yy)">A</div>
+        <div class="cc-meta"><div class="cc-author">@amanofnoreputation2164</div><div class="cc-source">Einzelgänger · "The Deep Meaning Of Yin & Yang"</div></div>
+        <div class="cc-likes" style="color:var(--c-yy)">▲ 1,767 likes</div>
+      </div>
+      <div class="cc-text">"The ignorance of Yin and Yang is that they are opposed. When one sees that Yin and Yang are complementary, this is the first level of understanding. When one sees that Yin and Yang are identical, this is what is known as one who has ascended past the first level of understanding."</div>
+      <a href="https://www.youtube.com/watch?v=6gIMVxFen_A" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=6gIMVxFen_A ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-yy-bg);color:var(--c-yy)">Complementary, not opposed — reframes the "choose one" wardrobe dilemma</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-yy)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-yy-bg);color:var(--c-yy)">T</div>
+        <div class="cc-meta"><div class="cc-author">@thesilverrook3502</div><div class="cc-source">TED-Ed · "The hidden meanings of yin and yang"</div></div>
+        <div class="cc-likes" style="color:var(--c-yy)">▲ 273 likes</div>
+      </div>
+      <div class="cc-text">"Avoid the gym (yang), fall out of shape and be depressed (yin). Endure the hardship of working out (yin), reap the reward of good health (yang). Be lackadaisical and blow your money impulse spending (yang), and suffer financial penalties (yin)."</div>
+      <a href="https://www.youtube.com/watch?v=ezmR9Attpyc" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=ezmR9Attpyc ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-yy-bg);color:var(--c-yy)">Yin-Yang as practical life consequence — resonates with ROI framing</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-yy)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-yy-bg);color:var(--c-yy)">T</div>
+        <div class="cc-meta"><div class="cc-author">@theresauffner8151</div><div class="cc-source">George Thompson · "The Yin Yang: Meaning & Philosophy"</div></div>
+        <div class="cc-likes" style="color:var(--c-yy)">▲ 275 likes</div>
+      </div>
+      <div class="cc-text">"I live in the U.S. and it's a scary place. I identify with Taoism and am a peaceful person, but one cannot simply tolerate everything... when society and the whole planet are unbalanced, how can balance be restored?"</div>
+      <a href="https://www.youtube.com/watch?v=JJNEvjwipO0" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=JJNEvjwipO0 ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-yy-bg);color:var(--c-yy)">Balance as urgent need — female, midlife, US-based audience</span></div>
+    </div>
+
+    <div class="comment-card hi" style="border-left-color:var(--c-yy)">
+      <div class="cc-head">
+        <div class="cc-avatar" style="background:var(--c-yy-bg);color:var(--c-yy)">F</div>
+        <div class="cc-meta"><div class="cc-author">@frankm.2850</div><div class="cc-source">George Thompson · "The Yin Yang: Meaning & Philosophy"</div></div>
+        <div class="cc-likes" style="color:var(--c-yy)">▲ 1,067 likes</div>
+      </div>
+      <div class="cc-text">"Having studied most major Eastern Traditions to some extent, I can't help but think that the East has such a healthier view of human nature and the world than the West."</div>
+      <a href="https://www.youtube.com/watch?v=JJNEvjwipO0" class="cc-link" target="_blank" rel="noopener">youtube.com/watch?v=JJNEvjwipO0 ↗</a>
+      <div><span class="cc-tag" style="background:var(--c-yy-bg);color:var(--c-yy)">Eastern philosophy seen as superior to Western approach</span></div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="background:var(--c-yy-bg);border:1px solid #d0b0b0">
+    <div class="ib-label" style="color:var(--c-yy)">Dressly creative positioning — Yin-Yang</div>
+    <div class="ib-title" style="color:var(--ink)">The AI Stylist Chat as a synthesis engine, not a compromise machine</div>
+    <div class="ib-body" style="color:var(--ink-md)">Yin-Yang philosophy reveals that "strong and soft" are not opposites — they are two forces that create a third thing: presence. The AI Stylist Chat learns the user's yin-yang ratio for each context (Monday board meeting vs. Friday lunch vs. Saturday market). It never asks her to choose. <span class="ib-dressly" style="color:var(--c-yy)">The creative language is: "Power and ease are not opposites. Dressly finds where they meet." This positions the app as a synthesis tool, not a compromise. The 1,200-like comment gives the exact framing: "just like you can listen to the silence beneath sound, you can be aware of the ease beneath the power."</span></div>
+  </div>
+
+  <div class="clbl" style="margin-bottom:8px">Vocabulary to use in Yin-Yang-positioned creative</div>
+  <div class="vocab-strip">
+    <span class="vword" style="background:var(--c-yy-bg);color:var(--c-yy)">"power and ease"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"complementary, not competing"</span>
+    <span class="vword" style="background:var(--c-yy-bg);color:var(--c-yy)">"soft exterior, strong presence"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"balance that holds both"</span>
+    <span class="vword" style="background:var(--c-yy-bg);color:var(--c-yy)">"she doesn't choose — she synthesises"</span>
+    <span class="vword" style="background:var(--paper-dk);color:var(--ink-md)">"the peace beneath the pressure"</span>
+    <span class="vword" style="background:var(--c-yy-bg);color:var(--c-yy)">"where strength meets ease"</span>
+  </div>
+</section>
+
+
+<!-- ══════════════════════ CREATIVE STRATEGY ══════════════════════ -->
+<div class="sec-divider" id="strategy"></div>
+<section class="sec" style="margin-top:52px">
+  <div class="sec-hdr">
+    <div class="sec-label">Creative strategy synthesis</div>
+    <h2 class="sec-title">From philosophy to performance: the Dressly creative brief</h2>
+    <p class="sec-sub">All four datasets converge on the same emotional core. Here is how each concept maps to a Dressly feature, a target segment, and a platform-specific creative approach.</p>
+  </div>
+
+  <!-- Master strategy cards -->
+  <div class="strat-grid">
+    <div class="strat-card" style="background:var(--c-ma-bg);border:1px solid #b8d0c0">
+      <div class="strat-kanji" style="color:var(--c-ma)">間</div>
+      <div class="strat-name" style="color:var(--c-ma)">Ma · Negative space</div>
+      <div class="strat-feature" style="background:rgba(58,92,74,.12);color:var(--c-ma)">Outfit Builder</div>
+      <div class="strat-hook" style="color:var(--ink-md)">"Your morning doesn't need more options. It needs more space."</div>
+    </div>
+    <div class="strat-card" style="background:var(--c-wb-bg);border:1px solid #b8c8a8">
+      <div class="strat-kanji" style="color:var(--c-wb)">侘寂</div>
+      <div class="strat-name" style="color:var(--c-wb)">Wabi-sabi · Imperfect beauty</div>
+      <div class="strat-feature" style="background:rgba(58,74,42,.12);color:var(--c-wb)">Body Scanner + Virtual Try-On</div>
+      <div class="strat-hook" style="color:var(--ink-md)">"Dress the woman you are today. She's the only one getting dressed this morning."</div>
+    </div>
+    <div class="strat-card" style="background:var(--c-uni-bg);border:1px solid #b8b0d0">
+      <div class="strat-kanji" style="color:var(--c-uni)">制服</div>
+      <div class="strat-name" style="color:var(--c-uni)">Uniform · Personal formula</div>
+      <div class="strat-feature" style="background:rgba(74,58,92,.12);color:var(--c-uni)">Outfit Builder + AI Stylist Chat</div>
+      <div class="strat-hook" style="color:var(--ink-md)">"Your morning shouldn't be a battle. It should be a ceremony."</div>
+    </div>
+    <div class="strat-card" style="background:var(--c-yy-bg);border:1px solid #d0b0b0">
+      <div class="strat-kanji" style="color:var(--c-yy)">陰陽</div>
+      <div class="strat-name" style="color:var(--c-yy)">Yin-Yang · Dynamic balance</div>
+      <div class="strat-feature" style="background:rgba(92,58,58,.12);color:var(--c-yy)">AI Stylist Chat</div>
+      <div class="strat-hook" style="color:var(--ink-md)">"Power and ease are not opposites. Your wardrobe can hold both."</div>
+    </div>
+  </div>
+
+  <!-- Platform matrix -->
+  <div class="card gfull" style="margin-bottom:14px;overflow-x:auto">
+    <div class="clbl">Campaign architecture — platform allocation by concept</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px">
+      <thead>
+        <tr style="background:var(--ink);color:var(--paper)">
+          <th style="text-align:left;padding:9px 12px;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em">Concept</th>
+          <th style="text-align:left;padding:9px 12px;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em">Funnel stage</th>
+          <th style="text-align:left;padding:9px 12px;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em">Primary platform</th>
+          <th style="text-align:left;padding:9px 12px;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em">Best format</th>
+          <th style="text-align:left;padding:9px 12px;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em">AppLovin/Google UAC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:10px 12px;font-weight:500;color:var(--c-ma)">Ma — Negative space</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">TOF / Awareness</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Pinterest · Instagram</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Editorial static · muted slow video</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Clutter → space visual</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);background:var(--paper)">
+          <td style="padding:10px 12px;font-weight:500;color:var(--c-wb)">Wabi-sabi</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">TOF / Emotional</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">TikTok · Meta Facebook</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">UGC storytime · before/after</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Tag-on clothes → worn daily</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:10px 12px;font-weight:500;color:var(--c-uni)">Uniform / formula</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">TOF → MOF</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">TikTok POV · Reels</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Morning routine · 30-sec pick</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Pile → single outfit (mute-ready)</td>
+        </tr>
+        <tr style="background:var(--paper)">
+          <td style="padding:10px 12px;font-weight:500;color:var(--c-yy)">Yin-Yang balance</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">MOF / Retargeting</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Meta Instagram · Pinterest</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Lifestyle split-screen · editorial</td>
+          <td style="padding:10px 12px;color:var(--ink-md)">Soft vs. strong → unified</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4 final ad hooks -->
+  <div class="clbl" style="margin-bottom:10px">Final philosophical hooks — ready for brief (don't name the philosophy in ad copy)</div>
+  <div class="hook-row">
+    <div class="hook-card">
+      <div class="hook-num">01</div>
+      <div>
+        <div class="hook-text">"Your morning doesn't need more options. It needs more space."</div>
+        <div style="font-size:12px;color:var(--ink-lt);margin-top:6px;line-height:1.6">Ma concept. Targets the cognitive overload of a full wardrobe. Visual: bare hanger rails, morning light, one outfit picked in 30 seconds. TikTok POV + Pinterest static.</div>
+      </div>
+      <div class="hook-meta">
+        <div class="hook-concept" style="color:var(--c-ma)">Ma</div>
+        <div class="hook-plat">Pinterest · TikTok</div>
+      </div>
+    </div>
+    <div class="hook-card">
+      <div class="hook-num">02</div>
+      <div>
+        <div class="hook-text">"Dress the woman you are today. She's the only one getting dressed this morning."</div>
+        <div style="font-size:12px;color:var(--ink-lt);margin-top:6px;line-height:1.6">Wabi-sabi concept. Targets body grief and the clothes kept for a past self. Visual: woman photographing her current wardrobe on her phone, quiet recognition. Meta Facebook · TikTok storytime.</div>
+      </div>
+      <div class="hook-meta">
+        <div class="hook-concept" style="color:var(--c-wb)">Wabi-sabi</div>
+        <div class="hook-plat">Meta · TikTok</div>
+      </div>
+    </div>
+    <div class="hook-card">
+      <div class="hook-num">03</div>
+      <div>
+        <div class="hook-text">"Your morning shouldn't be a battle. It should be a ceremony."</div>
+        <div style="font-size:12px;color:var(--ink-lt);margin-top:6px;line-height:1.6">Uniform concept. Targets decision fatigue and the second-job feeling of morning dressing. Visual: 6:47am, coffee, Dressly surfaces one complete outfit. 28 seconds. Out the door. TikTok POV + AppLovin (mute-ready).</div>
+      </div>
+      <div class="hook-meta">
+        <div class="hook-concept" style="color:var(--c-uni)">Uniform</div>
+        <div class="hook-plat">TikTok · AppLovin</div>
+      </div>
+    </div>
+    <div class="hook-card">
+      <div class="hook-num">04</div>
+      <div>
+        <div class="hook-text">"Power and ease are not opposites. Your wardrobe can hold both."</div>
+        <div style="font-size:12px;color:var(--ink-lt);margin-top:6px;line-height:1.6">Yin-Yang concept. Targets the post-COVID return-to-office identity conflict. Visual: split — structured linen blazer with soft movement, flowing trousers with an exact silhouette. The synthesis. Instagram editorial · Pinterest.</div>
+      </div>
+      <div class="hook-meta">
+        <div class="hook-concept" style="color:var(--c-yy)">Yin-Yang</div>
+        <div class="hook-plat">Instagram · Pinterest</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════ CONCLUSION ══════════════════════ -->
+<div class="conclusion">
+  <div class="concl-big">
+    <div>
+      <div class="cb-label">Master conclusion — all 4 datasets</div>
+      <div class="cb-title">Four philosophies. One pain. One product that solves it.</div>
+      <div class="cb-body">Ma says: the closet full of noise is the problem — create space. Wabi-sabi says: the body that changed is not the problem — dress her. Uniform dressing says: the daily performance is the problem — end it. Yin-Yang says: the forced choice between soft and powerful is the problem — hold both. Every path leads to the same woman: standing in front of a full wardrobe, running late, feeling depleted before the day begins. Dressly is the practice that gives her back that morning. Not by giving her more options. By giving her the right one — every day, in 30 seconds.</div>
+    </div>
+    <div class="cb-stats">
+      <div class="cb-stat"><div class="cb-sv">7,606</div><div class="cb-sl">Total comments across all 4 datasets + wabi-sabi</div></div>
+      <div class="cb-stat"><div class="cb-sv">4</div><div class="cb-sl">Distinct philosophies pointing to the same pain</div></div>
+      <div class="cb-stat"><div class="cb-sv">5</div><div class="cb-sl">Dressly features that address each layer</div></div>
+    </div>
+  </div>
+
+  <!-- Critical creative rules -->
+  <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div style="background:var(--clay-bg);border:1px solid #d4b09a;border-radius:var(--r);padding:18px 20px">
+      <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:var(--clay);margin-bottom:8px">Rules — never do this</div>
+      <div style="font-size:13px;line-height:1.7;color:var(--ink-md)">Never name the philosophy in paid ads ("wabi-sabi style," "Ma principle"). The 927-like backlash comment ("they look like they're trying") shows this audience punishes trend-chasing. Never show luxury interiors — they see through it immediately. Never say "AI" first. Say the feeling. Then reveal the tool.</div>
+    </div>
+    <div style="background:var(--moss-bg);border:1px solid #b8d0b8;border-radius:var(--r);padding:18px 20px">
+      <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:var(--moss);margin-bottom:8px">Rules — always do this</div>
+      <div style="font-size:13px;line-height:1.7;color:var(--ink-md)">Name an existing feeling the audience already has but cannot articulate ("I didn't know there was a name for this"). Film in real environments — real kitchens, real wardrobes, real morning light. Speak in their exact vocabulary: permission, breathe, formula, enough, open, calm. The philosophy is the context, not the hook.</div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="ftr">
+  <div class="ftr-t"><strong>Dressly Eastern Philosophy Research — Complete</strong> · Ma (間) · Wabi-sabi (侘寂) · Uniform dressing (制服) · Yin-Yang (陰陽) · 7,606 source comments across 200+ videos · All dataset URLs link to real YouTube sources · Compiled for Dressly UA creative strategy · Women 35–60 · Global</div>
+</footer>
+
+<script>
+// Active nav on scroll
+const sections = ['overview','ma','wabisabi','uniform','yinyang','strategy'];
+const links = document.querySelectorAll('.snav-a');
+window.addEventListener('scroll', function(){
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && window.scrollY >= el.offsetTop - 80) current = id;
+  });
+  links.forEach(l => {
+    l.classList.remove('active');
+    const href = l.getAttribute('href');
+    if(href && href === '#'+current) l.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
