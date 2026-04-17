@@ -1,175 +1,1486 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            padding: 20px;
-            background-color: #f6f8fa;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAM Workspace — Dressly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f0e;
+    --bg2: #161714;
+    --bg3: #1e1f1c;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e6df;
+    --muted: #7a7870;
+    --accent: #c8f07a;
+    --accent2: #8db84e;
+    --accent-dim: rgba(200,240,122,0.1);
+    --red: #f07a7a;
+    --blue: #7ab4f0;
+    --amber: #f0c07a;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        li {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-        }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
 
-        /* Контейнер для кнопки та висновків */
-        details {
-            display: inline-block;
-        }
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 220px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+  }
 
-        /* Прибираємо стандартну стрілочку браузера */
-        summary {
-            list-style: none;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
+  .logo-area {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
 
-        summary::-webkit-details-marker {
-            display: none;
-        }
+  .logo-wordmark {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
 
-        /* Стиль кнопок */
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #2da44e;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            transition: background-color 0.2s; 
-            border: 1px solid rgba(27, 31, 36, 0.15);
-        }
+  .logo-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
 
-        .btn:hover {
-            background-color: #2c974b;
-        }
+  .nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+  }
 
-        /* Стиль стрілочки */
-        .arrow {
-            display: inline-block;
-            margin-left: 8px;
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 8px solid #57606a; /* Колір стрілочки */
-            transition: transform 0.2s;
-        }
+  .nav-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 8px 6px;
+    margin-top: 8px;
+  }
 
-        /* Поворот стрілочки при відкритті */
-        details[open] .arrow {
-            transform: rotate(180deg);
-        }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+    text-decoration: none;
+  }
 
-        /* Блок з висновками */
-        .conclusions {
-            margin-top: 10px;
-            padding: 12px;
-            background-color: #ffffff;
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #24292f;
-            max-width: 500px;
-            line-height: 1.5;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
+  .nav-item:hover { color: var(--text); background: var(--bg3); }
+  .nav-item.active { color: var(--accent); background: var(--accent-dim); border-color: rgba(200,240,122,0.15); }
 
-        .conclusions strong {
-            color: #cf222e; /* Акцент на слові "Висновки" */
-        }
-    </style>
+  .nav-icon { font-size: 14px; width: 16px; flex-shrink: 0; }
+
+  .nav-count {
+    margin-left: auto;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    padding: 1px 6px;
+    color: var(--muted);
+  }
+
+  .sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .add-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #0e0f0e;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+
+  .add-btn:hover { background: #d4f88a; transform: translateY(-1px); }
+
+  .gh-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .gh-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+
+  .gh-dot.ok { background: var(--accent); }
+  .gh-dot.err { background: var(--red); }
+  .gh-dot.loading { background: var(--amber); animation: pulse 1s infinite; }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 220px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .page-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .search-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    width: 240px;
+    outline: none;
+    transition: border 0.15s;
+  }
+
+  .search-box::placeholder { color: var(--muted); }
+  .search-box:focus { border-color: var(--border2); }
+
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .pill {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: transparent;
+    transition: all 0.15s;
+  }
+
+  .pill:hover { border-color: var(--border2); color: var(--text); }
+  .pill.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  .content { padding: 32px; flex: 1; }
+
+  /* ── CARDS ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .card-thumb {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-thumb-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+  }
+
+  .card-body { padding: 16px; flex: 1; }
+
+  .card-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card-type.research { color: var(--blue); }
+  .card-type.tool { color: var(--accent); }
+  .card-type.app { color: var(--amber); }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .card:hover .card-actions { opacity: 1; }
+
+  .icon-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.15s;
+    color: var(--muted);
+  }
+
+  .icon-btn:hover { border-color: var(--border2); color: var(--text); }
+
+  /* ── STATS ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .stat-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .stat-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 18px;
+    color: var(--text);
+  }
+
+  .section-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .empty-state {
+    grid-column: 1/-1;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .empty-state-icon { font-size: 32px; margin-bottom: 12px; }
+
+  .tag {
+    display: inline-block;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    margin-right: 4px;
+    margin-top: 6px;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .modal-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    flex: 1;
+  }
+
+  .modal-close {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+
+  .modal-close:hover { color: var(--text); border-color: var(--border2); }
+
+  .modal-body { padding: 24px; }
+
+  .form-group { margin-bottom: 20px; }
+
+  .form-label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.15s;
+  }
+
+  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 140px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .type-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .type-option {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .type-option.selected { border-color: var(--accent); background: var(--accent-dim); }
+  .type-option .type-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .type-option .type-label { font-size: 12px; color: var(--muted); }
+  .type-option.selected .type-label { color: var(--accent); }
+
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .modal-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .modal-status.saving { color: var(--amber); }
+  .modal-status.ok { color: var(--accent); }
+  .modal-status.err { color: var(--red); }
+
+  .modal-btns { display: flex; gap: 10px; }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 20px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-secondary:hover { border-color: var(--border2); color: var(--text); }
+
+  .btn-primary {
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    color: #0e0f0e;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary:hover { background: #d4f88a; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ── GITHUB SETTINGS MODAL ── */
+  .gh-modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .gh-info-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .gh-info-box code {
+    font-family: 'DM Mono', monospace;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-size: 11px;
+  }
+
+  /* ── VIEWER ── */
+  .viewer-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 300;
+    display: none;
+    flex-direction: column;
+  }
+
+  .viewer-overlay.open { display: flex; }
+
+  .viewer-bar {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg2);
+    flex-shrink: 0;
+  }
+
+  .viewer-title {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .viewer-frame {
+    flex: 1;
+    border: none;
+    background: #fff;
+  }
+
+  /* Thumb patterns */
+  .thumb-dots { background-image: radial-gradient(var(--border2) 1px, transparent 1px); background-size: 12px 12px; }
+  .thumb-lines { background-image: repeating-linear-gradient(45deg, var(--border) 0, var(--border) 1px, transparent 0, transparent 50%); background-size: 10px 10px; }
+  .thumb-grid { background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 16px 16px; }
+
+  @media (max-width: 768px) {
+    .sidebar { width: 60px; }
+    .logo-wordmark, .logo-sub, .nav-section-label, .nav-item span:not(.nav-icon), .nav-count { display: none; }
+    .nav-item { justify-content: center; padding: 10px; }
+    .add-btn span { display: none; }
+    .main { margin-left: 60px; }
+    .topbar { padding: 14px 16px; flex-wrap: wrap; }
+    .content { padding: 16px; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .search-box { width: 160px; }
+  }
+</style>
 </head>
 <body>
 
-    <h2>Рісьорчі:</h2>
+<aside class="sidebar">
+  <div class="logo-area">
+    <div class="logo-wordmark">Dressly</div>
+    <div class="logo-sub">UAM Workspace</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section-label">Views</div>
+    <a class="nav-item active" onclick="showView('all',this)" href="#">
+      <span class="nav-icon">◈</span>
+      <span>All items</span>
+      <span class="nav-count" id="count-all">0</span>
+    </a>
+    <a class="nav-item" onclick="showView('research',this)" href="#">
+      <span class="nav-icon">◎</span>
+      <span>Research</span>
+      <span class="nav-count" id="count-research">0</span>
+    </a>
+    <a class="nav-item" onclick="showView('tool',this)" href="#">
+      <span class="nav-icon">◇</span>
+      <span>Tools</span>
+      <span class="nav-count" id="count-tool">0</span>
+    </a>
+    <a class="nav-item" onclick="showView('app',this)" href="#">
+      <span class="nav-icon">▣</span>
+      <span>Apps</span>
+      <span class="nav-count" id="count-app">0</span>
+    </a>
+    <div class="nav-section-label" style="margin-top:16px">Topics</div>
+    <div id="tags-nav"></div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="add-btn" onclick="openAddModal()">
+      <span>＋</span> <span>Add item</span>
+    </button>
+    <div class="gh-status" onclick="openGhSettings()" style="cursor:pointer" title="GitHub settings">
+      <div class="gh-dot" id="gh-dot"></div>
+      <span id="gh-status-text">GitHub: not configured</span>
+    </div>
+  </div>
+</aside>
 
-    <ul>
-        <li>
-            <a href="dressly_final_brief_v2.html" class="btn">Рісьорч Дімончіка 17.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Дімончік старався, всім читати
-                </div>
-            </details>
-        </li>
-        <li>
-            <a href="dressly-all-philosophies-research.html" class="btn">Eastern philosophy research youtube 15.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe
-                </div>
-            </details>
-        </li>
-        <li>
-            <a href="dressly-eastern-philosophy-research.html" class="btn">Eastern philosophy research reddit 15.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe
-                </div>
-            </details>
-        </li>
-        <li>
-            <a href="reddit-research-08.04.2026.html" class="btn">Reddit research 08.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Дослівні тригери для рекламних хуків. Топ 5 скарг.
-                </div>
-            </details>
-        </li>
+<main class="main">
+  <div class="topbar">
+    <div class="page-title" id="page-title">All items</div>
+    <input class="search-box" type="text" placeholder="Search..." id="search-input" oninput="renderCards()">
+    <div class="filter-pills" id="filter-pills">
+      <button class="pill active" onclick="setFilter('all',this)">All</button>
+      <button class="pill" onclick="setFilter('research',this)">Research</button>
+      <button class="pill" onclick="setFilter('tool',this)">Tool</button>
+      <button class="pill" onclick="setFilter('app',this)">App</button>
+    </div>
+  </div>
 
-        <li>
-            <a href="dressly-youtube-ua-brief.html" class="btn">Youtube research 08.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Симульований глибокий аналіз коментарів з каналів 
-                    Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style. 
-                    Топ-3 теми за емоційною інтенсивністю: довжина рукава (фізична фрустрація), 
-                    чорний колір що "старить" (відкриття, що ламає систему), 
-                    "відчуття невидимості" (екзистенційний біль).
-                </div>
-            </details>
-        </li>
+  <div class="content">
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(122,180,240,0.12)">◎</div>
+        <div>
+          <div class="stat-num" id="stat-research">0</div>
+          <div class="stat-label">Research docs</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(200,240,122,0.12)">◇</div>
+        <div>
+          <div class="stat-num" id="stat-tools">0</div>
+          <div class="stat-label">Tools</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(240,192,122,0.12)">▣</div>
+        <div>
+          <div class="stat-num" id="stat-apps">0</div>
+          <div class="stat-label">Apps</div>
+        </div>
+      </div>
+    </div>
 
-        <li>
-            <a href="7-hidden-shopping-frictions.html" class="btn">7 hidden shopping frictions 08.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> 7 больових точок при онлайн-шопінгу. Глибинний аналіз фрикцій, з якими 
-                    стикаються жінки 35+ під час пошуку та купівлі одягу онлайн. 
-                    Кожна точка прив'язана до конкретної функції Dressly та креативної ідеї для реклами.
-                </div>
-            </details>
-        </li>
+    <div class="section-header">
+      <div class="section-title" id="section-title">Everything</div>
+      <div class="section-count" id="section-count"></div>
+    </div>
 
-        <li>
-            <a href="strategic-positioning-08.04.2026.html" class="btn">Strategic positioning research 08.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> П'ять непрямолінійних кутів, що виходять далеко за межі «AI стайлінгу». 
-                    Кожен атакує різний психологічний шар тієї самої жінки. Підкріплені ринковими даними та першоджерелами..
-                </div>
-            </details>
-        </li>
-    </ul>
+    <div class="cards-grid" id="cards-grid">
+      <div class="empty-state">
+        <div class="empty-state-icon">⟳</div>
+        <div>Loading…</div>
+      </div>
+    </div>
+  </div>
+</main>
 
+<!-- ── ADD / EDIT MODAL ── -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Add new item</div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <div class="type-selector">
+          <div class="type-option selected" onclick="selectType('research',this)">
+            <span class="type-icon">◎</span>
+            <span class="type-label">Research</span>
+          </div>
+          <div class="type-option" onclick="selectType('tool',this)">
+            <span class="type-icon">◇</span>
+            <span class="type-label">Tool</span>
+          </div>
+          <div class="type-option" onclick="selectType('app',this)">
+            <span class="type-icon">▣</span>
+            <span class="type-label">App</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input class="form-input" id="item-title" type="text" placeholder="e.g. Reddit research 17.04.2026">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Conclusions / Description</label>
+        <input class="form-input" id="item-desc" type="text" placeholder="Key takeaway from this research">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tags (comma-separated)</label>
+        <input class="form-input" id="item-tags" type="text" placeholder="e.g. reddit, hooks, Q2">
+      </div>
+      <div class="form-group">
+        <label class="form-label">HTML Content (paste full HTML file)</label>
+        <textarea class="form-textarea" id="item-html" placeholder="Paste the full HTML content of the research/tool/app here…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="modal-status" id="modal-status"></div>
+      <div class="modal-btns">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" id="save-btn" onclick="saveItem()">
+          <span id="save-btn-text">Save to GitHub</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── GITHUB SETTINGS MODAL ── -->
+<div class="modal-overlay" id="gh-modal">
+  <div class="modal gh-modal">
+    <div class="modal-header">
+      <div class="modal-title">GitHub Settings</div>
+      <div class="modal-close" onclick="closeGhSettings()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="gh-info-box">
+        Items are stored as individual <code>.json</code> files in your GitHub repo under a <code>data/</code> folder. 
+        The <code>index.html</code> itself reads from that folder on load.<br><br>
+        You need a GitHub <strong>Personal Access Token</strong> with <code>repo</code> scope. 
+        <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank" style="color:var(--accent)">Generate one here →</a>
+      </div>
+      <div class="form-group">
+        <label class="form-label">GitHub Token (stored only in this browser)</label>
+        <input class="form-input" id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Repository (owner/repo)</label>
+        <input class="form-input" id="gh-repo" type="text" placeholder="pavlobilokin-research/research-pavlo">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Branch</label>
+        <input class="form-input" id="gh-branch" type="text" placeholder="main">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Data folder path</label>
+        <input class="form-input" id="gh-folder" type="text" placeholder="data">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="modal-status" id="gh-modal-status"></div>
+      <div class="modal-btns">
+        <button class="btn-secondary" onclick="closeGhSettings()">Cancel</button>
+        <button class="btn-secondary" onclick="testGhConnection()">Test connection</button>
+        <button class="btn-primary" onclick="saveGhSettings()">Save settings</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── VIEWER ── -->
+<div class="viewer-overlay" id="viewer">
+  <div class="viewer-bar">
+    <button class="btn-secondary" onclick="closeViewer()" style="padding:6px 14px;font-size:12px">← Back</button>
+    <div class="viewer-title" id="viewer-title"></div>
+    <button class="btn-secondary" onclick="editCurrentItem()" style="padding:6px 14px;font-size:12px">Edit</button>
+    <button class="btn-secondary" onclick="shareCurrentItem()" style="padding:6px 14px;font-size:12px">Copy link</button>
+    <button class="btn-secondary" onclick="deleteCurrentItem()" style="padding:6px 14px;font-size:12px;color:var(--red);border-color:rgba(240,122,122,0.3)">Delete</button>
+  </div>
+  <iframe class="viewer-frame" id="viewer-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONFIG (loaded from localStorage, persisted per-browser)
+// ─────────────────────────────────────────────
+const CFG_KEY = 'dressly_gh_config';
+let cfg = { token: '', repo: '', branch: 'main', folder: 'data' };
+
+function loadCfg() {
+  try { Object.assign(cfg, JSON.parse(localStorage.getItem(CFG_KEY)) || {}); } catch {}
+}
+
+function saveCfg() {
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+}
+
+// ─────────────────────────────────────────────
+// GITHUB API HELPERS
+// ─────────────────────────────────────────────
+function ghHeaders() {
+  return {
+    'Authorization': `Bearer ${cfg.token}`,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+
+function ghBase() {
+  return `https://api.github.com/repos/${cfg.repo}/contents/${cfg.folder}`;
+}
+
+function b64encode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+function b64decode(str) {
+  return decodeURIComponent(escape(atob(str)));
+}
+
+// Get a single file (returns {content, sha} or null)
+async function ghGet(path) {
+  const res = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${path}`, {
+    headers: ghHeaders()
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`GitHub error ${res.status}: ${await res.text()}`);
+  const data = await res.json();
+  return { content: b64decode(data.content.replace(/\n/g,'')), sha: data.sha };
+}
+
+// Create or update a file on GitHub
+async function ghPut(path, content, message, sha = null) {
+  const body = {
+    message,
+    content: b64encode(content),
+    branch: cfg.branch
+  };
+  if (sha) body.sha = sha;
+  const res = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${path}`, {
+    method: 'PUT',
+    headers: ghHeaders(),
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error(`GitHub write error ${res.status}: ${await res.text()}`);
+  return await res.json();
+}
+
+// Delete a file on GitHub
+async function ghDelete(path, sha, message) {
+  const res = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${path}`, {
+    method: 'DELETE',
+    headers: ghHeaders(),
+    body: JSON.stringify({ message, sha, branch: cfg.branch })
+  });
+  if (!res.ok) throw new Error(`GitHub delete error ${res.status}: ${await res.text()}`);
+}
+
+// List all files in the data folder
+async function ghList() {
+  const res = await fetch(`${ghBase()}`, { headers: ghHeaders() });
+  if (res.status === 404) return []; // folder doesn't exist yet
+  if (!res.ok) throw new Error(`GitHub list error ${res.status}`);
+  return await res.json(); // array of file objects
+}
+
+// ─────────────────────────────────────────────
+// DATA MODEL
+// Items stored as: data/{id}.json  → JSON metadata
+// HTML stored as: data/{id}.html   → raw HTML content
+// ─────────────────────────────────────────────
+let items = [];   // in-memory cache
+let currentView = 'all';
+let currentFilter = 'all';
+let currentEditId = null;
+let currentViewerId = null;
+let selectedType = 'research';
+let fileShas = {};  // {path: sha} cache for updates/deletes
+
+const ICONS = { research: '◎', tool: '◇', app: '▣' };
+const PATTERNS = { research: 'thumb-dots', tool: 'thumb-lines', app: 'thumb-grid' };
+const THUMB_BG = {
+  research: 'rgba(122,180,240,0.08)',
+  tool: 'rgba(200,240,122,0.08)',
+  app: 'rgba(240,192,122,0.08)'
+};
+
+// ─────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────
+async function boot() {
+  loadCfg();
+  updateGhStatusUI('loading', 'Connecting…');
+
+  if (!cfg.token || !cfg.repo) {
+    updateGhStatusUI('err', 'Not configured');
+    seedDemoItems();
+    renderAll();
+    return;
+  }
+
+  try {
+    await loadFromGitHub();
+    updateGhStatusUI('ok', cfg.repo.split('/')[1] || cfg.repo);
+  } catch(e) {
+    console.error('GitHub load error:', e);
+    updateGhStatusUI('err', 'Load failed');
+    // Fallback: show empty
+    items = [];
+    renderAll();
+  }
+
+  handleDeepLink();
+}
+
+// ─────────────────────────────────────────────
+// LOAD ALL ITEMS FROM GITHUB
+// ─────────────────────────────────────────────
+async function loadFromGitHub() {
+  const files = await ghList();
+  const metaFiles = files.filter(f => f.name.endsWith('.json') && f.name !== '_index.json');
+
+  items = [];
+  fileShas = {};
+
+  await Promise.all(metaFiles.map(async (f) => {
+    try {
+      const result = await ghGet(f.path);
+      if (!result) return;
+      const item = JSON.parse(result.content);
+      fileShas[f.path] = result.sha;
+
+      // Load HTML SHA for later updates
+      const htmlPath = f.path.replace('.json', '.html');
+      const htmlEntry = files.find(x => x.path === htmlPath);
+      if (htmlEntry) fileShas[htmlPath] = htmlEntry.sha;
+
+      // If html is embedded in meta, use it; else load separately
+      if (!item.html) {
+        const htmlResult = await ghGet(htmlPath);
+        if (htmlResult) {
+          item.html = htmlResult.content;
+          fileShas[htmlPath] = htmlResult.sha;
+        }
+      }
+
+      items.push(item);
+    } catch(e) {
+      console.warn('Skipping bad file', f.name, e);
+    }
+  }));
+
+  renderAll();
+}
+
+// ─────────────────────────────────────────────
+// SAVE ITEM TO GITHUB
+// ─────────────────────────────────────────────
+async function ghSaveItem(item) {
+  if (!cfg.token || !cfg.repo) throw new Error('GitHub not configured');
+
+  const folder = cfg.folder || 'data';
+  const metaPath = `${folder}/${item.id}.json`;
+  const htmlPath  = `${folder}/${item.id}.html`;
+
+  // Separate HTML from meta to keep JSON small
+  const meta = { ...item };
+  const htmlContent = meta.html || '';
+  delete meta.html;
+
+  // Write meta JSON
+  const metaSha = fileShas[metaPath] || null;
+  const metaResult = await ghPut(
+    metaPath,
+    JSON.stringify(meta, null, 2),
+    `[uam] ${metaSha ? 'Update' : 'Add'} item: ${item.title}`,
+    metaSha
+  );
+  fileShas[metaPath] = metaResult.content.sha;
+
+  // Write HTML file
+  if (htmlContent) {
+    const htmlSha = fileShas[htmlPath] || null;
+    const htmlResult = await ghPut(
+      htmlPath,
+      htmlContent,
+      `[uam] ${htmlSha ? 'Update' : 'Add'} HTML: ${item.title}`,
+      htmlSha
+    );
+    fileShas[htmlPath] = htmlResult.content.sha;
+  }
+}
+
+// ─────────────────────────────────────────────
+// DELETE ITEM FROM GITHUB
+// ─────────────────────────────────────────────
+async function ghDeleteItem(item) {
+  if (!cfg.token || !cfg.repo) return;
+  const folder = cfg.folder || 'data';
+  const metaPath = `${folder}/${item.id}.json`;
+  const htmlPath  = `${folder}/${item.id}.html`;
+
+  if (fileShas[metaPath]) {
+    await ghDelete(metaPath, fileShas[metaPath], `[uam] Remove item: ${item.title}`);
+    delete fileShas[metaPath];
+  }
+  if (fileShas[htmlPath]) {
+    await ghDelete(htmlPath, fileShas[htmlPath], `[uam] Remove HTML: ${item.title}`);
+    delete fileShas[htmlPath];
+  }
+}
+
+// ─────────────────────────────────────────────
+// DEMO SEED (when no GitHub configured)
+// ─────────────────────────────────────────────
+function seedDemoItems() {
+  items = [
+    {
+      id: 'demo-research-1',
+      type: 'research',
+      title: 'Дімончік Research 17.04.2026',
+      desc: 'Дімончік старався, всім читати',
+      tags: ['research', 'onboarding'],
+      html: '<style>body{font-family:system-ui;max-width:720px;margin:40px auto;padding:24px;color:#1a1a1a;line-height:1.7}</style><h1>Dressly Research</h1><p>Add your GitHub credentials in sidebar settings to enable GitHub sync.</p>',
+      created: new Date(Date.now() - 86400000).toISOString()
+    },
+    {
+      id: 'demo-research-2',
+      type: 'research',
+      title: 'Eastern Philosophy Research YouTube 15.04.2026',
+      desc: 'Ідея використання східної культури як підсилення capsule wardrobe',
+      tags: ['research', 'youtube', 'philosophy'],
+      html: '<style>body{font-family:system-ui;max-width:720px;margin:40px auto;padding:24px;color:#1a1a1a;line-height:1.7}</style><h1>Eastern Philosophy Research</h1><p>YouTube analysis placeholder — sync with GitHub to load real content.</p>',
+      created: new Date(Date.now() - 86400000*2).toISOString()
+    },
+    {
+      id: 'demo-research-3',
+      type: 'research',
+      title: 'Reddit Research 08.04.2026',
+      desc: 'Дослівні тригери для рекламних хуків. Топ 5 скарг.',
+      tags: ['research', 'reddit', 'hooks'],
+      html: '<style>body{font-family:system-ui;max-width:720px;margin:40px auto;padding:24px;color:#1a1a1a;line-height:1.7}</style><h1>Reddit Research</h1><p>Placeholder — configure GitHub to sync real content.</p>',
+      created: new Date(Date.now() - 86400000*9).toISOString()
+    }
+  ];
+}
+
+// ─────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────
+function renderAll() {
+  renderCounts();
+  renderCards();
+  renderTagsNav();
+}
+
+function renderCounts() {
+  const r = items.filter(i=>i.type==='research').length;
+  const t = items.filter(i=>i.type==='tool').length;
+  const a = items.filter(i=>i.type==='app').length;
+  document.getElementById('stat-research').textContent = r;
+  document.getElementById('stat-tools').textContent = t;
+  document.getElementById('stat-apps').textContent = a;
+  document.getElementById('count-all').textContent = items.length;
+  document.getElementById('count-research').textContent = r;
+  document.getElementById('count-tool').textContent = t;
+  document.getElementById('count-app').textContent = a;
+}
+
+function renderCards() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  let filtered = items.filter(item => {
+    const matchType = currentFilter === 'all' || item.type === currentFilter;
+    const matchView = currentView === 'all' || item.type === currentView;
+    const matchSearch = !q || item.title.toLowerCase().includes(q)
+      || (item.desc||'').toLowerCase().includes(q)
+      || (item.tags||[]).some(t=>t.toLowerCase().includes(q));
+    return matchType && matchView && matchSearch;
+  });
+
+  filtered.sort((a,b) => new Date(b.created) - new Date(a.created));
+  document.getElementById('section-count').textContent = `${filtered.length} item${filtered.length!==1?'s':''}`;
+
+  const grid = document.getElementById('cards-grid');
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-state-icon">${q ? '🔍' : '◈'}</div>
+      <div>${q ? `No results for "${q}"` : 'Nothing here yet — click + Add item'}</div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(item => {
+    const date = new Date(item.created).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+    const tags = (item.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+    return `
+    <div class="card" onclick="openViewer('${item.id}')">
+      <div class="card-thumb ${PATTERNS[item.type]||'thumb-dots'}" style="background-color:${THUMB_BG[item.type]||'rgba(200,240,122,0.08)'}">
+        <span style="font-size:36px;z-index:1;position:relative">${ICONS[item.type]||'◎'}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-type ${item.type}">${item.type.toUpperCase()}</div>
+        <div class="card-title">${item.title}</div>
+        <div class="card-desc">${item.desc||'No description'}</div>
+        ${tags ? `<div style="margin-top:6px">${tags}</div>` : ''}
+      </div>
+      <div class="card-footer">
+        <span class="card-date">${date}</span>
+        <div class="card-actions">
+          <div class="icon-btn" onclick="event.stopPropagation();editItem('${item.id}')" title="Edit">✎</div>
+          <div class="icon-btn" onclick="event.stopPropagation();deleteItem('${item.id}')" title="Delete" style="color:var(--red)">✕</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTagsNav() {
+  const allTags = [...new Set(items.flatMap(i=>i.tags||[]))].sort();
+  document.getElementById('tags-nav').innerHTML = allTags.slice(0,12).map(t =>
+    `<a class="nav-item" onclick="searchTag('${t}')" href="#" style="font-family:'DM Mono',monospace;font-size:11px">
+      <span class="nav-icon" style="font-size:10px">#</span><span>${t}</span>
+    </a>`
+  ).join('');
+}
+
+// ─────────────────────────────────────────────
+// VIEW / FILTER
+// ─────────────────────────────────────────────
+function showView(view, el) {
+  currentView = view;
+  currentFilter = 'all';
+  document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('page-title').textContent =
+    view === 'all' ? 'All items' : view.charAt(0).toUpperCase() + view.slice(1) + 's';
+  document.getElementById('section-title').textContent =
+    view === 'all' ? 'Everything' : view.charAt(0).toUpperCase() + view.slice(1) + 's';
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  document.querySelector('.pill').classList.add('active');
+  renderCards();
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderCards();
+}
+
+function searchTag(tag) {
+  document.getElementById('search-input').value = tag;
+  renderCards();
+}
+
+// ─────────────────────────────────────────────
+// ADD / EDIT MODAL
+// ─────────────────────────────────────────────
+function openAddModal() {
+  currentEditId = null;
+  selectedType = 'research';
+  document.getElementById('modal-title').textContent = 'Add new item';
+  document.getElementById('item-title').value = '';
+  document.getElementById('item-desc').value = '';
+  document.getElementById('item-tags').value = '';
+  document.getElementById('item-html').value = '';
+  document.getElementById('modal-status').textContent = '';
+  document.getElementById('modal-status').className = 'modal-status';
+  document.querySelectorAll('.type-option').forEach((el,i)=>el.classList.toggle('selected',i===0));
+  document.getElementById('modal').classList.add('open');
+}
+
+function editItem(id) {
+  const item = items.find(i=>i.id===id);
+  if (!item) return;
+  currentEditId = id;
+  selectedType = item.type;
+  document.getElementById('modal-title').textContent = 'Edit item';
+  document.getElementById('item-title').value = item.title;
+  document.getElementById('item-desc').value = item.desc||'';
+  document.getElementById('item-tags').value = (item.tags||[]).join(', ');
+  document.getElementById('item-html').value = item.html||'';
+  document.getElementById('modal-status').textContent = '';
+  document.getElementById('modal-status').className = 'modal-status';
+  document.querySelectorAll('.type-option').forEach((el,i)=>{
+    el.classList.toggle('selected', ['research','tool','app'][i]===item.type);
+  });
+  document.getElementById('modal').classList.add('open');
+}
+
+function editCurrentItem() { editItem(currentViewerId); }
+
+function selectType(type, el) {
+  selectedType = type;
+  document.querySelectorAll('.type-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function setModalStatus(msg, cls) {
+  const el = document.getElementById('modal-status');
+  el.textContent = msg;
+  el.className = `modal-status ${cls}`;
+}
+
+async function saveItem() {
+  const title = document.getElementById('item-title').value.trim();
+  if (!title) { alert('Please enter a title'); return; }
+
+  const btn = document.getElementById('save-btn');
+  const btnText = document.getElementById('save-btn-text');
+  btn.disabled = true;
+  btnText.textContent = 'Saving…';
+  setModalStatus('Pushing to GitHub…', 'saving');
+
+  const item = {
+    id: currentEditId || 'item_' + Date.now(),
+    type: selectedType,
+    title,
+    desc: document.getElementById('item-desc').value.trim(),
+    tags: document.getElementById('item-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    html: document.getElementById('item-html').value,
+    created: currentEditId ? (items.find(i=>i.id===currentEditId)||{}).created || new Date().toISOString() : new Date().toISOString(),
+    updated: new Date().toISOString()
+  };
+
+  try {
+    if (cfg.token && cfg.repo) {
+      await ghSaveItem(item);
+      setModalStatus('✓ Saved to GitHub', 'ok');
+    } else {
+      setModalStatus('⚠ Saved locally (configure GitHub to persist)', 'saving');
+    }
+
+    // Update in-memory
+    if (currentEditId) {
+      const idx = items.findIndex(i=>i.id===currentEditId);
+      items[idx] = item;
+    } else {
+      items.unshift(item);
+    }
+
+    renderAll();
+    setTimeout(() => closeModal(), 800);
+
+  } catch(e) {
+    console.error('Save error:', e);
+    setModalStatus(`✕ ${e.message}`, 'err');
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = 'Save to GitHub';
+  }
+}
+
+async function deleteItem(id) {
+  if (!confirm('Delete this item?')) return;
+  const item = items.find(i=>i.id===id);
+  if (!item) return;
+  try {
+    await ghDeleteItem(item);
+  } catch(e) {
+    console.warn('GitHub delete failed:', e);
+  }
+  items = items.filter(i=>i.id!==id);
+  renderAll();
+}
+
+async function deleteCurrentItem() {
+  if (!confirm('Delete this item?')) return;
+  const item = items.find(i=>i.id===currentViewerId);
+  if (!item) return;
+  try {
+    await ghDeleteItem(item);
+  } catch(e) {
+    console.warn('GitHub delete failed:', e);
+  }
+  items = items.filter(i=>i.id!==currentViewerId);
+  renderAll();
+  closeViewer();
+}
+
+// ─────────────────────────────────────────────
+// GITHUB SETTINGS MODAL
+// ─────────────────────────────────────────────
+function openGhSettings() {
+  document.getElementById('gh-token').value = cfg.token;
+  document.getElementById('gh-repo').value = cfg.repo;
+  document.getElementById('gh-branch').value = cfg.branch || 'main';
+  document.getElementById('gh-folder').value = cfg.folder || 'data';
+  document.getElementById('gh-modal-status').textContent = '';
+  document.getElementById('gh-modal').classList.add('open');
+}
+
+function closeGhSettings() {
+  document.getElementById('gh-modal').classList.remove('open');
+}
+
+function saveGhSettings() {
+  cfg.token  = document.getElementById('gh-token').value.trim();
+  cfg.repo   = document.getElementById('gh-repo').value.trim();
+  cfg.branch = document.getElementById('gh-branch').value.trim() || 'main';
+  cfg.folder = document.getElementById('gh-folder').value.trim() || 'data';
+  saveCfg();
+  closeGhSettings();
+  boot(); // reload from GitHub
+}
+
+async function testGhConnection() {
+  const token  = document.getElementById('gh-token').value.trim();
+  const repo   = document.getElementById('gh-repo').value.trim();
+  const folder = document.getElementById('gh-folder').value.trim() || 'data';
+  const st = document.getElementById('gh-modal-status');
+  st.textContent = 'Testing…';
+  st.className = 'modal-status saving';
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}`, {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' }
+    });
+    if (!res.ok) throw new Error(`Status ${res.status}`);
+    st.textContent = '✓ Connected!';
+    st.className = 'modal-status ok';
+  } catch(e) {
+    st.textContent = `✕ ${e.message}`;
+    st.className = 'modal-status err';
+  }
+}
+
+// ─────────────────────────────────────────────
+// GITHUB STATUS INDICATOR
+// ─────────────────────────────────────────────
+function updateGhStatusUI(state, text) {
+  const dot = document.getElementById('gh-dot');
+  const label = document.getElementById('gh-status-text');
+  dot.className = 'gh-dot ' + (state === 'ok' ? 'ok' : state === 'err' ? 'err' : state === 'loading' ? 'loading' : '');
+  label.textContent = `GitHub: ${text}`;
+}
+
+// ─────────────────────────────────────────────
+// VIEWER
+// ─────────────────────────────────────────────
+function openViewer(id) {
+  const item = items.find(i=>i.id===id);
+  if (!item) return;
+  currentViewerId = id;
+  document.getElementById('viewer-title').textContent = item.title;
+  const content = item.html || '<p style="padding:40px;color:#666;font-family:system-ui">No HTML content. Edit to add.</p>';
+  document.getElementById('viewer-frame').srcdoc = content;
+  document.getElementById('viewer').classList.add('open');
+  history.pushState({ itemId: id }, '', '#item-' + id);
+}
+
+function closeViewer() {
+  document.getElementById('viewer').classList.remove('open');
+  history.pushState({}, '', window.location.pathname);
+}
+
+function shareCurrentItem() {
+  const url = window.location.origin + window.location.pathname + '#item-' + currentViewerId;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = event.currentTarget;
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(()=>btn.textContent=orig, 2000);
+  });
+}
+
+function handleDeepLink() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#item-')) openViewer(hash.slice(6));
+}
+
+window.addEventListener('popstate', e => {
+  if (!e.state?.itemId) closeViewer();
+});
+
+// ─────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────
+boot();
+</script>
 </body>
 </html>
