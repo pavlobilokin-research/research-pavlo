@@ -31,13 +31,15 @@ jobs:
       - name: Generate config.js
         env:
           RESEARCH_TOKEN: ${{ secrets.RESEARCH_TOKEN }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           cat > config.js <<EOF
           window.DRESSLY_CONFIG = {
-            owner:  "pavlobilokin-research",
-            repo:   "research-pavlo",
-            branch: "main",
-            token:  "$RESEARCH_TOKEN"
+            owner:    "pavlobilokin-research",
+            repo:     "research-pavlo",
+            branch:   "main",
+            token:    "$RESEARCH_TOKEN",
+            password: "$PASSWORD"
           };
           EOF
 
