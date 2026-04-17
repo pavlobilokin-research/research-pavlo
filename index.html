@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dressly — Research Hub</title>
+    <!-- Injected at deploy time by GitHub Actions — contains RESEARCH_TOKEN -->
+    <script src="config.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,13 +39,7 @@
             gap: 12px;
             margin-bottom: 28px;
         }
-
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -.3px;
-        }
-
+        .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -.3px; }
         .header h1 span { color: var(--green); }
 
         /* ── Add-panel toggle ── */
@@ -73,7 +69,7 @@
             transition: max-height .35s ease, opacity .3s ease;
             opacity: 0;
         }
-        .add-panel.open { max-height: 700px; opacity: 1; }
+        .add-panel.open { max-height: 600px; opacity: 1; }
 
         .add-panel-inner {
             background: #fff;
@@ -84,14 +80,9 @@
             box-shadow: var(--shadow);
         }
 
-        .add-panel-inner h2 {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 18px;
-            color: var(--brown);
-        }
+        .add-panel-inner h2 { font-size: 15px; font-weight: 700; margin-bottom: 18px; }
 
-        /* ── Token notice ── */
+        /* ── Connection status badge ── */
         .token-row {
             display: flex;
             align-items: center;
@@ -104,12 +95,12 @@
             font-size: 13px;
             color: var(--muted);
         }
-        .token-row svg { flex-shrink:0; }
         .token-dot {
             width: 8px; height: 8px;
             border-radius: 50%;
             background: #e0c5b0;
             flex-shrink: 0;
+            transition: background .3s;
         }
         .token-dot.ok { background: var(--green); }
 
@@ -123,8 +114,10 @@
         @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
 
         .field { display: flex; flex-direction: column; gap: 5px; }
-        .field label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .3px; text-transform: uppercase; }
-
+        .field label {
+            font-size: 12px; font-weight: 600; color: var(--muted);
+            letter-spacing: .3px; text-transform: uppercase;
+        }
         .field input,
         .field textarea {
             width: 100%;
@@ -143,26 +136,8 @@
         .field textarea:focus { border-color: var(--brown); }
         .field input::placeholder,
         .field textarea::placeholder { color: #bbb3aa; }
-
         .field-full { grid-column: 1 / -1; }
-
         .html-area { min-height: 140px; font-size: 12px; font-family: 'Courier New', monospace; line-height: 1.5; }
-
-        /* ── Config row (collapsed by default) ── */
-        .config-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            color: var(--muted);
-            cursor: pointer;
-            margin-bottom: 14px;
-            user-select: none;
-        }
-        .config-toggle:hover { color: var(--brown); }
-        .config-section { display: none; margin-bottom: 14px; }
-        .config-section.open { display: grid; grid-template-columns:1fr 1fr; gap:10px; }
-        @media(max-width:520px){ .config-section.open{grid-template-columns:1fr;} }
 
         /* ── Submit & status ── */
         .form-footer { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
@@ -182,11 +157,7 @@
         #submit-btn:hover:not(:disabled) { background: var(--green-dk); transform: translateY(-1px); }
         #submit-btn:disabled { opacity: .55; cursor: not-allowed; }
 
-        #status-msg {
-            font-size: 13px;
-            font-weight: 500;
-            min-height: 20px;
-        }
+        #status-msg { font-size: 13px; font-weight: 500; min-height: 20px; }
         #status-msg.ok  { color: var(--green); }
         #status-msg.err { color: #c0392b; }
 
@@ -207,14 +178,12 @@
             flex-direction: column;
             gap: 10px;
         }
-
         ul#research-list li {
             display: flex;
             align-items: flex-start;
             gap: 10px;
         }
 
-        /* ── Buttons ── */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -232,9 +201,7 @@
         }
         .btn:hover { background: #5a4538; transform: translateY(-1px); }
 
-        /* ── Details / conclusions ── */
         details { display: inline-block; }
-
         summary {
             list-style: none;
             cursor: pointer;
@@ -268,7 +235,6 @@
         }
         .conclusions strong { color: var(--brown); }
 
-        /* ── Loader spinner ── */
         .spinner {
             display: inline-block;
             width: 15px; height: 15px;
@@ -300,44 +266,13 @@
         <div class="add-panel-inner">
             <h2>📄 New Research Entry</h2>
 
-            <!-- Token status -->
+            <!-- Connection status — driven by config.js -->
             <div class="token-row">
                 <div class="token-dot" id="token-dot"></div>
-                <span id="token-status-text">GitHub token not set — expand Config to enter it</span>
+                <span id="token-status-text">Checking connection…</span>
             </div>
 
-            <!-- Config (repo + token) -->
-            <div class="config-toggle" onclick="toggleConfig()">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/>
-                    <path d="M6 5v4M6 3.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-                </svg>
-                GitHub Config
-            </div>
-            <div class="config-section" id="config-section">
-                <div class="field">
-                    <label>Owner / Org</label>
-                    <input type="text" id="cfg-owner" placeholder="e.g. your-username">
-                </div>
-                <div class="field">
-                    <label>Repository</label>
-                    <input type="text" id="cfg-repo" placeholder="e.g. dressly-research">
-                </div>
-                <div class="field">
-                    <label>Branch</label>
-                    <input type="text" id="cfg-branch" placeholder="main" value="main">
-                </div>
-                <div class="field">
-                    <label>Fine-grained Token (session only)</label>
-                    <input type="password" id="cfg-token" placeholder="github_pat_…">
-                </div>
-                <div class="field" style="align-self:end">
-                    <label>&nbsp;</label>
-                    <button class="btn" style="border:none;cursor:pointer;width:fit-content" onclick="saveConfig()">Save Config</button>
-                </div>
-            </div>
-
-            <!-- File fields -->
+            <!-- Form: label + filename + HTML content -->
             <div class="form-grid">
                 <div class="field">
                     <label>Button Label</label>
@@ -360,7 +295,7 @@
         </div>
     </div>
 
-    <!-- ── List ── -->
+    <!-- ── Research list ── -->
     <p class="list-header">All Researches</p>
 
     <ul id="research-list">
@@ -417,42 +352,26 @@
 
     <script>
     // ─────────────────────────────────────────────
-    //  CONFIG  — stored in sessionStorage per tab
+    //  Config — injected by config.js at deploy time
+    //  Falls back gracefully if config.js is missing
     // ─────────────────────────────────────────────
-    const CFG_KEY = 'gh_cfg';
+    const CFG = (typeof window.DRESSLY_CONFIG !== 'undefined')
+        ? window.DRESSLY_CONFIG
+        : { owner: '', repo: '', branch: 'main', token: '' };
 
-    function loadConfig() {
-        try { return JSON.parse(sessionStorage.getItem(CFG_KEY)) || {}; } catch { return {}; }
-    }
-
-    function saveConfig() {
-        const cfg = {
-            owner:  document.getElementById('cfg-owner').value.trim(),
-            repo:   document.getElementById('cfg-repo').value.trim(),
-            branch: document.getElementById('cfg-branch').value.trim() || 'main',
-            token:  document.getElementById('cfg-token').value.trim()
-        };
-        if (!cfg.owner || !cfg.repo || !cfg.token) {
-            setStatus('Fill in Owner, Repository and Token first.', 'err');
-            return;
-        }
-        sessionStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-        refreshTokenStatus();
-        setStatus('Config saved for this session ✓', 'ok');
-    }
-
-    function refreshTokenStatus() {
-        const cfg = loadConfig();
-        const dot  = document.getElementById('token-dot');
-        const txt  = document.getElementById('token-status-text');
-        if (cfg.token) {
+    // ─────────────────────────────────────────────
+    //  Init — show connection status on load
+    // ─────────────────────────────────────────────
+    (function init() {
+        const dot = document.getElementById('token-dot');
+        const txt = document.getElementById('token-status-text');
+        if (CFG.token && CFG.owner && CFG.repo) {
             dot.classList.add('ok');
-            txt.textContent = `Connected: ${cfg.owner}/${cfg.repo} (${cfg.branch})`;
+            txt.textContent = `Connected to ${CFG.owner}/${CFG.repo} (${CFG.branch})`;
         } else {
-            dot.classList.remove('ok');
-            txt.textContent = 'GitHub token not set — expand Config to enter it';
+            txt.textContent = 'Not connected — config.js missing or token not set';
         }
-    }
+    })();
 
     // ─────────────────────────────────────────────
     //  UI toggles
@@ -462,51 +381,44 @@
         const btn   = document.getElementById('toggle-panel-btn');
         panel.classList.toggle('open');
         btn.classList.toggle('open');
-        // pre-fill config inputs from session
-        const cfg = loadConfig();
-        if (cfg.owner)  document.getElementById('cfg-owner').value  = cfg.owner;
-        if (cfg.repo)   document.getElementById('cfg-repo').value   = cfg.repo;
-        if (cfg.branch) document.getElementById('cfg-branch').value = cfg.branch;
-        // don't pre-fill token for security
-    }
-
-    function toggleConfig() {
-        document.getElementById('config-section').classList.toggle('open');
     }
 
     // ─────────────────────────────────────────────
-    //  GitHub helpers
+    //  GitHub API helpers
     // ─────────────────────────────────────────────
-    async function ghFetch(path, method, body, cfg) {
-        const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`, {
-            method,
-            headers: {
-                'Authorization': `Bearer ${cfg.token}`,
-                'Accept': 'application/vnd.github+json',
-                'Content-Type': 'application/json',
-                'X-GitHub-Api-Version': '2022-11-28'
-            },
-            body: body ? JSON.stringify(body) : undefined
-        });
+    async function ghFetch(path, method, body) {
+        const res = await fetch(
+            `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`,
+            {
+                method,
+                headers: {
+                    'Authorization': `Bearer ${CFG.token}`,
+                    'Accept': 'application/vnd.github+json',
+                    'Content-Type': 'application/json',
+                    'X-GitHub-Api-Version': '2022-11-28'
+                },
+                body: body ? JSON.stringify(body) : undefined
+            }
+        );
         return res;
     }
 
-    async function getFileSHA(path, cfg) {
-        const res = await ghFetch(path, 'GET', null, cfg);
+    async function getFileSHA(path) {
+        const res = await ghFetch(path, 'GET', null);
         if (res.status === 404) return null;
         if (!res.ok) throw new Error(`GitHub GET error ${res.status}`);
         const data = await res.json();
         return data.sha || null;
     }
 
-    async function putFile(path, content, message, cfg, sha) {
+    async function putFile(path, content, message, sha) {
         const body = {
             message,
-            content: btoa(unescape(encodeURIComponent(content))),  // UTF-8 safe base64
-            branch: cfg.branch
+            content: btoa(unescape(encodeURIComponent(content))), // UTF-8-safe base64
+            branch: CFG.branch
         };
         if (sha) body.sha = sha;
-        const res = await ghFetch(path, 'PUT', body, cfg);
+        const res = await ghFetch(path, 'PUT', body);
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
             throw new Error(err.message || `GitHub PUT error ${res.status}`);
@@ -515,7 +427,7 @@
     }
 
     // ─────────────────────────────────────────────
-    //  Inject new <li> into index.html source
+    //  index.html self-update helpers
     // ─────────────────────────────────────────────
     function buildNewLi(label, filename) {
         return `        <li>
@@ -528,16 +440,12 @@
     }
 
     function appendLiToSource(htmlSource, newLi) {
-        // Insert just before </ul>
         const marker = '</ul>';
         const idx = htmlSource.lastIndexOf(marker);
-        if (idx === -1) throw new Error('Could not find </ul> in index.html to inject entry.');
+        if (idx === -1) throw new Error('Could not find </ul> in index.html');
         return htmlSource.slice(0, idx) + newLi + '\n    ' + htmlSource.slice(idx);
     }
 
-    // ─────────────────────────────────────────────
-    //  Also update the live DOM
-    // ─────────────────────────────────────────────
     function appendLiToDOM(label, filename) {
         const ul = document.getElementById('research-list');
         const li = document.createElement('li');
@@ -548,14 +456,13 @@
                 <div class="conclusions"><strong>Висновки:</strong> </div>
             </details>`;
         ul.appendChild(li);
-        // flash highlight
         li.style.transition = 'background .4s';
         li.style.background = '#e8f7ee';
-        setTimeout(() => { li.style.background = ''; }, 1200);
+        setTimeout(() => { li.style.background = ''; }, 1400);
     }
 
     // ─────────────────────────────────────────────
-    //  Status helper
+    //  Status / loading helpers
     // ─────────────────────────────────────────────
     function setStatus(msg, type) {
         const el = document.getElementById('status-msg');
@@ -575,16 +482,15 @@
     //  Main submit
     // ─────────────────────────────────────────────
     async function submitResearch() {
-        const cfg      = loadConfig();
+        if (!CFG.token || !CFG.owner || !CFG.repo) {
+            setStatus('No GitHub config found. Re-deploy the site to inject config.js.', 'err');
+            return;
+        }
+
         const label    = document.getElementById('f-label').value.trim();
         const filename = document.getElementById('f-filename').value.trim();
         const content  = document.getElementById('f-content').value;
 
-        // Validate
-        if (!cfg.token || !cfg.owner || !cfg.repo) {
-            setStatus('Open Config and save your GitHub details first.', 'err');
-            return;
-        }
         if (!label)    { setStatus('Enter a button label.', 'err'); return; }
         if (!filename) { setStatus('Enter a filename.', 'err'); return; }
         if (!content)  { setStatus('Paste the HTML content.', 'err'); return; }
@@ -594,36 +500,31 @@
         setStatus('', '');
 
         try {
-            // 1. Upload the new research file
-            setStatus('Uploading research file…', '');
-            const newFileSHA = await getFileSHA(filename, cfg);
-            await putFile(filename, content, `Add research: ${label}`, cfg, newFileSHA);
+            // 1. Upload new research file
+            setStatus('Uploading research file…');
+            const newFileSHA = await getFileSHA(filename);
+            await putFile(filename, content, `Add research: ${label}`, newFileSHA);
 
             // 2. Fetch current index.html from GitHub
-            setStatus('Fetching index.html…', '');
-            const idxRes = await ghFetch('index.html', 'GET', null, cfg);
+            setStatus('Fetching index.html…');
+            const idxRes = await ghFetch('index.html', 'GET', null);
             if (!idxRes.ok) throw new Error(`Could not fetch index.html (${idxRes.status})`);
             const idxData = await idxRes.json();
             const idxSHA  = idxData.sha;
             const idxHTML = decodeURIComponent(escape(atob(idxData.content.replace(/\n/g, ''))));
 
-            // 3. Inject new <li>
-            const newLi      = buildNewLi(label, filename);
-            const updatedHTML = appendLiToSource(idxHTML, newLi);
+            // 3. Inject new <li> and push back
+            setStatus('Updating index.html…');
+            const updatedHTML = appendLiToSource(idxHTML, buildNewLi(label, filename));
+            await putFile('index.html', updatedHTML, `Update index: add ${label}`, idxSHA);
 
-            // 4. Push updated index.html
-            setStatus('Updating index.html…', '');
-            await putFile('index.html', updatedHTML, `Update index: add ${label}`, cfg, idxSHA);
-
-            // 5. Update live DOM
+            // 4. Update live DOM + reset form
             appendLiToDOM(label, filename);
-
-            // 6. Reset form
             document.getElementById('f-label').value    = '';
             document.getElementById('f-filename').value = '';
             document.getElementById('f-content').value  = '';
 
-            setStatus('✓ Published successfully!', 'ok');
+            setStatus('✓ Published successfully! GitHub Pages will update in ~30s.', 'ok');
         } catch (err) {
             console.error(err);
             setStatus(`Error: ${err.message}`, 'err');
@@ -631,11 +532,6 @@
             setBtnLoading(false);
         }
     }
-
-    // ─────────────────────────────────────────────
-    //  Init
-    // ─────────────────────────────────────────────
-    refreshTokenStatus();
     </script>
 
 </body>
