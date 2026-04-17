@@ -145,31 +145,9 @@
 
   .add-btn:hover { background: #d4f88a; transform: translateY(-1px); }
 
-  .gh-status {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    color: var(--muted);
-    text-align: center;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-  }
 
-  .gh-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--muted);
-    flex-shrink: 0;
-    transition: background 0.3s;
-  }
 
-  .gh-dot.ok { background: var(--accent); }
-  .gh-dot.err { background: var(--red); }
-  .gh-dot.loading { background: var(--amber); animation: pulse 1s infinite; }
 
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
   /* ── MAIN ── */
   .main {
@@ -599,34 +577,8 @@
   .btn-primary:hover { background: #d4f88a; }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* ── GITHUB SETTINGS MODAL ── */
-  .gh-modal {
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-lg);
-    width: 100%;
-    max-width: 500px;
-  }
 
-  .gh-info-box {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
 
-  .gh-info-box code {
-    font-family: 'DM Mono', monospace;
-    background: rgba(255,255,255,0.06);
-    padding: 1px 5px;
-    border-radius: 4px;
-    color: var(--accent);
-    font-size: 11px;
-  }
 
   /* ── VIEWER ── */
   .viewer-overlay {
@@ -716,10 +668,6 @@
     <button class="add-btn" onclick="openAddModal()">
       <span>＋</span> <span>Add item</span>
     </button>
-    <div class="gh-status" onclick="openGhSettings()" style="cursor:pointer" title="GitHub settings">
-      <div class="gh-dot" id="gh-dot"></div>
-      <span id="gh-status-text">GitHub: not configured</span>
-    </div>
   </div>
 </aside>
 
@@ -821,54 +769,13 @@
       <div class="modal-btns">
         <button class="btn-secondary" onclick="closeModal()">Cancel</button>
         <button class="btn-primary" id="save-btn" onclick="saveItem()">
-          <span id="save-btn-text">Save to GitHub</span>
+          <span id="save-btn-text">Save</span>
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── GITHUB SETTINGS MODAL ── -->
-<div class="modal-overlay" id="gh-modal">
-  <div class="modal gh-modal">
-    <div class="modal-header">
-      <div class="modal-title">GitHub Settings</div>
-      <div class="modal-close" onclick="closeGhSettings()">✕</div>
-    </div>
-    <div class="modal-body">
-      <div class="gh-info-box">
-        Items are stored as individual <code>.json</code> files in your GitHub repo under a <code>data/</code> folder. 
-        The <code>index.html</code> itself reads from that folder on load.<br><br>
-        You need a GitHub <strong>Personal Access Token</strong> with <code>repo</code> scope. 
-        <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank" style="color:var(--accent)">Generate one here →</a>
-      </div>
-      <div class="form-group">
-        <label class="form-label">GitHub Token (stored only in this browser)</label>
-        <input class="form-input" id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Repository (owner/repo)</label>
-        <input class="form-input" id="gh-repo" type="text" placeholder="pavlobilokin-research/research-pavlo">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Branch</label>
-        <input class="form-input" id="gh-branch" type="text" placeholder="main">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Data folder path</label>
-        <input class="form-input" id="gh-folder" type="text" placeholder="data">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <div class="modal-status" id="gh-modal-status"></div>
-      <div class="modal-btns">
-        <button class="btn-secondary" onclick="closeGhSettings()">Cancel</button>
-        <button class="btn-secondary" onclick="testGhConnection()">Test connection</button>
-        <button class="btn-primary" onclick="saveGhSettings()">Save settings</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- ── VIEWER ── -->
 <div class="viewer-overlay" id="viewer">
@@ -888,23 +795,18 @@
 // RESEARCH_TOKEN is the default token baked into the file.
 // Any token saved via the settings modal overrides it.
 // ─────────────────────────────────────────────
-const RESEARCH_TOKEN = 'REPLACE_WITH_YOUR_TOKEN'; // ← set this value before pushing to GitHub
+const RESEARCH_TOKEN = '__RESEARCH_TOKEN__';
 
-const CFG_KEY = 'dressly_gh_config';
-let cfg = { token: RESEARCH_TOKEN, repo: 'pavlobilokin-research/research-pavlo', branch: 'main', folder: 'data' };
+// Config is baked in at build time — token injected by GitHub Actions
+const cfg = {
+  token: RESEARCH_TOKEN,
+  repo: 'pavlobilokin-research/research-pavlo',
+  branch: 'main',
+  folder: 'data'
+};
 
-function loadCfg() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(CFG_KEY)) || {};
-    // localStorage overrides defaults, but fall back to RESEARCH_TOKEN if no token saved
-    Object.assign(cfg, saved);
-    if (!cfg.token) cfg.token = RESEARCH_TOKEN;
-  } catch {}
-}
-
-function saveCfg() {
-  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-}
+function loadCfg() { /* no-op — config is static */ }
+function saveCfg() { /* no-op — config is static */ }
 
 // ─────────────────────────────────────────────
 // GITHUB API HELPERS
@@ -967,12 +869,22 @@ async function ghDelete(path, sha, message) {
   if (!res.ok) throw new Error(`GitHub delete error ${res.status}: ${await res.text()}`);
 }
 
-// List all files in the data folder
+// List files in the data/ folder
 async function ghList() {
   const res = await fetch(`${ghBase()}`, { headers: ghHeaders() });
-  if (res.status === 404) return []; // folder doesn't exist yet
+  if (res.status === 404) return [];
   if (!res.ok) throw new Error(`GitHub list error ${res.status}`);
-  return await res.json(); // array of file objects
+  return await res.json();
+}
+
+// List all files in the repo root
+async function ghListRoot() {
+  const res = await fetch(
+    `https://api.github.com/repos/${cfg.repo}/contents/`,
+    { headers: ghHeaders() }
+  );
+  if (!res.ok) throw new Error(`GitHub root list error ${res.status}`);
+  return await res.json();
 }
 
 // ─────────────────────────────────────────────
@@ -1001,10 +913,8 @@ const THUMB_BG = {
 // ─────────────────────────────────────────────
 async function boot() {
   loadCfg();
-  updateGhStatusUI('loading', 'Connecting…');
 
   if (!cfg.token || !cfg.repo) {
-    updateGhStatusUI('err', 'Not configured');
     seedDemoItems();
     renderAll();
     return;
@@ -1012,10 +922,8 @@ async function boot() {
 
   try {
     await loadFromGitHub();
-    updateGhStatusUI('ok', cfg.repo.split('/')[1] || cfg.repo);
   } catch(e) {
     console.error('GitHub load error:', e);
-    updateGhStatusUI('err', 'Load failed');
     // Fallback: show empty
     items = [];
     renderAll();
@@ -1026,13 +934,18 @@ async function boot() {
 
 // ─────────────────────────────────────────────
 // LOAD ALL ITEMS FROM GITHUB
+// Sources:
+//   1. data/*.json  — managed items added via the UI
+//   2. *.html at repo root — raw HTML files committed directly
+//      (skips index.html itself; lazy-loads HTML content on open)
 // ─────────────────────────────────────────────
 async function loadFromGitHub() {
-  const files = await ghList();
-  const metaFiles = files.filter(f => f.name.endsWith('.json') && f.name !== '_index.json');
-
   items = [];
   fileShas = {};
+
+  // ── SOURCE 1: data/ folder managed items ──
+  const dataFiles = await ghList();
+  const metaFiles = dataFiles.filter(f => f.name.endsWith('.json') && f.name !== '_index.json');
 
   await Promise.all(metaFiles.map(async (f) => {
     try {
@@ -1041,12 +954,10 @@ async function loadFromGitHub() {
       const item = JSON.parse(result.content);
       fileShas[f.path] = result.sha;
 
-      // Load HTML SHA for later updates
       const htmlPath = f.path.replace('.json', '.html');
-      const htmlEntry = files.find(x => x.path === htmlPath);
+      const htmlEntry = dataFiles.find(x => x.path === htmlPath);
       if (htmlEntry) fileShas[htmlPath] = htmlEntry.sha;
 
-      // If html is embedded in meta, use it; else load separately
       if (!item.html) {
         const htmlResult = await ghGet(htmlPath);
         if (htmlResult) {
@@ -1055,11 +966,68 @@ async function loadFromGitHub() {
         }
       }
 
+      item._source = 'managed';
       items.push(item);
     } catch(e) {
-      console.warn('Skipping bad file', f.name, e);
+      console.warn('Skipping data file', f.name, e);
     }
   }));
+
+  // ── SOURCE 2: root-level .html files ──
+  const rootFiles = await ghListRoot();
+  const managedIds = new Set(items.map(i => i.id));
+
+  const rootHtmlFiles = rootFiles.filter(f =>
+    f.type === 'file' &&
+    f.name.endsWith('.html') &&
+    f.name !== 'index.html'
+  );
+
+  await Promise.all(rootHtmlFiles.map(async (f) => {
+    try {
+      // Derive a stable id from the filename
+      const id = 'root_' + f.name.replace('.html', '').replace(/[^a-z0-9_-]/gi, '_');
+      if (managedIds.has(id)) return; // already managed via data/
+
+      fileShas[f.path] = f.sha;
+
+      // Fetch the HTML content
+      const result = await ghGet(f.path);
+      if (!result) return;
+
+      // Try to extract <title> for display name; fall back to filename
+      const titleMatch = result.content.match(/<title[^>]*>([^<]+)<\/title>/i);
+      const title = titleMatch
+        ? titleMatch[1].trim()
+        : f.name.replace('.html', '').replace(/[-_]/g, ' ');
+
+      // Infer type from filename patterns
+      let type = 'research';
+      const name = f.name.toLowerCase();
+      if (name.includes('tool') || name.includes('checker') || name.includes('calculator')) type = 'tool';
+      else if (name.includes('app') || name.includes('dashboard') || name.includes('scraper')) type = 'app';
+
+      items.push({
+        id,
+        type,
+        title,
+        desc: '',
+        tags: [],
+        html: result.content,
+        created: new Date().toISOString(),
+        _source: 'root',
+        _filename: f.name
+      });
+    } catch(e) {
+      console.warn('Skipping root file', f.name, e);
+    }
+  }));
+
+  // Sort: managed items first, then root files alphabetically
+  items.sort((a, b) => {
+    if (a._source === b._source) return new Date(b.created) - new Date(a.created);
+    return a._source === 'managed' ? -1 : 1;
+  });
 
   renderAll();
 }
@@ -1214,6 +1182,7 @@ function renderCards() {
         <div class="card-title">${item.title}</div>
         <div class="card-desc">${item.desc||'No description'}</div>
         ${tags ? `<div style="margin-top:6px">${tags}</div>` : ''}
+        ${item._filename ? `<div style="margin-top:6px"><span class="tag" style="color:var(--muted);opacity:0.7">${item._filename}</span></div>` : ''}
       </div>
       <div class="card-footer">
         <span class="card-date">${date}</span>
@@ -1391,61 +1360,7 @@ async function deleteCurrentItem() {
   closeViewer();
 }
 
-// ─────────────────────────────────────────────
-// GITHUB SETTINGS MODAL
-// ─────────────────────────────────────────────
-function openGhSettings() {
-  document.getElementById('gh-token').value = cfg.token;
-  document.getElementById('gh-repo').value = cfg.repo;
-  document.getElementById('gh-branch').value = cfg.branch || 'main';
-  document.getElementById('gh-folder').value = cfg.folder || 'data';
-  document.getElementById('gh-modal-status').textContent = '';
-  document.getElementById('gh-modal').classList.add('open');
-}
 
-function closeGhSettings() {
-  document.getElementById('gh-modal').classList.remove('open');
-}
-
-function saveGhSettings() {
-  cfg.token  = document.getElementById('gh-token').value.trim();
-  cfg.repo   = document.getElementById('gh-repo').value.trim();
-  cfg.branch = document.getElementById('gh-branch').value.trim() || 'main';
-  cfg.folder = document.getElementById('gh-folder').value.trim() || 'data';
-  saveCfg();
-  closeGhSettings();
-  boot(); // reload from GitHub
-}
-
-async function testGhConnection() {
-  const token  = document.getElementById('gh-token').value.trim();
-  const repo   = document.getElementById('gh-repo').value.trim();
-  const folder = document.getElementById('gh-folder').value.trim() || 'data';
-  const st = document.getElementById('gh-modal-status');
-  st.textContent = 'Testing…';
-  st.className = 'modal-status saving';
-  try {
-    const res = await fetch(`https://api.github.com/repos/${repo}`, {
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' }
-    });
-    if (!res.ok) throw new Error(`Status ${res.status}`);
-    st.textContent = '✓ Connected!';
-    st.className = 'modal-status ok';
-  } catch(e) {
-    st.textContent = `✕ ${e.message}`;
-    st.className = 'modal-status err';
-  }
-}
-
-// ─────────────────────────────────────────────
-// GITHUB STATUS INDICATOR
-// ─────────────────────────────────────────────
-function updateGhStatusUI(state, text) {
-  const dot = document.getElementById('gh-dot');
-  const label = document.getElementById('gh-status-text');
-  dot.className = 'gh-dot ' + (state === 'ok' ? 'ok' : state === 'err' ? 'err' : state === 'loading' ? 'loading' : '');
-  label.textContent = `GitHub: ${text}`;
-}
 
 // ─────────────────────────────────────────────
 // VIEWER
