@@ -1,0 +1,450 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;color:var(--color-text-primary);background:transparent;font-size:13px}
+.w{max-width:920px;margin:0 auto;padding:1.25rem 1rem 3rem}
+.hdr{padding:1rem 0 .8rem;border-bottom:1px solid var(--color-border-tertiary);margin-bottom:1.5rem}
+.hdr-eye{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:.3rem}
+.hdr-h{font-family:'Lora',serif;font-size:1.5rem;line-height:1.2}
+.hdr-sub{font-size:12px;color:var(--color-text-secondary);margin-top:.3rem;line-height:1.5}
+.sec-lbl{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--color-text-secondary);margin-bottom:.75rem;padding-bottom:5px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.mb{margin-bottom:1.75rem}
+.stat-bar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1.75rem}
+.sb{padding:12px 14px;border-radius:10px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.sb-num{font-family:'Lora',serif;font-size:1.5rem;margin-bottom:3px}
+.sb-label{font-size:11px;color:var(--color-text-secondary);line-height:1.4;margin-bottom:6px}
+.sb-hook{font-family:'Lora',serif;font-style:italic;font-size:11px;line-height:1.5;padding:5px 8px;border-radius:5px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.concept-stack{display:flex;flex-direction:column;gap:8px}
+.ct{border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden;background:var(--color-background-primary)}
+.ct-head{display:grid;grid-template-columns:36px 1fr auto;align-items:start;gap:0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ct-num{font-family:'Lora',serif;font-size:1.3rem;padding:10px 0 10px 13px;line-height:1}
+.ct-title-wrap{padding:10px 12px}
+.ct-name{font-size:13px;font-weight:500;line-height:1.3;margin-bottom:3px}
+.ct-why{font-size:11px;color:var(--color-text-secondary);line-height:1.45}
+.ct-badge{padding:10px 13px 10px 0;white-space:nowrap}
+.ct-tag{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:500}
+.ct-body{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0}
+.ct-cell{padding:10px 13px;border-right:0.5px solid var(--color-border-tertiary);border-top:0.5px solid var(--color-border-tertiary)}
+.ct-cell:first-child{border-top:none;grid-column:1/-1;border-right:none;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ct-cell.hooks-cell{grid-column:1/-1;border-right:none;border-top:0.5px solid var(--color-border-tertiary)}
+.ct-cell:last-child{border-right:none}
+.cl{font-size:9px;letter-spacing:.11em;text-transform:uppercase;font-weight:500;margin-bottom:4px}
+.tx{font-size:11.5px;line-height:1.6}
+.tx.q{font-family:'Lora',serif;font-style:italic;font-size:12px;line-height:1.65}
+.hook-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:2px}
+.hk{padding:7px 10px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.hk-type{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.hk-text{font-family:'Lora',serif;font-style:italic;font-size:11.5px;line-height:1.55}
+.persona-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pg{border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden;background:var(--color-background-primary)}
+.pg-head{padding:10px 13px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.pg-name{font-size:13px;font-weight:500;margin-bottom:2px}
+.pg-desc{font-size:10.5px;color:var(--color-text-secondary);line-height:1.4}
+.pg-body{padding:10px 13px}
+.pg-pain{font-family:'Lora',serif;font-style:italic;font-size:11.5px;line-height:1.6;margin-bottom:8px;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.pg-sol{font-size:11.5px;line-height:1.55;margin-bottom:8px;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.pg-hooks{display:flex;flex-direction:column;gap:4px}
+.pg-hk{padding:5px 8px;border-radius:5px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.pg-hk-type{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.pg-hk-text{font-family:'Lora',serif;font-style:italic;font-size:11px;line-height:1.5}
+.format-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.fg{border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden;background:var(--color-background-primary)}
+.fg-head{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.fg-icon{width:28px;height:28px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500}
+.fg-title{font-size:12.5px;font-weight:500;flex:1;line-height:1.3}
+.fg-tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:500;flex-shrink:0;white-space:nowrap}
+.fg-body{padding:10px 13px;display:flex;flex-direction:column;gap:7px}
+.fg-ref{font-size:11px;color:var(--color-text-secondary);padding:5px 9px;border-left:2px solid var(--color-border-secondary);line-height:1.45;border-radius:0 5px 5px 0}
+.fg-how{font-size:11.5px;line-height:1.6}
+.fg-script{font-family:'Lora',serif;font-style:italic;font-size:11.5px;line-height:1.6;padding:7px 10px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.r{color:#C4577A}.rbg{background:#FDF0F5;color:#8A2050}
+.p{color:#7A4A9A}.pbg{background:#F5EBF8;color:#4A1A6A}
+.t{color:#1A7A6A}.tbg{background:#EAF5F3;color:#0A4A3A}
+.g{color:#8A6010}.gbg{background:#FBF5E4;color:#5A3A08}
+.b{color:#2A4A8A}.bbg{background:#EAF0FB;color:#1A2A60}
+.cr{color:#B84C1A}.crbg{background:#FDF0EA;color:#8A3010}
+.sl{color:#3A6A8A}.slbg{background:#EAF3F8;color:#1A3A58}
+</style>
+
+<div class="w">
+<h2 class="sr-only">Dressly final creative brief — concept types, personas, data ammunition, formats</h2>
+
+<div class="hdr">
+  <div class="hdr-eye">Dressly · Final creative brief</div>
+  <div class="hdr-h">Concept types · Personas · Data ammunition · Formats</div>
+  <div class="hdr-sub">Your ideas + research merged. Everything here is ready to brief against.</div>
+</div>
+
+<!-- DATA -->
+<div class="mb">
+  <div class="sec-lbl">Data you can use as hooks — real numbers that stop the scroll</div>
+  <div class="stat-bar">
+    <div class="sb">
+      <div class="sb-num r">43%</div>
+      <div class="sb-label">Return rate on Amazon clothing vs. 9% on everything else. She knows this loop. She lives it.</div>
+      <div class="sb-hook">"43% of Amazon clothing gets returned. You're not bad at shopping. You're missing a system."</div>
+    </div>
+    <div class="sb">
+      <div class="sb-num p">72%</div>
+      <div class="sb-label">Of women kept clothing they didn't love because returning felt like too much effort.</div>
+      <div class="sb-hook">"72% of women have clothes they hate but kept anyway. Your closet is full of expensive compromises."</div>
+    </div>
+    <div class="sb">
+      <div class="sb-num t">$380</div>
+      <div class="sb-label">Average annual Amazon clothing spend per US woman 35–49. Most of it unworn.</div>
+      <div class="sb-hook">"$380 a year on Amazon clothes. Most unworn. The problem was never the shopping."</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCEPTS -->
+<div class="mb">
+  <div class="sec-lbl">6 concept types — with real user language, Dressly solution, and hooks for ads + UGC</div>
+  <div class="concept-stack">
+
+    <div class="ct">
+      <div class="ct-head">
+        <div class="ct-num r">1</div>
+        <div class="ct-title-wrap">
+          <div class="ct-name">The Stranger in the Mirror / Identity Drift</div>
+          <div class="ct-why">She's changed — body, life, chapter — but her wardrobe is frozen in the past. Getting dressed feels like wearing someone else's life.</div>
+        </div>
+        <div class="ct-badge"><span class="ct-tag rbg">Highest conviction</span></div>
+      </div>
+      <div class="ct-body">
+        <div class="ct-cell">
+          <div class="cl r">Real user language (verbatim)</div>
+          <div class="tx q">"My wardrobe is full of clothes that belong to someone I used to be." / "My wardrobe thinks I'm still 34." / "I stopped dressing like myself years ago." / "I looked in the mirror and didn't recognise myself — not because I aged, because my clothes haven't kept up."</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl r">Core pain</div>
+          <div class="tx">Identity drift accumulated over years — post-kids, post-divorce, post-career-shift. She's evolved. Her wardrobe hasn't. Every morning she opens a closet that belongs to a closed chapter.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl r">Dressly solution</div>
+          <div class="tx">Asks who she is now — not who she was when she bought the blazer. Builds outfits for the current woman, not the archived one. First time her wardrobe and her identity are in the same decade.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl r">Amazon capsule angle</div>
+          <div class="tx">3 Amazon pieces under $80 that represent who she is now — not who her closet remembers. The "identity update capsule." Purposeful, affordable, connected to reality.</div>
+        </div>
+        <div class="ct-cell hooks-cell">
+          <div class="cl r">Hooks — ads + UGC</div>
+          <div class="hook-wrap">
+            <div class="hk"><div class="hk-type r">Brand line · any format</div><div class="hk-text">"She looked in the mirror and saw a woman her clothes hadn't met yet."</div></div>
+            <div class="hk"><div class="hk-type r">Vulnerable · Meta / Reels</div><div class="hk-text">"My wardrobe thinks I'm still 34. Dressly finally caught up."</div></div>
+            <div class="hk"><div class="hk-type r">UGC opener</div><div class="hk-text">"I stopped dressing like myself years ago. This is how I found her again."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct">
+      <div class="ct-head">
+        <div class="ct-num p">2</div>
+        <div class="ct-title-wrap">
+          <div class="ct-name">The Guilt Closet / The Unworn Graveyard</div>
+          <div class="ct-why">$2,000 in unworn clothes. Tags still on. The closet is a record of failed intentions — financial guilt meets identity guilt.</div>
+        </div>
+        <div class="ct-badge"><span class="ct-tag pbg">Highest guilt release</span></div>
+      </div>
+      <div class="ct-body">
+        <div class="ct-cell">
+          <div class="cl p">Real user language (verbatim)</div>
+          <div class="tx q">"I have $2,000 worth of things I've never worn." / "That blouse I bought 2 years ago and never wore — I still feel guilty every time I see it." / "I keep buying things I'll wear 'eventually.' Eventually never comes." / "My closet is full of good intentions and bad purchases."</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl p">Core pain</div>
+          <div class="tx">Financial guilt + identity guilt layered together. She should know what suits her by now. The closet feels like evidence of a character flaw. The guilt compounds every time she opens it.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl p">Dressly solution</div>
+          <div class="tx">Works with what she already has. Resurrects the orphan pieces — finds the outfit they belong in. She didn't have bad taste. She just didn't have a system. That reframe is the emotional payload.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl p">Amazon capsule angle</div>
+          <div class="tx">"Stop buying more. Start wearing what you have." Dressly-first, Amazon-supplement. The capsule only adds what her existing wardrobe genuinely lacks.</div>
+        </div>
+        <div class="ct-cell hooks-cell">
+          <div class="cl p">Hooks — ads + UGC</div>
+          <div class="hook-wrap">
+            <div class="hk"><div class="hk-type p">Viral UGC</div><div class="hk-text">"That blouse I bought 2 years ago and never wore? Dressly finally figured out what to do with it."</div></div>
+            <div class="hk"><div class="hk-type p">Data hook · Meta static</div><div class="hk-text">"I had $2,000 in unworn clothes. Turns out I didn't have bad taste. I just needed a system."</div></div>
+            <div class="hk"><div class="hk-type p">Direct · TikTok</div><div class="hk-text">"Stop buying more. Start wearing what you have. Here's the app that makes that possible."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct">
+      <div class="ct-head">
+        <div class="ct-num t">3</div>
+        <div class="ct-title-wrap">
+          <div class="ct-name">Choice Fatigue / Window Shopping Spiral</div>
+          <div class="ct-why">Hours on Amazon, hours on Instagram, nothing bought or everything bought wrong. She needs fewer, better decisions — not more options.</div>
+        </div>
+        <div class="ct-badge"><span class="ct-tag tbg">Morning routine angle</span></div>
+      </div>
+      <div class="ct-body">
+        <div class="ct-cell">
+          <div class="cl t">Real user language (verbatim)</div>
+          <div class="tx q">"I spend hours browsing and still buy nothing." / "I stood in front of my closet for 20 minutes and was late anyway." / "You shouldn't have to solve a puzzle before your first coffee." / "I make 300 decisions before lunch. This shouldn't be one of them."</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl t">Core pain</div>
+          <div class="tx">Decision fatigue hitting before the day even starts. She's a time-poor professional managing work, family, logistics. The closet is one more unsolvable problem costing her 15–20 minutes every morning.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl t">Dressly solution</div>
+          <div class="tx">Removes the decision entirely. One outfit. Done. The relief isn't convenience — it's the removal of a daily weight she didn't realise she was carrying. Freeing morning routine = real life benefit.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl t">The "always on time for dates" angle</div>
+          <div class="tx">"How I'm always on time when going on a date." The outfit is ready before the anxiety starts. She walks out calm, dressed, on time — instead of 40 minutes late having changed 4 times.</div>
+        </div>
+        <div class="ct-cell hooks-cell">
+          <div class="cl t">Hooks — ads + UGC</div>
+          <div class="hook-wrap">
+            <div class="hk"><div class="hk-type t">Morning routine · TikTok</div><div class="hk-text">"I stopped making outfit decisions. My mornings changed completely."</div></div>
+            <div class="hk"><div class="hk-type t">Darkly funny · Reels</div><div class="hk-text">"You shouldn't have to solve a puzzle before your first coffee."</div></div>
+            <div class="hk"><div class="hk-type t">Dating angle · UGC</div><div class="hk-text">"This is how I'm always on time for dates. The outfit is done before I start getting ready."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct">
+      <div class="ct-head">
+        <div class="ct-num g">4</div>
+        <div class="ct-title-wrap">
+          <div class="ct-name">The Dopamine Trap / Amazon Emotional Loop</div>
+          <div class="ct-why">She doesn't shop because she needs things. She shops because browsing soothes something. The cart feels like control. The delivery is the disappointment. Repeat.</div>
+        </div>
+        <div class="ct-badge"><span class="ct-tag gbg">Behavioral intercept</span></div>
+      </div>
+      <div class="ct-body">
+        <div class="ct-cell">
+          <div class="cl g">Real user language (verbatim)</div>
+          <div class="tx q">"I don't need more clothes. I need therapy. But therapy doesn't have two-day shipping." / "The serotonin is in the cart. Not in the delivery. I know this." / "I have a full closet and I'm on Amazon at 11pm. I know exactly what's wrong with me."</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl g">Core pain</div>
+          <div class="tx">The loop is driven by an unresolved wardrobe problem. She buys to fill the "nothing to wear" gap. The purchases don't fix the gap. She buys again. Self-aware about the cycle — which makes the hook land harder.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl g">Dressly solution</div>
+          <div class="tx">Replaces the Amazon session — same phone, same browsing behavior, different outcome. Opens Dressly instead of Amazon. Finds outfits she already owns. The dopamine hit arrives without the purchase, the return, the guilt.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl g">Data to lead with</div>
+          <div class="tx">43% Amazon clothing return rate. 72% kept clothes they hated. $380/year average spend. The number makes it undeniable and creates receptivity for the solution.</div>
+        </div>
+        <div class="ct-cell hooks-cell">
+          <div class="cl g">Hooks — ads + UGC</div>
+          <div class="hook-wrap">
+            <div class="hk"><div class="hk-type g">Self-aware · TikTok</div><div class="hk-text">"I know the serotonin is in the cart. This is what actually broke the loop."</div></div>
+            <div class="hk"><div class="hk-type g">Intercept · Meta</div><div class="hk-text">"Before you open Amazon tonight — open this. You probably already have the outfit."</div></div>
+            <div class="hk"><div class="hk-type g">Data hook</div><div class="hk-text">"43% of Amazon clothing gets returned. You're not bad at shopping. You're missing a system."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct">
+      <div class="ct-head">
+        <div class="ct-num cr">5</div>
+        <div class="ct-title-wrap">
+          <div class="ct-name">The Relationship Wardrobe / Effort Gap</div>
+          <div class="ct-why">She dresses better for her boss than her husband. Small acts of dressing with intention are the most accessible form of relationship investment available to her.</div>
+        </div>
+        <div class="ct-badge"><span class="ct-tag crbg">Relationship angle</span></div>
+      </div>
+      <div class="ct-body">
+        <div class="ct-cell">
+          <div class="cl cr">Real user language (verbatim)</div>
+          <div class="tx q">"My husband asked where I was going. I was wearing a dress in my own kitchen." / "I became so efficient I forgot to be a woman." / "We can't afford a personal stylist." / "I want to remind him why he married me — without being obvious I'm trying."</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl cr">Core pain</div>
+          <div class="tx">Long-term relationship comfort collapse. She stopped dressing with intention at home. He stopped noticing. Neither has said anything. The wardrobe is both the symptom and the most accessible fix.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl cr">Dressly solution</div>
+          <div class="tx">The "we can't afford a stylist — I got something better" angle. A personal AI stylist for the price of a latte per month. She shows up differently for him. He notices before a single word is said.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl cr">Marriage repair angles</div>
+          <div class="tx">"How I broke the rut and saved my marriage." "Now my husband adores me." Result-forward. Shows the before, implies the after, delivers the product in between.</div>
+        </div>
+        <div class="ct-cell hooks-cell">
+          <div class="cl cr">Hooks — ads + UGC</div>
+          <div class="hook-wrap">
+            <div class="hk"><div class="hk-type cr">Vulnerability bomb · Meta</div><div class="hk-text">"My husband asked where I was going. I was wearing a dress in my own kitchen. That told me everything."</div></div>
+            <div class="hk"><div class="hk-type cr">Her idea · UGC</div><div class="hk-text">"We can't afford a personal stylist. I got something better."</div></div>
+            <div class="hk"><div class="hk-type cr">Transformation · Reels</div><div class="hk-text">"How I broke the rut and saved my marriage. It started with what I was wearing."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct">
+      <div class="ct-head">
+        <div class="ct-num sl">6</div>
+        <div class="ct-title-wrap">
+          <div class="ct-name">Dating & Attraction / Right Swipes & Real Life</div>
+          <div class="ct-why">From situationship to happy relationship. From no profile photos she likes to 3x match rate. From panic-buying before every date to a capsule that covers all of them.</div>
+        </div>
+        <div class="ct-badge"><span class="ct-tag slbg">Dating arc</span></div>
+      </div>
+      <div class="ct-body">
+        <div class="ct-cell">
+          <div class="cl sl">Real user language (verbatim)</div>
+          <div class="tx q">"I need one photo where I look like an attractive adult woman and I don't have it." / "I know what gets right swipes. I cannot apply it to myself." / "I went from situationships to a relationship. I genuinely think this helped." / "My ex saw me after and I could tell."</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl sl">Core pain</div>
+          <div class="tx">She knows the visual language of attraction — she studies other women's profiles, she notices what works. She cannot produce it for herself. The knowing and the doing are disconnected. Dressly bridges them.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl sl">Dressly solution</div>
+          <div class="tx">Builds the "effortless but intentional" dating capsule. Profile photo-ready outfits. First date through meeting his world — all covered. From "I have nothing that looks like me" to a rotation that works across every dating scenario.</div>
+        </div>
+        <div class="ct-cell" style="border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="cl sl">The arc</div>
+          <div class="tx">"From situationships to a happy marriage." "How I got all the right swipes." "How I made my ex jealous — accidentally. By finally dressing like myself."</div>
+        </div>
+        <div class="ct-cell hooks-cell">
+          <div class="cl sl">Hooks — ads + UGC</div>
+          <div class="hook-wrap">
+            <div class="hk"><div class="hk-type sl">Profile photo · TikTok</div><div class="hk-text">"This is how I get all the right swipes. It had nothing to do with the photos."</div></div>
+            <div class="hk"><div class="hk-type sl">Her idea · UGC arc</div><div class="hk-text">"From situationships to a happy marriage. A wardrobe was part of that story."</div></div>
+            <div class="hk"><div class="hk-type sl">Provocative · Reels</div><div class="hk-text">"How I made my ex jealous. Accidentally. By finally dressing like myself."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PERSONAS — 4 remaining -->
+<div class="mb">
+  <div class="sec-lbl">4 user personas — pain · Dressly solution · ready-to-film hooks</div>
+  <div class="persona-grid">
+
+    <div class="pg">
+      <div class="pg-head" style="background:#FDF0F5">
+        <div class="pg-name r">The Housewife Reinvention</div>
+        <div class="pg-desc">35–50 · Stays home or part-time · Defined by domestic role · Wants to feel like more than a function</div>
+      </div>
+      <div class="pg-body">
+        <div class="pg-pain">"I became so efficient I forgot to be a woman. I dress to manage the household, not to be in a relationship."</div>
+        <div class="pg-sol r">Dressly builds the "TV housewife" capsule — not the frumpy domestic one. The woman who is put-together, intentional, and seen.</div>
+        <div class="pg-hooks">
+          <div class="pg-hk"><div class="pg-hk-type r">UGC transformation</div><div class="pg-hk-text">"This is how I went from regular housewife to TV housewife. Without a stylist."</div></div>
+          <div class="pg-hk"><div class="pg-hk-type r">Vulnerable</div><div class="pg-hk-text">"I became so efficient I forgot to be a woman. This is what reminded me."</div></div>
+          <div class="pg-hk"><div class="pg-hk-type r">Aspiration</div><div class="pg-hk-text">"Now my husband adores me. Small change. Big difference."</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg">
+      <div class="pg-head" style="background:#F5EBF8">
+        <div class="pg-name p">The Dating Arc</div>
+        <div class="pg-desc">33–45 · Single, actively dating · Was in situationships · Wants a real relationship · Wardrobe doesn't match who she's become</div>
+      </div>
+      <div class="pg-body">
+        <div class="pg-pain">"I keep ending up in situationships. I don't know if it's me or what I'm projecting. Probably both."</div>
+        <div class="pg-sol p">Dressly builds the visual identity of "woman who knows who she is" — the single most attractive quality in dating.</div>
+        <div class="pg-hooks">
+          <div class="pg-hk"><div class="pg-hk-type p">Transformation · Reels</div><div class="pg-hk-text">"How I went from situationships to a happy marriage. Dressly was part of that story."</div></div>
+          <div class="pg-hk"><div class="pg-hk-type p">Darkly funny</div><div class="pg-hk-text">"I've been in 4 situationships in 2 years. At some point I had to ask what I was projecting."</div></div>
+          <div class="pg-hk"><div class="pg-hk-type p">Right swipes</div><div class="pg-hk-text">"This is how I get all the right swipes. And stopped attracting the wrong people."</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg">
+      <div class="pg-head" style="background:#FBF5E4">
+        <div class="pg-name g">The Budget-Conscious Wife</div>
+        <div class="pg-desc">32–50 · Married · Wants to look great but can't justify a stylist · Amazon is her department store · Returns pile growing</div>
+      </div>
+      <div class="pg-body">
+        <div class="pg-pain">"We can't afford a personal stylist. I keep buying things that are almost right and returning half of them."</div>
+        <div class="pg-sol g">Her idea is the best version: "My husband said we can't afford a stylist. I got something better." Dressly democratises personal styling.</div>
+        <div class="pg-hooks">
+          <div class="pg-hk"><div class="pg-hk-type g">Her exact idea · UGC</div><div class="pg-hk-text">"My husband said we can't afford a personal stylist. I got something better."</div></div>
+          <div class="pg-hk"><div class="pg-hk-type g">Data-led</div><div class="pg-hk-text">"$380 a year on Amazon clothes that don't work. This cost me less than one of those returns."</div></div>
+          <div class="pg-hk"><div class="pg-hk-type g">Result</div><div class="pg-hk-text">"Now my husband adores me. I didn't spend a fortune. I just finally had a system."</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg">
+      <div class="pg-head" style="background:#EAF0FB">
+        <div class="pg-name b">The Re-enterer</div>
+        <div class="pg-desc">36–50 · Post-divorce · Wardrobe built around married life · Identity frozen at whenever she coupled up</div>
+      </div>
+      <div class="pg-body">
+        <div class="pg-pain">"The last time I dressed to attract someone I was 29. I don't know the rules at 43. I don't know what I look like at my best anymore."</div>
+        <div class="pg-sol b">Dressly styles the woman she is now. The Amazon capsule is the "reclaim" kit. The glow-up is the story, the wardrobe is the mechanism.</div>
+        <div class="pg-hooks">
+          <div class="pg-hk"><div class="pg-hk-type b">Defiant · TikTok</div><div class="pg-hk-text">"My ex hated this color on me. My entire new wardrobe is built around it."</div></div>
+          <div class="pg-hk"><div class="pg-hk-type b">Her idea · UGC</div><div class="pg-hk-text">"How I accidentally made my ex jealous. By finally dressing like myself."</div></div>
+          <div class="pg-hk"><div class="pg-hk-type b">Aspirational</div><div class="pg-hk-text">"You can't dress like 29. You don't have to dress like you gave up. There's a better version."</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FORMATS — 3 remaining -->
+<div class="mb">
+  <div class="sec-lbl">3 formats to test first — with real industry references + Dressly execution</div>
+  <div class="format-grid">
+
+    <div class="fg">
+      <div class="fg-head">
+        <div class="fg-icon pbg">DX</div>
+        <div class="fg-title">The diagnosis — "this is actually why" format</div>
+        <div class="fg-tag pbg">45–60 sec · TikTok · highest watch-through</div>
+      </div>
+      <div class="fg-body">
+        <div class="fg-ref">Real world ref: Dr. Huberman, Dr. Amen TikTok shorts — diagnosis hook drives 80%+ completion. Health/wellness category owns this format. Zero fashion brands use it. First-mover advantage available now.</div>
+        <div class="fg-how">Creator to camera, confident not preachy. "This is actually why you have nothing to wear. And it has nothing to do with how much you own." → Explains the identity drift → Dressly as correctly-aimed solution. Feeling of insider knowledge throughout.</div>
+        <div class="fg-script">"This is actually why you have nothing to wear. It has nothing to do with how much is in your closet." / "The reason you hate your dating profile photos has nothing to do with the photos."</div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <div class="fg-head">
+        <div class="fg-icon tbg">LT</div>
+        <div class="fg-title">The letter — she writes to her past self</div>
+        <div class="fg-tag tbg">45 sec · Meta + Reels · highest emotional ceiling</div>
+      </div>
+      <div class="fg-body">
+        <div class="fg-ref">Real world ref: Dove "Dear Future Me" (2023) — letter format drove 3x engagement vs standard UGC. Bumble "For Women Who Know What They Want." First-person address creates intimacy that ads almost never achieve.</div>
+        <div class="fg-how">Creator reads quietly, one-take feel. Addresses the specific pain: the return pile, the guilt closet, the husband who stopped noticing. Closes with Dressly as what she finally found. Slightly imperfect delivery is essential — polish kills it.</div>
+        <div class="fg-script">"Dear me from 2022. Stop buying the 6th version of that blouse. Stop dressing for someone you used to be. I found something. It's simpler than everything you've been trying."</div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <div class="fg-head">
+        <div class="fg-icon gbg">CA</div>
+        <div class="fg-title">The closet audit — she counts the receipts</div>
+        <div class="fg-tag gbg">30 sec · TikTok · highest share + comment rate</div>
+      </div>
+      <div class="fg-body">
+        <div class="fg-ref">Real world ref: #nobuy TikTok (2.1B views) + finance creators @frugalfeminist, @BrookeHampshire "I calculated what I spent on clothes I never wear" — viral every time. ThredUp + Nuuly use versions of this. Finance × fashion crossover is peaking. Most fashion brands haven't touched it yet.</div>
+        <div class="fg-how">Creator opens Amazon order history — clothing only. "I'm not going to say the number out loud." Tilts phone toward camera, number partially obscured. "What I will say is: most of it has never been worn." Pause. "I didn't have a shopping problem. I had a system problem." Opens Dressly. Shows outfits from existing wardrobe. "Haven't added to the return pile since."</div>
+        <div class="fg-script">"I pulled my Amazon order history. Clothing only. Last 12 months. I'm not going to say the number out loud." / "My wardrobe told on me. Work clothes: 34 pieces. Home: the chair."</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
