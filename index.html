@@ -5,485 +5,702 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dressly — Research Hub</title>
     <script src="config.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         :root {
-            --bg:       #F7F3EE;
-            --card:     #F0EAE1;
-            --border:   #DDD5CC;
-            --brown:    #3B2F25;
-            --green:    #4CAF72;
-            --green-dk: #3a9960;
-            --red:      #c0392b;
-            --muted:    #7a6e65;
-            --radius:   14px;
-            --shadow:   0 2px 12px rgba(59,47,37,.08);
+            --bg:          #0e0f0e;
+            --bg2:         #161714;
+            --bg3:         #1e1f1c;
+            --border:      rgba(255,255,255,0.08);
+            --border2:     rgba(255,255,255,0.14);
+            --text:        #e8e6df;
+            --muted:       #7a7870;
+            --accent:      #c8f07a;
+            --accent2:     #8db84e;
+            --accent-dim:  rgba(200,240,122,0.08);
+            --red:         #f07a7a;
+            --radius:      10px;
+            --radius-lg:   16px;
         }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'DM Sans', sans-serif;
             background: var(--bg);
-            color: var(--brown);
+            color: var(--text);
             min-height: 100vh;
-            padding: 32px 20px 60px;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 28px;
-        }
-        .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -.3px; }
-        .header h1 span { color: var(--green); }
-
-        #toggle-panel-btn {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding: 9px 18px;
-            background: var(--brown);
-            color: #fff;
-            border: none;
-            border-radius: 999px;
-            font-family: 'DM Sans', sans-serif;
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background .18s, transform .12s;
+            line-height: 1.6;
         }
-        #toggle-panel-btn:hover { background: #5a4538; transform: translateY(-1px); }
-        #toggle-panel-btn svg { flex-shrink: 0; transition: transform .25s; }
-        #toggle-panel-btn.open svg { transform: rotate(45deg); }
 
-        .add-panel {
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height .35s ease, opacity .3s ease;
-            opacity: 0;
+        /* ── Sidebar ── */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            width: 220px;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
         }
-        .add-panel.open { max-height: 620px; opacity: 1; }
 
-        .add-panel-inner {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
+        .logo-area {
+            padding: 24px 20px 20px;
+            border-bottom: 1px solid var(--border);
         }
-        .add-panel-inner h2 { font-size: 15px; font-weight: 700; margin-bottom: 18px; }
+        .logo-wordmark {
+            font-family: 'Instrument Serif', serif;
+            font-size: 22px;
+            color: var(--text);
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+        .logo-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
 
-        .token-row {
+        .nav {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
+        .nav-section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 8px 8px 6px;
+            margin-top: 8px;
+        }
+        .nav-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 18px;
-            padding: 10px 14px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
+            gap: 9px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: var(--muted);
             font-size: 13px;
+            font-weight: 400;
+            transition: all 0.15s;
+            border: 1px solid transparent;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-item:hover { color: var(--text); background: var(--bg3); }
+        .nav-item.active { color: var(--accent); background: var(--accent-dim); border-color: rgba(200,240,122,0.15); }
+        .nav-icon { font-size: 14px; width: 16px; flex-shrink: 0; }
+        .nav-count {
+            margin-left: auto;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            padding: 1px 6px;
             color: var(--muted);
         }
-        .token-dot {
-            width: 8px; height: 8px;
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .add-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #0e0f0e;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+        .add-btn:hover { background: #d4f88a; transform: translateY(-1px); }
+        .add-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Connection dot in sidebar footer */
+        .conn-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+        }
+        .conn-dot {
+            width: 6px; height: 6px;
             border-radius: 50%;
-            background: #e0c5b0;
+            background: #555;
             flex-shrink: 0;
             transition: background .3s;
         }
-        .token-dot.ok { background: var(--green); }
+        .conn-dot.ok { background: var(--accent); box-shadow: 0 0 6px rgba(200,240,122,.5); }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 14px;
-        }
-        @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
-
-        .field { display: flex; flex-direction: column; gap: 5px; }
-        .field label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .3px; text-transform: uppercase; }
-        .field input, .field textarea {
-            width: 100%;
-            padding: 10px 13px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            color: var(--brown);
-            outline: none;
-            transition: border-color .18s;
-            resize: vertical;
-        }
-        .field input:focus, .field textarea:focus { border-color: var(--brown); }
-        .field input::placeholder, .field textarea::placeholder { color: #bbb3aa; }
-        .field-full { grid-column: 1 / -1; }
-        .html-area { min-height: 140px; font-size: 12px; font-family: 'Courier New', monospace; line-height: 1.5; }
-
-        .form-footer { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-
-        #submit-btn {
-            padding: 11px 26px;
-            background: var(--green);
-            color: #fff;
-            border: none;
-            border-radius: 999px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background .18s, transform .12s, opacity .18s;
-        }
-        #submit-btn:hover:not(:disabled) { background: var(--green-dk); transform: translateY(-1px); }
-        #submit-btn:disabled { opacity: .55; cursor: not-allowed; }
-
-        #status-msg { font-size: 13px; font-weight: 500; min-height: 20px; }
-        #status-msg.ok  { color: var(--green); }
-        #status-msg.err { color: var(--red); }
-
-        .list-header {
-            font-size: 12px; font-weight: 700; letter-spacing: .5px;
-            text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+        /* ── Main ── */
+        .main {
+            margin-left: 220px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        ul#research-list {
-            list-style: none; padding: 0;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        ul#research-list li {
+        .topbar {
+            padding: 18px 32px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 16px;
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .page-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 22px;
+            color: var(--text);
+            flex: 1;
+        }
+        .search-box {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 7px 14px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            width: 220px;
+            outline: none;
+            transition: border 0.15s;
+        }
+        .search-box::placeholder { color: var(--muted); }
+        .search-box:focus { border-color: var(--border2); }
+
+        .content { padding: 28px 32px; flex: 1; }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .section-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 17px;
+            color: var(--text);
+        }
+        .section-count {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
         }
 
-        .btn {
+        /* ── Cards grid ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .card:hover {
+            border-color: var(--border2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,0,0,.4);
+        }
+
+        /* Thumb with subtle pattern */
+        .card-thumb {
+            height: 100px;
+            background: var(--bg3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .card-thumb::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(200,240,122,0.06) 1px, transparent 1px);
+            background-size: 18px 18px;
+        }
+
+        .card-body { padding: 14px 16px 10px; flex: 1; }
+
+        .card-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.4;
+        }
+        .card-conclusions {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            padding: 10px 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .card-link {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--accent);
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            padding: 11px 20px;
-            background: var(--brown);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 999px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            transition: background .18s, transform .12s;
-            white-space: nowrap;
-        }
-        .btn:hover { background: #5a4538; transform: translateY(-1px); }
-
-        details { display: inline-block; }
-        summary {
-            list-style: none; cursor: pointer;
-            display: flex; align-items: center; padding: 8px;
-        }
-        summary::-webkit-details-marker { display: none; }
-        .arrow {
-            display: inline-block;
-            width: 0; height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 7px solid var(--muted);
-            transition: transform .2s;
-        }
-        details[open] .arrow { transform: rotate(180deg); }
-        .conclusions {
-            margin-top: 6px;
-            padding: 12px 14px;
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 13px;
-            color: #24292f;
-            max-width: 440px;
-            line-height: 1.55;
-            box-shadow: var(--shadow);
-        }
-        .conclusions strong { color: var(--brown); }
-
-        /* ── Row action icons (appear on hover) ── */
-        .row-actions {
-            display: flex;
-            align-items: center;
             gap: 4px;
-            opacity: 0;
             transition: opacity .15s;
         }
-        ul#research-list li:hover .row-actions { opacity: 1; }
+        .card-link:hover { opacity: .7; }
 
-        .icon-btn {
+        .card-actions { display: flex; gap: 4px; }
+        .icon-btn-sm {
+            width: 26px; height: 26px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 30px; height: 30px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            background: #fff;
+            border-radius: 6px;
+            background: transparent;
             cursor: pointer;
-            transition: background .15s, border-color .15s;
+            color: var(--muted);
+            transition: all .15s;
             flex-shrink: 0;
         }
-        .icon-btn:hover { background: var(--card); border-color: var(--brown); }
-        .icon-btn.delete:hover { background: #fdecea; border-color: var(--red); }
+        .icon-btn-sm:hover { border-color: var(--border2); color: var(--text); background: var(--bg3); }
+        .icon-btn-sm.del:hover { border-color: var(--red); color: var(--red); background: rgba(240,122,122,0.08); }
 
-        /* ── Inline edit row ── */
-        .edit-row {
-            display: none;
-            align-items: center;
-            gap: 8px;
-            flex-basis: 100%;
-            margin-top: 4px;
+        /* ── Empty state ── */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
         }
-        .edit-row.open { display: flex; }
-        .edit-row input {
-            flex: 1;
-            padding: 8px 12px;
-            background: var(--bg);
+        .empty-state-icon { font-size: 36px; margin-bottom: 12px; opacity: .4; }
+        .empty-state-text { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; }
+
+        /* ── Add / Edit modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.7);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: var(--bg2);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 560px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 64px rgba(0,0,0,.6);
+        }
+        .modal-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-header h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 18px;
+            font-weight: 400;
+        }
+        .modal-close {
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all .15s;
+        }
+        .modal-close:hover { border-color: var(--border2); color: var(--text); }
+
+        .modal-body { padding: 20px 24px; }
+
+        .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+        .field label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+        .field input, .field textarea {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 9px 12px;
+            color: var(--text);
             font-family: 'DM Sans', sans-serif;
             font-size: 13px;
-            color: var(--brown);
             outline: none;
-            min-width: 0;
+            transition: border .15s;
+            width: 100%;
         }
-        .edit-row input:focus { border-color: var(--brown); }
-        .edit-save-btn {
-            padding: 7px 16px;
-            background: var(--green);
-            color: #fff;
+        .field input:focus, .field textarea:focus { border-color: var(--border2); }
+        .field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+        .field textarea { min-height: 160px; resize: vertical; font-family: 'DM Mono', monospace; font-size: 11px; line-height: 1.6; }
+
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+
+        .modal-footer {
+            padding: 14px 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-status {
+            flex: 1;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+        }
+        .modal-status.ok  { color: var(--accent); }
+        .modal-status.err { color: var(--red); }
+
+        .btn-primary {
+            padding: 9px 20px;
+            background: var(--accent);
+            color: #0e0f0e;
             border: none;
-            border-radius: 999px;
+            border-radius: 8px;
             font-family: 'DM Sans', sans-serif;
-            font-size: 13px; font-weight: 600;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
+            transition: all .15s;
             white-space: nowrap;
         }
-        .edit-save-btn:hover { background: var(--green-dk); }
-        .edit-cancel-btn {
-            padding: 7px 14px;
+        .btn-primary:hover:not(:disabled) { background: #d4f88a; }
+        .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+        .btn-ghost {
+            padding: 9px 16px;
             background: transparent;
             color: var(--muted);
             border: 1px solid var(--border);
-            border-radius: 999px;
+            border-radius: 8px;
             font-family: 'DM Sans', sans-serif;
             font-size: 13px;
             cursor: pointer;
+            transition: all .15s;
         }
-        .edit-cancel-btn:hover { border-color: var(--brown); color: var(--brown); }
+        .btn-ghost:hover { border-color: var(--border2); color: var(--text); }
 
-        /* ── Delete confirm modal ── */
+        /* ── Delete confirm ── */
         .confirm-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,.35);
-            z-index: 100;
+            background: rgba(0,0,0,.7);
+            z-index: 300;
             align-items: center;
             justify-content: center;
         }
         .confirm-overlay.open { display: flex; }
         .confirm-box {
-            background: #fff;
-            border-radius: var(--radius);
+            background: var(--bg2);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-lg);
             padding: 28px 32px;
             max-width: 360px;
             width: 90%;
-            box-shadow: 0 8px 40px rgba(0,0,0,.2);
+            box-shadow: 0 16px 48px rgba(0,0,0,.5);
             text-align: center;
         }
-        .confirm-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-        .confirm-box p  { font-size: 13px; color: var(--muted); margin-bottom: 22px; line-height: 1.5; }
+        .confirm-box h3 { font-family: 'Instrument Serif', serif; font-size: 18px; font-weight: 400; margin-bottom: 8px; }
+        .confirm-box p  { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
         .confirm-actions { display: flex; gap: 10px; justify-content: center; }
-        .confirm-del-btn {
-            padding: 10px 22px;
+        .btn-danger {
+            padding: 9px 20px;
             background: var(--red);
-            color: #fff;
+            color: #0e0f0e;
             border: none;
-            border-radius: 999px;
+            border-radius: 8px;
             font-family: 'DM Sans', sans-serif;
-            font-size: 14px; font-weight: 700;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
+            transition: opacity .15s;
         }
-        .confirm-del-btn:disabled { opacity: .6; cursor: not-allowed; }
-        .confirm-cancel-btn {
-            padding: 10px 22px;
-            background: transparent;
-            color: var(--muted);
-            border: 1px solid var(--border);
-            border-radius: 999px;
+        .btn-danger:hover:not(:disabled) { opacity: .85; }
+        .btn-danger:disabled { opacity: .5; cursor: not-allowed; }
+
+        /* ── Inline edit row on cards ── */
+        .inline-edit {
+            display: none;
+            padding: 10px 16px;
+            border-top: 1px solid var(--border);
+            gap: 8px;
+            align-items: center;
+        }
+        .inline-edit.open { display: flex; }
+        .inline-edit input {
+            flex: 1;
+            background: var(--bg3);
+            border: 1px solid var(--border2);
+            border-radius: 6px;
+            padding: 6px 10px;
+            color: var(--text);
             font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            cursor: pointer;
+            font-size: 12px;
+            outline: none;
+            min-width: 0;
         }
-        .confirm-cancel-btn:hover { border-color: var(--brown); color: var(--brown); }
+        .inline-edit input:focus { border-color: var(--accent); }
 
         .spinner {
             display: inline-block;
-            width: 15px; height: 15px;
-            border: 2px solid rgba(255,255,255,.35);
-            border-top-color: #fff;
+            width: 13px; height: 13px;
+            border: 2px solid rgba(14,15,14,.3);
+            border-top-color: #0e0f0e;
             border-radius: 50%;
             animation: spin .6s linear infinite;
             vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Dressly <span>Researches</span></h1>
-        <button id="toggle-panel-btn" onclick="togglePanel()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <line x1="7" y1="1" x2="7" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                <line x1="1" y1="7" x2="13" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Add Research
-        </button>
-    </div>
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar">
+        <div class="logo-area">
+            <div class="logo-wordmark">Dressly</div>
+            <div class="logo-sub">Research Hub</div>
+        </div>
+        <nav class="nav">
+            <div class="nav-section-label">Library</div>
+            <a class="nav-item active" href="#">
+                <span class="nav-icon">◈</span>
+                All Researches
+                <span class="nav-count" id="nav-count">0</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="conn-row">
+                <div class="conn-dot" id="conn-dot"></div>
+                <span id="conn-text">checking…</span>
+            </div>
+            <button class="add-btn" onclick="openAddModal()">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                Add Research
+            </button>
+        </div>
+    </aside>
 
-    <div class="add-panel" id="add-panel">
-        <div class="add-panel-inner">
-            <h2>New Research Entry</h2>
-            <div class="token-row">
-                <div class="token-dot" id="token-dot"></div>
-                <span id="token-status-text">Checking connection…</span>
+    <!-- ── Main ── -->
+    <main class="main">
+        <div class="topbar">
+            <div class="page-title">All Researches</div>
+            <input class="search-box" type="text" id="search-input" placeholder="Search…" oninput="renderCards()">
+        </div>
+        <div class="content">
+            <div class="section-header">
+                <span class="section-title">Everything</span>
+                <span class="section-count" id="section-count"></span>
             </div>
-            <div class="form-grid">
-                <div class="field">
-                    <label>Button Label</label>
-                    <input type="text" id="f-label" placeholder="e.g. Reddit research 17.04.2026">
+            <div class="cards-grid" id="cards-grid"></div>
+        </div>
+    </main>
+
+    <!-- ── Add / Edit modal ── -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">New Research Entry</h2>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="field-row">
+                    <div class="field">
+                        <label>Button Label</label>
+                        <input type="text" id="f-label" placeholder="Reddit research 17.04.2026">
+                    </div>
+                    <div class="field">
+                        <label>Filename (.html)</label>
+                        <input type="text" id="f-filename" placeholder="reddit-research-17.04.2026.html">
+                    </div>
                 </div>
                 <div class="field">
-                    <label>Filename (no spaces)</label>
-                    <input type="text" id="f-filename" placeholder="e.g. reddit-research-17.04.2026.html">
+                    <label>Short description (optional)</label>
+                    <input type="text" id="f-desc" placeholder="What are the key conclusions?">
                 </div>
-                <div class="field field-full">
+                <div class="field">
                     <label>HTML Content (full file)</label>
-                    <textarea class="html-area" id="f-content" placeholder="Paste the full HTML content here…"></textarea>
+                    <textarea id="f-content" placeholder="Paste the full HTML content of the research file here…"></textarea>
                 </div>
             </div>
-            <div class="form-footer">
-                <button id="submit-btn" onclick="submitResearch()">Publish to GitHub</button>
-                <span id="status-msg"></span>
+            <div class="modal-footer">
+                <span class="modal-status" id="modal-status"></span>
+                <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" id="submit-btn" onclick="submitResearch()">Publish to GitHub</button>
             </div>
         </div>
     </div>
 
-    <p class="list-header">All Researches</p>
-
-    <!-- RESEARCH_LIST_START -->
-    <ul id="research-list">
-        <li data-filename="dressly_final_brief_v2.html">
-            <a href="dressly_final_brief_v2.html" class="btn">Рісьорч Дімончіка 17.04.2026</a>
-            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Дімончік старався, всім читати</div></details>
-            <div class="row-actions">
-                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
-                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="edit-row"></div>
-        </li>
-        <li data-filename="dressly-all-philosophies-research.html">
-            <a href="dressly-all-philosophies-research.html" class="btn">Eastern philosophy research youtube 15.04.2026</a>
-            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe</div></details>
-            <div class="row-actions">
-                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
-                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="edit-row"></div>
-        </li>
-        <li data-filename="dressly-eastern-philosophy-research.html">
-            <a href="dressly-eastern-philosophy-research.html" class="btn">Eastern philosophy research reddit 15.04.2026</a>
-            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe</div></details>
-            <div class="row-actions">
-                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
-                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="edit-row"></div>
-        </li>
-        <li data-filename="reddit-research-08.04.2026.html">
-            <a href="reddit-research-08.04.2026.html" class="btn">Reddit research 08.04.2026</a>
-            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Дослівні тригери для рекламних хуків. Топ 5 скарг.</div></details>
-            <div class="row-actions">
-                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
-                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="edit-row"></div>
-        </li>
-        <li data-filename="dressly-youtube-ua-brief.html">
-            <a href="dressly-youtube-ua-brief.html" class="btn">Youtube research 08.04.2026</a>
-            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Симульований глибокий аналіз коментарів з каналів Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style.</div></details>
-            <div class="row-actions">
-                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
-                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="edit-row"></div>
-        </li>
-        <li data-filename="7-hidden-shopping-frictions.html">
-            <a href="7-hidden-shopping-frictions.html" class="btn">7 hidden shopping frictions 08.04.2026</a>
-            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> 7 больових точок при онлайн-шопінгу.</div></details>
-            <div class="row-actions">
-                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
-                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="edit-row"></div>
-        </li>
-        <li data-filename="strategic-positioning-08.04.2026.html">
-            <a href="strategic-positioning-08.04.2026.html" class="btn">Strategic positioning research 08.04.2026</a>
-            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> П'ять непрямолінійних кутів, що виходять далеко за межі «AI стайлінгу».</div></details>
-            <div class="row-actions">
-                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
-                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="edit-row"></div>
-        </li>
-    </ul>
-    <!-- RESEARCH_LIST_END -->
-
-    <!-- Delete confirm modal -->
+    <!-- ── Delete confirm ── -->
     <div class="confirm-overlay" id="confirm-overlay">
         <div class="confirm-box">
-            <h3>Delete this entry?</h3>
+            <h3>Delete entry?</h3>
             <p id="confirm-desc"></p>
             <div class="confirm-actions">
-                <button class="confirm-cancel-btn" onclick="closeConfirm()">Cancel</button>
-                <button class="confirm-del-btn" id="confirm-del-btn">Delete</button>
+                <button class="btn-ghost" onclick="closeConfirm()">Cancel</button>
+                <button class="btn-danger" id="confirm-del-btn">Delete</button>
             </div>
         </div>
     </div>
 
     <script>
-    // ── Config ──────────────────────────────────────────────────────────────
+    // ── Config ───────────────────────────────────────────────────────────────
     const CFG = (typeof window.DRESSLY_CONFIG !== 'undefined')
         ? window.DRESSLY_CONFIG
         : { owner: '', repo: '', branch: 'main', token: '' };
 
+    // ── Static entries (source of truth in index.html) ───────────────────────
+    // Each entry: { label, filename, desc }
+    // ENTRIES_START
+    const STATIC_ENTRIES = [
+        { label: "Рісьорч Дімончіка 17.04.2026",              filename: "dressly_final_brief_v2.html",              desc: "Дімончік старався, всім читати" },
+        { label: "Eastern philosophy research youtube 15.04.2026", filename: "dressly-all-philosophies-research.html",  desc: "Ідея використання східної культури як підсилення capsule wardrobe" },
+        { label: "Eastern philosophy research reddit 15.04.2026",  filename: "dressly-eastern-philosophy-research.html", desc: "Ідея використання східної культури як підсилення capsule wardrobe" },
+        { label: "Reddit research 08.04.2026",                 filename: "reddit-research-08.04.2026.html",           desc: "Дослівні тригери для рекламних хуків. Топ 5 скарг." },
+        { label: "Youtube research 08.04.2026",                filename: "dressly-youtube-ua-brief.html",            desc: "Симульований глибокий аналіз коментарів з каналів Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style." },
+        { label: "7 hidden shopping frictions 08.04.2026",    filename: "7-hidden-shopping-frictions.html",         desc: "7 больових точок при онлайн-шопінгу. Кожна точка прив'язана до конкретної функції Dressly." },
+        { label: "Strategic positioning research 08.04.2026", filename: "strategic-positioning-08.04.2026.html",    desc: "П'ять непрямолінійних кутів. Підкріплені ринковими даними та першоджерелами." }
+    ];
+    // ENTRIES_END
+
+    // ── Init ─────────────────────────────────────────────────────────────────
     (function init() {
-        const dot = document.getElementById('token-dot');
-        const txt = document.getElementById('token-status-text');
+        const dot = document.getElementById('conn-dot');
+        const txt = document.getElementById('conn-text');
         if (CFG.token && CFG.owner && CFG.repo) {
             dot.classList.add('ok');
-            txt.textContent = 'Connected to ' + CFG.owner + '/' + CFG.repo + ' (' + CFG.branch + ')';
+            txt.textContent = CFG.owner + '/' + CFG.repo;
         } else {
-            txt.textContent = 'Not connected — config.js missing or token not set';
+            txt.textContent = 'not connected';
         }
+        renderCards();
     })();
 
-    function togglePanel() {
-        document.getElementById('add-panel').classList.toggle('open');
-        document.getElementById('toggle-panel-btn').classList.toggle('open');
+    // ── Render cards ─────────────────────────────────────────────────────────
+    const EMOJIS = ['📄','📊','🔬','📝','🎯','💡','🧠','📈','🗂️','🔍'];
+    function getEmoji(filename) {
+        let h = 0;
+        for (let i = 0; i < filename.length; i++) h = (h * 31 + filename.charCodeAt(i)) >>> 0;
+        return EMOJIS[h % EMOJIS.length];
     }
 
-    // ── GitHub helpers ───────────────────────────────────────────────────────
+    function renderCards() {
+        const q = (document.getElementById('search-input').value || '').toLowerCase();
+        const filtered = STATIC_ENTRIES.filter(e =>
+            !q || e.label.toLowerCase().includes(q) || (e.desc || '').toLowerCase().includes(q)
+        );
+        document.getElementById('nav-count').textContent = STATIC_ENTRIES.length;
+        document.getElementById('section-count').textContent = filtered.length + ' item' + (filtered.length !== 1 ? 's' : '');
+
+        const grid = document.getElementById('cards-grid');
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No results for "' + q + '"</div></div>';
+            return;
+        }
+
+        grid.innerHTML = filtered.map(function(e) {
+            const emoji = getEmoji(e.filename);
+            const descHtml = e.desc ? '<div class="card-conclusions">' + e.desc + '</div>' : '';
+            return '<div class="card" data-filename="' + e.filename + '">' +
+                '<div class="card-thumb"><span style="position:relative;z-index:1">' + emoji + '</span></div>' +
+                '<div class="card-body">' +
+                    '<div class="card-label">Research</div>' +
+                    '<div class="card-title">' + e.label + '</div>' +
+                    descHtml +
+                '</div>' +
+                '<div class="card-footer">' +
+                    '<a href="' + e.filename + '" target="_blank" class="card-link" onclick="event.stopPropagation()">Open ↗</a>' +
+                    '<div class="card-actions">' +
+                        '<button class="icon-btn-sm" title="Edit label" onclick="event.stopPropagation();startEdit(this)">' +
+                            '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2l2 2L3.5 10.5H1.5v-2L8 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>' +
+                        '</button>' +
+                        '<button class="icon-btn-sm del" title="Delete" onclick="event.stopPropagation();confirmDelete(this)">' +
+                            '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 3h9M4.5 3V2h3v1M4.5 5.5v3M7.5 5.5v3M2 3l.8 7h6.4L10 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                        '</button>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="inline-edit"></div>' +
+            '</div>';
+        }).join('');
+    }
+
+    // ── GitHub helpers ────────────────────────────────────────────────────────
     function ghHeaders() {
         return {
             'Authorization': 'Bearer ' + CFG.token,
@@ -492,18 +709,11 @@
             'X-GitHub-Api-Version': '2022-11-28'
         };
     }
-
     function ghUrl(path) {
         return 'https://api.github.com/repos/' + CFG.owner + '/' + CFG.repo + '/contents/' + path;
     }
-
-    function toB64(str) {
-        return btoa(unescape(encodeURIComponent(str)));
-    }
-
-    function fromB64(b64) {
-        return decodeURIComponent(escape(atob(b64.replace(/\n/g, ''))));
-    }
+    function toB64(str) { return btoa(unescape(encodeURIComponent(str))); }
+    function fromB64(b64) { return decodeURIComponent(escape(atob(b64.replace(/\n/g, '')))); }
 
     async function getFile(path) {
         const res = await fetch(ghUrl(path), { headers: ghHeaders() });
@@ -511,26 +721,19 @@
         if (!res.ok) throw new Error('GitHub GET error ' + res.status);
         return res.json();
     }
-
     async function putFile(path, content, message, sha) {
         const body = { message, content: toB64(content), branch: CFG.branch };
         if (sha) body.sha = sha;
-        const res = await fetch(ghUrl(path), {
-            method: 'PUT',
-            headers: ghHeaders(),
-            body: JSON.stringify(body)
-        });
+        const res = await fetch(ghUrl(path), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
             throw new Error(err.message || 'GitHub PUT error ' + res.status);
         }
         return res.json();
     }
-
     async function deleteFile(path, sha, message) {
         const res = await fetch(ghUrl(path), {
-            method: 'DELETE',
-            headers: ghHeaders(),
+            method: 'DELETE', headers: ghHeaders(),
             body: JSON.stringify({ message, sha, branch: CFG.branch })
         });
         if (!res.ok) {
@@ -538,168 +741,142 @@
             throw new Error(err.message || 'GitHub DELETE error ' + res.status);
         }
     }
-
     async function fetchIndexSource() {
         const data = await getFile('index.html');
         if (!data) throw new Error('index.html not found on GitHub');
         return { sha: data.sha, html: fromB64(data.content) };
     }
 
-    // ── index.html source manipulation ──────────────────────────────────────
-    // Uses <!-- RESEARCH_LIST_END --> marker — no false matches possible
-    function injectEntry(source, liHtml) {
-        const MARKER = '<!-- RESEARCH_LIST_END -->';
-        const mIdx = source.indexOf(MARKER);
-        if (mIdx === -1) throw new Error('Marker RESEARCH_LIST_END not found in index.html');
-        const ulClose = source.lastIndexOf('</ul>', mIdx);
-        if (ulClose === -1) throw new Error('Could not locate </ul> before marker');
-        return source.slice(0, ulClose) + liHtml + '\n    </ul>\n    ' + source.slice(mIdx);
+    // ── index.html source manipulation ───────────────────────────────────────
+    // Rewrites the entire STATIC_ENTRIES array in source
+    function buildEntriesSource(entries) {
+        return '    const STATIC_ENTRIES = [\n' +
+            entries.map(function(e) {
+                return '        { label: ' + JSON.stringify(e.label) +
+                    ', filename: ' + JSON.stringify(e.filename) +
+                    ', desc: ' + JSON.stringify(e.desc || '') + ' }';
+            }).join(',\n') +
+        '\n    ];';
     }
 
-    function removeEntry(source, filename) {
-        const esc = filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        return source.replace(
-            new RegExp('\\s*<li data-filename="' + esc + '">[\\s\\S]*?</li>', 'g'),
-            ''
-        );
+    function updateEntriesInSource(source, entries) {
+        const START = '    // ENTRIES_START\n';
+        const END   = '\n    // ENTRIES_END';
+        const si = source.indexOf(START);
+        const ei = source.indexOf(END);
+        if (si === -1 || ei === -1) throw new Error('ENTRIES markers not found in index.html');
+        return source.slice(0, si + START.length) + buildEntriesSource(entries) + source.slice(ei);
     }
 
-    function renameEntry(source, filename, newLabel) {
-        const esc = filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        return source.replace(
-            new RegExp('(<li data-filename="' + esc + '">[\\s\\S]*?<a href="' + esc + '" class="btn">)([^<]*)(</a>)'),
-            '$1' + newLabel + '$3'
-        );
+    // ── Modal ─────────────────────────────────────────────────────────────────
+    var _editingFilename = null;
+
+    function openAddModal() {
+        _editingFilename = null;
+        document.getElementById('modal-title').textContent = 'New Research Entry';
+        document.getElementById('f-label').value    = '';
+        document.getElementById('f-filename').value = '';
+        document.getElementById('f-desc').value     = '';
+        document.getElementById('f-content').value  = '';
+        setModalStatus('', '');
+        document.getElementById('submit-btn').textContent = 'Publish to GitHub';
+        document.getElementById('submit-btn').disabled = false;
+        document.getElementById('modal-overlay').classList.add('open');
     }
 
-    // ── Build <li> HTML ──────────────────────────────────────────────────────
-    const EDIT_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg>';
-    const DEL_ICON  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-    function buildLiHtml(label, filename) {
-        return '<li data-filename="' + filename + '">\n' +
-            '            <a href="' + filename + '" class="btn">' + label + '</a>\n' +
-            '            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>\u0412\u0438\u0441\u043d\u043e\u0432\u043a\u0438:</strong> </div></details>\n' +
-            '            <div class="row-actions">\n' +
-            '                <button class="icon-btn" title="Edit label" onclick="startEdit(this)">' + EDIT_ICON + '</button>\n' +
-            '                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)">' + DEL_ICON + '</button>\n' +
-            '            </div>\n' +
-            '            <div class="edit-row"></div>\n' +
-            '        </li>';
+    function closeModal() {
+        document.getElementById('modal-overlay').classList.remove('open');
     }
 
-    // ── Status / loading ─────────────────────────────────────────────────────
-    function setStatus(msg, type) {
-        const el = document.getElementById('status-msg');
+    function setModalStatus(msg, type) {
+        const el = document.getElementById('modal-status');
         el.textContent = msg;
-        el.className = type || '';
+        el.className = 'modal-status' + (type ? ' ' + type : '');
     }
 
-    function setBtnLoading(loading) {
-        const btn = document.getElementById('submit-btn');
-        btn.disabled = loading;
-        btn.textContent = loading ? 'Publishing…' : 'Publish to GitHub';
-    }
-
-    // ── ADD ──────────────────────────────────────────────────────────────────
+    // ── ADD ───────────────────────────────────────────────────────────────────
     async function submitResearch() {
         if (!CFG.token || !CFG.owner || !CFG.repo) {
-            setStatus('No GitHub config — re-deploy to inject config.js', 'err');
-            return;
+            setModalStatus('Not connected — re-deploy to inject config.js', 'err'); return;
         }
         const label    = document.getElementById('f-label').value.trim();
         const filename = document.getElementById('f-filename').value.trim();
+        const desc     = document.getElementById('f-desc').value.trim();
         const content  = document.getElementById('f-content').value;
 
-        if (!label)                      { setStatus('Enter a button label.', 'err'); return; }
-        if (!filename)                   { setStatus('Enter a filename.', 'err'); return; }
-        if (!content)                    { setStatus('Paste the HTML content.', 'err'); return; }
-        if (!/\.html?$/i.test(filename)) { setStatus('Filename must end in .html', 'err'); return; }
+        if (!label)                      { setModalStatus('Enter a label.', 'err'); return; }
+        if (!filename)                   { setModalStatus('Enter a filename.', 'err'); return; }
+        if (!content)                    { setModalStatus('Paste the HTML content.', 'err'); return; }
+        if (!/\.html?$/i.test(filename)) { setModalStatus('Filename must end in .html', 'err'); return; }
 
-        setBtnLoading(true);
-        setStatus('Uploading research file…');
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Publishing…';
+        setModalStatus('Uploading file…', '');
 
         try {
-            // 1. Upload the research file
+            // 1. Upload research file
             const existing = await getFile(filename);
             await putFile(filename, content, 'Add research: ' + label, existing ? existing.sha : null);
 
-            // 2. Inject entry into index.html and push
-            setStatus('Updating index.html…');
+            // 2. Update index.html
+            setModalStatus('Updating index.html…', '');
             const { sha, html } = await fetchIndexSource();
-            await putFile('index.html', injectEntry(html, buildLiHtml(label, filename)), 'Update index: add ' + label, sha);
+            const newEntries = STATIC_ENTRIES.concat([{ label, filename, desc }]);
+            await putFile('index.html', updateEntriesInSource(html, newEntries), 'Update index: add ' + label, sha);
 
-            // 3. Add to DOM immediately
-            addLiToDOM(label, filename);
-
-            // 4. Reset form
-            document.getElementById('f-label').value    = '';
-            document.getElementById('f-filename').value = '';
-            document.getElementById('f-content').value  = '';
-
-            setStatus('Published! GitHub Pages updates in ~30s.', 'ok');
+            // 3. Update in-memory and re-render
+            STATIC_ENTRIES.push({ label, filename, desc });
+            renderCards();
+            setModalStatus('✓ Published! Pages updates in ~30s.', 'ok');
+            setTimeout(closeModal, 1800);
         } catch (err) {
             console.error(err);
-            setStatus('Error: ' + err.message, 'err');
+            setModalStatus('Error: ' + err.message, 'err');
         } finally {
-            setBtnLoading(false); // always re-enables the button
+            btn.disabled = false;
+            btn.textContent = 'Publish to GitHub';
         }
     }
 
-    function addLiToDOM(label, filename) {
-        const ul = document.getElementById('research-list');
-        const li = document.createElement('li');
-        li.dataset.filename = filename;
-        li.innerHTML =
-            '<a href="' + filename + '" class="btn">' + label + '</a>' +
-            '<details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> </div></details>' +
-            '<div class="row-actions">' +
-            '<button class="icon-btn" title="Edit label" onclick="startEdit(this)">' + EDIT_ICON + '</button>' +
-            '<button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)">' + DEL_ICON + '</button>' +
-            '</div>' +
-            '<div class="edit-row"></div>';
-        ul.appendChild(li);
-        li.style.transition = 'background .4s';
-        li.style.background = '#e8f7ee';
-        setTimeout(function() { li.style.background = ''; }, 1400);
-    }
-
-    // ── EDIT ─────────────────────────────────────────────────────────────────
+    // ── EDIT label (inline on card) ───────────────────────────────────────────
     function startEdit(btn) {
-        const li      = btn.closest('li');
-        const editRow = li.querySelector('.edit-row');
-        if (editRow.classList.contains('open')) return;
-        const current = li.querySelector('a.btn').textContent.trim();
+        const card     = btn.closest('.card');
+        const editRow  = card.querySelector('.inline-edit');
+        const filename = card.dataset.filename;
+        const entry    = STATIC_ENTRIES.find(function(e) { return e.filename === filename; });
+        if (!entry || editRow.classList.contains('open')) return;
+
         editRow.innerHTML =
             '<input type="text" class="edit-input" value="">' +
-            '<button class="edit-save-btn" onclick="saveEdit(this)">Save</button>' +
-            '<button class="edit-cancel-btn" onclick="cancelEdit(this)">Cancel</button>';
-        editRow.querySelector('.edit-input').value = current;
+            '<button class="btn-primary" style="padding:5px 12px;font-size:12px" onclick="saveEdit(this)">Save</button>' +
+            '<button class="btn-ghost"  style="padding:5px 10px;font-size:12px" onclick="cancelEdit(this)">✕</button>';
+        editRow.querySelector('.edit-input').value = entry.label;
         editRow.classList.add('open');
         editRow.querySelector('.edit-input').focus();
     }
 
     function cancelEdit(btn) {
-        const editRow = btn.closest('.edit-row');
-        editRow.classList.remove('open');
-        editRow.innerHTML = '';
+        const row = btn.closest('.inline-edit');
+        row.classList.remove('open');
+        row.innerHTML = '';
     }
 
     async function saveEdit(btn) {
-        const editRow  = btn.closest('.edit-row');
-        const li       = editRow.closest('li');
-        const anchor   = li.querySelector('a.btn');
-        const filename = li.dataset.filename;
-        const newLabel = editRow.querySelector('.edit-input').value.trim();
-        if (!newLabel) { alert('Label cannot be empty.'); return; }
+        const row      = btn.closest('.inline-edit');
+        const card     = row.closest('.card');
+        const filename = card.dataset.filename;
+        const newLabel = row.querySelector('.edit-input').value.trim();
+        const entry    = STATIC_ENTRIES.find(function(e) { return e.filename === filename; });
+        if (!entry || !newLabel) return;
 
         btn.disabled = true;
-        btn.textContent = 'Saving…';
+        btn.textContent = '…';
         try {
             const { sha, html } = await fetchIndexSource();
-            await putFile('index.html', renameEntry(html, filename, newLabel), 'Rename: ' + filename, sha);
-            anchor.textContent = newLabel;
-            cancelEdit(btn);
+            entry.label = newLabel;
+            await putFile('index.html', updateEntriesInSource(html, STATIC_ENTRIES), 'Rename: ' + filename, sha);
+            renderCards();
         } catch (err) {
             alert('Error: ' + err.message);
             btn.disabled = false;
@@ -707,41 +884,46 @@
         }
     }
 
-    // ── DELETE ───────────────────────────────────────────────────────────────
-    var _deleteTarget = null;
+    // ── DELETE ────────────────────────────────────────────────────────────────
+    var _deleteFilename = null;
 
     function confirmDelete(btn) {
-        _deleteTarget = btn.closest('li');
-        const label = _deleteTarget.querySelector('a.btn').textContent.trim();
-        const filename = _deleteTarget.dataset.filename;
+        const card = btn.closest('.card');
+        _deleteFilename = card.dataset.filename;
+        const entry = STATIC_ENTRIES.find(function(e) { return e.filename === _deleteFilename; });
         document.getElementById('confirm-desc').textContent =
-            '"' + label + '" will be removed from the list and the file deleted from GitHub.';
+            '"' + (entry ? entry.label : _deleteFilename) + '" will be removed from the list and deleted from GitHub.';
         var delBtn = document.getElementById('confirm-del-btn');
         delBtn.disabled = false;
         delBtn.textContent = 'Delete';
-        delBtn.onclick = function() { executeDelete(filename); };
+        delBtn.onclick = executeDelete;
         document.getElementById('confirm-overlay').classList.add('open');
     }
 
     function closeConfirm() {
         document.getElementById('confirm-overlay').classList.remove('open');
-        _deleteTarget = null;
+        _deleteFilename = null;
     }
 
-    async function executeDelete(filename) {
+    async function executeDelete() {
+        const filename = _deleteFilename;
         const delBtn = document.getElementById('confirm-del-btn');
         delBtn.disabled = true;
         delBtn.textContent = 'Deleting…';
         try {
             // Remove from index.html
             const { sha, html } = await fetchIndexSource();
-            await putFile('index.html', removeEntry(html, filename), 'Remove entry: ' + filename, sha);
+            const newEntries = STATIC_ENTRIES.filter(function(e) { return e.filename !== filename; });
+            await putFile('index.html', updateEntriesInSource(html, newEntries), 'Remove: ' + filename, sha);
 
             // Delete the file (best-effort)
             const fileData = await getFile(filename);
             if (fileData) await deleteFile(filename, fileData.sha, 'Delete: ' + filename);
 
-            if (_deleteTarget) _deleteTarget.remove();
+            // Update memory + DOM
+            var idx = STATIC_ENTRIES.findIndex(function(e) { return e.filename === filename; });
+            if (idx > -1) STATIC_ENTRIES.splice(idx, 1);
+            renderCards();
             closeConfirm();
         } catch (err) {
             alert('Error: ' + err.message);
@@ -750,10 +932,9 @@
         }
     }
 
-    document.getElementById('confirm-overlay').addEventListener('click', function(e) {
-        if (e.target === this) closeConfirm();
-    });
+    // Close modals on backdrop click
+    document.getElementById('confirm-overlay').addEventListener('click', function(e) { if (e.target === this) closeConfirm(); });
+    document.getElementById('modal-overlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
     </script>
-
 </body>
 </html>
