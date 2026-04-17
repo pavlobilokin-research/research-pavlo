@@ -33,15 +33,9 @@ jobs:
           RESEARCH_TOKEN: ${{ secrets.RESEARCH_TOKEN }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
-          cat > config.js <<EOF
-          window.DRESSLY_CONFIG = {
-            owner:    "pavlobilokin-research",
-            repo:     "research-pavlo",
-            branch:   "main",
-            token:    "$RESEARCH_TOKEN",
-            password: "$PASSWORD"
-          };
-          EOF
+          printf 'window.DRESSLY_CONFIG = {\n  owner: "pavlobilokin-research",\n  repo: "research-pavlo",\n  branch: "main",\n  token: "%s",\n  password: "%s"\n};\n' "$RESEARCH_TOKEN" "$PASSWORD" > config.js
+          echo "config.js generated:"
+          cat config.js
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
