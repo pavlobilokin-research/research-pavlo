@@ -442,7 +442,14 @@
     function appendLiToSource(htmlSource, newLi) {
         const marker = '</ul>';
         const idx = htmlSource.lastIndexOf(marker);
-        if (idx === -1) throw new Error('Could not find </ul> in index.html');
+        if (idx === -1) throw new Error('Could not find         <li>
+            <a href="123.html" class="btn">123</a>
+            <details>
+                <summary><span class="arrow"></span></summary>
+                <div class="conclusions"><strong>Висновки:</strong> </div>
+            </details>
+        </li>
+    </ul> in index.html');
         return htmlSource.slice(0, idx) + newLi + '\n    ' + htmlSource.slice(idx);
     }
 
