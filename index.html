@@ -639,19 +639,6 @@
     ];
     // ENTRIES_END
 
-    // ── Init ─────────────────────────────────────────────────────────────────
-    (function init() {
-        const dot = document.getElementById('conn-dot');
-        const txt = document.getElementById('conn-text');
-        if (CFG.token && CFG.owner && CFG.repo) {
-            dot.classList.add('ok');
-            txt.textContent = CFG.owner + '/' + CFG.repo;
-        } else {
-            txt.textContent = 'not connected';
-        }
-        renderCards();
-    })();
-
     // ── Render cards ─────────────────────────────────────────────────────────
     const EMOJIS = ['📄','📊','🔬','📝','🎯','💡','🧠','📈','🗂️','🔍'];
     function getEmoji(filename) {
@@ -935,6 +922,19 @@
     // Close modals on backdrop click
     document.getElementById('confirm-overlay').addEventListener('click', function(e) { if (e.target === this) closeConfirm(); });
     document.getElementById('modal-overlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+    // ── Init (runs after DOM is ready) ───────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+        var dot = document.getElementById('conn-dot');
+        var txt = document.getElementById('conn-text');
+        if (CFG.token && CFG.owner && CFG.repo) {
+            dot.classList.add('ok');
+            txt.textContent = CFG.owner + '/' + CFG.repo;
+        } else {
+            txt.textContent = 'not connected';
+        }
+        renderCards();
+    });
     </script>
 </body>
 </html>
