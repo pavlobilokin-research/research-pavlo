@@ -2,174 +2,641 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dressly — Research Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:       #F7F3EE;
+            --card:     #F0EAE1;
+            --border:   #DDD5CC;
+            --brown:    #3B2F25;
+            --green:    #4CAF72;
+            --green-dk: #3a9960;
+            --muted:    #7a6e65;
+            --radius:   14px;
+            --shadow:   0 2px 12px rgba(59,47,37,.08);
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            padding: 20px;
-            background-color: #f6f8fa;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--brown);
+            min-height: 100vh;
+            padding: 32px 20px 60px;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        /* Контейнер для кнопки та висновків */
-        details {
-            display: inline-block;
-        }
-
-        /* Прибираємо стандартну стрілочку браузера */
-        summary {
-            list-style: none;
+        /* ── Header ── */
+        .header {
             display: flex;
             align-items: center;
-            cursor: pointer;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 28px;
         }
 
-        summary::-webkit-details-marker {
-            display: none;
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -.3px;
         }
 
-        /* Стиль кнопок */
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #2da44e;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
+        .header h1 span { color: var(--green); }
+
+        /* ── Add-panel toggle ── */
+        #toggle-panel-btn {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            background: var(--brown);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-family: 'DM Sans', sans-serif;
             font-size: 14px;
             font-weight: 600;
-            transition: background-color 0.2s; 
-            border: 1px solid rgba(27, 31, 36, 0.15);
+            cursor: pointer;
+            transition: background .18s, transform .12s;
+        }
+        #toggle-panel-btn:hover { background: #5a4538; transform: translateY(-1px); }
+        #toggle-panel-btn svg { flex-shrink: 0; transition: transform .25s; }
+        #toggle-panel-btn.open svg { transform: rotate(45deg); }
+
+        /* ── Slide-down panel ── */
+        .add-panel {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height .35s ease, opacity .3s ease;
+            opacity: 0;
+        }
+        .add-panel.open { max-height: 700px; opacity: 1; }
+
+        .add-panel-inner {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
         }
 
-        .btn:hover {
-            background-color: #2c974b;
+        .add-panel-inner h2 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--brown);
         }
 
-        /* Стиль стрілочки */
+        /* ── Token notice ── */
+        .token-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            padding: 10px 14px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .token-row svg { flex-shrink:0; }
+        .token-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #e0c5b0;
+            flex-shrink: 0;
+        }
+        .token-dot.ok { background: var(--green); }
+
+        /* ── Form fields ── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
+
+        .field { display: flex; flex-direction: column; gap: 5px; }
+        .field label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .3px; text-transform: uppercase; }
+
+        .field input,
+        .field textarea {
+            width: 100%;
+            padding: 10px 13px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--brown);
+            outline: none;
+            transition: border-color .18s;
+            resize: vertical;
+        }
+        .field input:focus,
+        .field textarea:focus { border-color: var(--brown); }
+        .field input::placeholder,
+        .field textarea::placeholder { color: #bbb3aa; }
+
+        .field-full { grid-column: 1 / -1; }
+
+        .html-area { min-height: 140px; font-size: 12px; font-family: 'Courier New', monospace; line-height: 1.5; }
+
+        /* ── Config row (collapsed by default) ── */
+        .config-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--muted);
+            cursor: pointer;
+            margin-bottom: 14px;
+            user-select: none;
+        }
+        .config-toggle:hover { color: var(--brown); }
+        .config-section { display: none; margin-bottom: 14px; }
+        .config-section.open { display: grid; grid-template-columns:1fr 1fr; gap:10px; }
+        @media(max-width:520px){ .config-section.open{grid-template-columns:1fr;} }
+
+        /* ── Submit & status ── */
+        .form-footer { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+        #submit-btn {
+            padding: 11px 26px;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .18s, transform .12s, opacity .18s;
+        }
+        #submit-btn:hover:not(:disabled) { background: var(--green-dk); transform: translateY(-1px); }
+        #submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+        #status-msg {
+            font-size: 13px;
+            font-weight: 500;
+            min-height: 20px;
+        }
+        #status-msg.ok  { color: var(--green); }
+        #status-msg.err { color: #c0392b; }
+
+        /* ── List ── */
+        .list-header {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        ul#research-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        ul#research-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 11px 20px;
+            background: var(--brown);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 999px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background .18s, transform .12s;
+            white-space: nowrap;
+        }
+        .btn:hover { background: #5a4538; transform: translateY(-1px); }
+
+        /* ── Details / conclusions ── */
+        details { display: inline-block; }
+
+        summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+        summary::-webkit-details-marker { display: none; }
+
         .arrow {
             display: inline-block;
-            margin-left: 8px;
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 8px solid #57606a; /* Колір стрілочки */
-            transition: transform 0.2s;
+            width: 0; height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 7px solid var(--muted);
+            transition: transform .2s;
         }
+        details[open] .arrow { transform: rotate(180deg); }
 
-        /* Поворот стрілочки при відкритті */
-        details[open] .arrow {
-            transform: rotate(180deg);
-        }
-
-        /* Блок з висновками */
         .conclusions {
-            margin-top: 10px;
-            padding: 12px;
-            background-color: #ffffff;
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
+            margin-top: 6px;
+            padding: 12px 14px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
             font-size: 13px;
             color: #24292f;
-            max-width: 500px;
-            line-height: 1.5;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            max-width: 440px;
+            line-height: 1.55;
+            box-shadow: var(--shadow);
         }
+        .conclusions strong { color: var(--brown); }
 
-        .conclusions strong {
-            color: #cf222e; /* Акцент на слові "Висновки" */
+        /* ── Loader spinner ── */
+        .spinner {
+            display: inline-block;
+            width: 15px; height: 15px;
+            border: 2px solid rgba(255,255,255,.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+            vertical-align: middle;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <h2>Рісьорчі:</h2>
+    <!-- ── Header ── -->
+    <div class="header">
+        <h1>Dressly <span>Researches</span></h1>
+        <button id="toggle-panel-btn" onclick="togglePanel()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <line x1="7" y1="1" x2="7" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <line x1="1" y1="7" x2="13" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Add Research
+        </button>
+    </div>
 
-    <ul>
+    <!-- ── Add panel ── -->
+    <div class="add-panel" id="add-panel">
+        <div class="add-panel-inner">
+            <h2>📄 New Research Entry</h2>
+
+            <!-- Token status -->
+            <div class="token-row">
+                <div class="token-dot" id="token-dot"></div>
+                <span id="token-status-text">GitHub token not set — expand Config to enter it</span>
+            </div>
+
+            <!-- Config (repo + token) -->
+            <div class="config-toggle" onclick="toggleConfig()">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/>
+                    <path d="M6 5v4M6 3.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+                GitHub Config
+            </div>
+            <div class="config-section" id="config-section">
+                <div class="field">
+                    <label>Owner / Org</label>
+                    <input type="text" id="cfg-owner" placeholder="e.g. your-username">
+                </div>
+                <div class="field">
+                    <label>Repository</label>
+                    <input type="text" id="cfg-repo" placeholder="e.g. dressly-research">
+                </div>
+                <div class="field">
+                    <label>Branch</label>
+                    <input type="text" id="cfg-branch" placeholder="main" value="main">
+                </div>
+                <div class="field">
+                    <label>Fine-grained Token (session only)</label>
+                    <input type="password" id="cfg-token" placeholder="github_pat_…">
+                </div>
+                <div class="field" style="align-self:end">
+                    <label>&nbsp;</label>
+                    <button class="btn" style="border:none;cursor:pointer;width:fit-content" onclick="saveConfig()">Save Config</button>
+                </div>
+            </div>
+
+            <!-- File fields -->
+            <div class="form-grid">
+                <div class="field">
+                    <label>Button Label</label>
+                    <input type="text" id="f-label" placeholder="e.g. Reddit research 17.04.2026">
+                </div>
+                <div class="field">
+                    <label>Filename (no spaces)</label>
+                    <input type="text" id="f-filename" placeholder="e.g. reddit-research-17.04.2026.html">
+                </div>
+                <div class="field field-full">
+                    <label>HTML Content (full file)</label>
+                    <textarea class="html-area" id="f-content" placeholder="Paste the full HTML content of the research file here…"></textarea>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <button id="submit-btn" onclick="submitResearch()">Publish to GitHub</button>
+                <span id="status-msg"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── List ── -->
+    <p class="list-header">All Researches</p>
+
+    <ul id="research-list">
         <li>
             <a href="dressly_final_brief_v2.html" class="btn">Рісьорч Дімончіка 17.04.2026</a>
             <details>
                 <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Дімончік старався, всім читати
-                </div>
+                <div class="conclusions"><strong>Висновки:</strong> Дімончік старався, всім читати</div>
             </details>
         </li>
         <li>
             <a href="dressly-all-philosophies-research.html" class="btn">Eastern philosophy research youtube 15.04.2026</a>
             <details>
                 <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe
-                </div>
+                <div class="conclusions"><strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe</div>
             </details>
         </li>
         <li>
             <a href="dressly-eastern-philosophy-research.html" class="btn">Eastern philosophy research reddit 15.04.2026</a>
             <details>
                 <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe
-                </div>
+                <div class="conclusions"><strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe</div>
             </details>
         </li>
         <li>
             <a href="reddit-research-08.04.2026.html" class="btn">Reddit research 08.04.2026</a>
             <details>
                 <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Дослівні тригери для рекламних хуків. Топ 5 скарг.
-                </div>
+                <div class="conclusions"><strong>Висновки:</strong> Дослівні тригери для рекламних хуків. Топ 5 скарг.</div>
             </details>
         </li>
-
         <li>
             <a href="dressly-youtube-ua-brief.html" class="btn">Youtube research 08.04.2026</a>
             <details>
                 <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> Симульований глибокий аналіз коментарів з каналів 
-                    Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style. 
-                    Топ-3 теми за емоційною інтенсивністю: довжина рукава (фізична фрустрація), 
-                    чорний колір що "старить" (відкриття, що ламає систему), 
-                    "відчуття невидимості" (екзистенційний біль).
-                </div>
+                <div class="conclusions"><strong>Висновки:</strong> Симульований глибокий аналіз коментарів з каналів Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style. Топ-3 теми за емоційною інтенсивністю: довжина рукава (фізична фрустрація), чорний колір що "старить" (відкриття, що ламає систему), "відчуття невидимості" (екзистенційний біль).</div>
             </details>
         </li>
-
         <li>
             <a href="7-hidden-shopping-frictions.html" class="btn">7 hidden shopping frictions 08.04.2026</a>
             <details>
                 <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> 7 больових точок при онлайн-шопінгу. Глибинний аналіз фрикцій, з якими 
-                    стикаються жінки 35+ під час пошуку та купівлі одягу онлайн. 
-                    Кожна точка прив'язана до конкретної функції Dressly та креативної ідеї для реклами.
-                </div>
+                <div class="conclusions"><strong>Висновки:</strong> 7 больових точок при онлайн-шопінгу. Глибинний аналіз фрикцій, з якими стикаються жінки 35+ під час пошуку та купівлі одягу онлайн. Кожна точка прив'язана до конкретної функції Dressly та креативної ідеї для реклами.</div>
             </details>
         </li>
-
         <li>
             <a href="strategic-positioning-08.04.2026.html" class="btn">Strategic positioning research 08.04.2026</a>
             <details>
                 <summary><span class="arrow"></span></summary>
-                <div class="conclusions">
-                    <strong>Висновки:</strong> П'ять непрямолінійних кутів, що виходять далеко за межі «AI стайлінгу». 
-                    Кожен атакує різний психологічний шар тієї самої жінки. Підкріплені ринковими даними та першоджерелами..
-                </div>
+                <div class="conclusions"><strong>Висновки:</strong> П'ять непрямолінійних кутів, що виходять далеко за межі «AI стайлінгу». Кожен атакує різний психологічний шар тієї самої жінки. Підкріплені ринковими даними та першоджерелами.</div>
             </details>
         </li>
     </ul>
+
+    <script>
+    // ─────────────────────────────────────────────
+    //  CONFIG  — stored in sessionStorage per tab
+    // ─────────────────────────────────────────────
+    const CFG_KEY = 'gh_cfg';
+
+    function loadConfig() {
+        try { return JSON.parse(sessionStorage.getItem(CFG_KEY)) || {}; } catch { return {}; }
+    }
+
+    function saveConfig() {
+        const cfg = {
+            owner:  document.getElementById('cfg-owner').value.trim(),
+            repo:   document.getElementById('cfg-repo').value.trim(),
+            branch: document.getElementById('cfg-branch').value.trim() || 'main',
+            token:  document.getElementById('cfg-token').value.trim()
+        };
+        if (!cfg.owner || !cfg.repo || !cfg.token) {
+            setStatus('Fill in Owner, Repository and Token first.', 'err');
+            return;
+        }
+        sessionStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+        refreshTokenStatus();
+        setStatus('Config saved for this session ✓', 'ok');
+    }
+
+    function refreshTokenStatus() {
+        const cfg = loadConfig();
+        const dot  = document.getElementById('token-dot');
+        const txt  = document.getElementById('token-status-text');
+        if (cfg.token) {
+            dot.classList.add('ok');
+            txt.textContent = `Connected: ${cfg.owner}/${cfg.repo} (${cfg.branch})`;
+        } else {
+            dot.classList.remove('ok');
+            txt.textContent = 'GitHub token not set — expand Config to enter it';
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    //  UI toggles
+    // ─────────────────────────────────────────────
+    function togglePanel() {
+        const panel = document.getElementById('add-panel');
+        const btn   = document.getElementById('toggle-panel-btn');
+        panel.classList.toggle('open');
+        btn.classList.toggle('open');
+        // pre-fill config inputs from session
+        const cfg = loadConfig();
+        if (cfg.owner)  document.getElementById('cfg-owner').value  = cfg.owner;
+        if (cfg.repo)   document.getElementById('cfg-repo').value   = cfg.repo;
+        if (cfg.branch) document.getElementById('cfg-branch').value = cfg.branch;
+        // don't pre-fill token for security
+    }
+
+    function toggleConfig() {
+        document.getElementById('config-section').classList.toggle('open');
+    }
+
+    // ─────────────────────────────────────────────
+    //  GitHub helpers
+    // ─────────────────────────────────────────────
+    async function ghFetch(path, method, body, cfg) {
+        const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`, {
+            method,
+            headers: {
+                'Authorization': `Bearer ${cfg.token}`,
+                'Accept': 'application/vnd.github+json',
+                'Content-Type': 'application/json',
+                'X-GitHub-Api-Version': '2022-11-28'
+            },
+            body: body ? JSON.stringify(body) : undefined
+        });
+        return res;
+    }
+
+    async function getFileSHA(path, cfg) {
+        const res = await ghFetch(path, 'GET', null, cfg);
+        if (res.status === 404) return null;
+        if (!res.ok) throw new Error(`GitHub GET error ${res.status}`);
+        const data = await res.json();
+        return data.sha || null;
+    }
+
+    async function putFile(path, content, message, cfg, sha) {
+        const body = {
+            message,
+            content: btoa(unescape(encodeURIComponent(content))),  // UTF-8 safe base64
+            branch: cfg.branch
+        };
+        if (sha) body.sha = sha;
+        const res = await ghFetch(path, 'PUT', body, cfg);
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || `GitHub PUT error ${res.status}`);
+        }
+        return res.json();
+    }
+
+    // ─────────────────────────────────────────────
+    //  Inject new <li> into index.html source
+    // ─────────────────────────────────────────────
+    function buildNewLi(label, filename) {
+        return `        <li>
+            <a href="${filename}" class="btn">${label}</a>
+            <details>
+                <summary><span class="arrow"></span></summary>
+                <div class="conclusions"><strong>Висновки:</strong> </div>
+            </details>
+        </li>`;
+    }
+
+    function appendLiToSource(htmlSource, newLi) {
+        // Insert just before </ul>
+        const marker = '</ul>';
+        const idx = htmlSource.lastIndexOf(marker);
+        if (idx === -1) throw new Error('Could not find </ul> in index.html to inject entry.');
+        return htmlSource.slice(0, idx) + newLi + '\n    ' + htmlSource.slice(idx);
+    }
+
+    // ─────────────────────────────────────────────
+    //  Also update the live DOM
+    // ─────────────────────────────────────────────
+    function appendLiToDOM(label, filename) {
+        const ul = document.getElementById('research-list');
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a href="${filename}" class="btn">${label}</a>
+            <details>
+                <summary><span class="arrow"></span></summary>
+                <div class="conclusions"><strong>Висновки:</strong> </div>
+            </details>`;
+        ul.appendChild(li);
+        // flash highlight
+        li.style.transition = 'background .4s';
+        li.style.background = '#e8f7ee';
+        setTimeout(() => { li.style.background = ''; }, 1200);
+    }
+
+    // ─────────────────────────────────────────────
+    //  Status helper
+    // ─────────────────────────────────────────────
+    function setStatus(msg, type) {
+        const el = document.getElementById('status-msg');
+        el.textContent = msg;
+        el.className = type || '';
+    }
+
+    function setBtnLoading(loading) {
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = loading;
+        btn.innerHTML = loading
+            ? '<span class="spinner"></span> Publishing…'
+            : 'Publish to GitHub';
+    }
+
+    // ─────────────────────────────────────────────
+    //  Main submit
+    // ─────────────────────────────────────────────
+    async function submitResearch() {
+        const cfg      = loadConfig();
+        const label    = document.getElementById('f-label').value.trim();
+        const filename = document.getElementById('f-filename').value.trim();
+        const content  = document.getElementById('f-content').value;
+
+        // Validate
+        if (!cfg.token || !cfg.owner || !cfg.repo) {
+            setStatus('Open Config and save your GitHub details first.', 'err');
+            return;
+        }
+        if (!label)    { setStatus('Enter a button label.', 'err'); return; }
+        if (!filename) { setStatus('Enter a filename.', 'err'); return; }
+        if (!content)  { setStatus('Paste the HTML content.', 'err'); return; }
+        if (!/\.html?$/.test(filename)) { setStatus('Filename must end in .html', 'err'); return; }
+
+        setBtnLoading(true);
+        setStatus('', '');
+
+        try {
+            // 1. Upload the new research file
+            setStatus('Uploading research file…', '');
+            const newFileSHA = await getFileSHA(filename, cfg);
+            await putFile(filename, content, `Add research: ${label}`, cfg, newFileSHA);
+
+            // 2. Fetch current index.html from GitHub
+            setStatus('Fetching index.html…', '');
+            const idxRes = await ghFetch('index.html', 'GET', null, cfg);
+            if (!idxRes.ok) throw new Error(`Could not fetch index.html (${idxRes.status})`);
+            const idxData = await idxRes.json();
+            const idxSHA  = idxData.sha;
+            const idxHTML = decodeURIComponent(escape(atob(idxData.content.replace(/\n/g, ''))));
+
+            // 3. Inject new <li>
+            const newLi      = buildNewLi(label, filename);
+            const updatedHTML = appendLiToSource(idxHTML, newLi);
+
+            // 4. Push updated index.html
+            setStatus('Updating index.html…', '');
+            await putFile('index.html', updatedHTML, `Update index: add ${label}`, cfg, idxSHA);
+
+            // 5. Update live DOM
+            appendLiToDOM(label, filename);
+
+            // 6. Reset form
+            document.getElementById('f-label').value    = '';
+            document.getElementById('f-filename').value = '';
+            document.getElementById('f-content').value  = '';
+
+            setStatus('✓ Published successfully!', 'ok');
+        } catch (err) {
+            console.error(err);
+            setStatus(`Error: ${err.message}`, 'err');
+        } finally {
+            setBtnLoading(false);
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    //  Init
+    // ─────────────────────────────────────────────
+    refreshTokenStatus();
+    </script>
 
 </body>
 </html>
