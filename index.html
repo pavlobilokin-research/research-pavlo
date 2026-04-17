@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dressly — Research Hub</title>
-    <!-- Injected at deploy time by GitHub Actions — contains RESEARCH_TOKEN -->
     <script src="config.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -17,6 +16,7 @@
             --brown:    #3B2F25;
             --green:    #4CAF72;
             --green-dk: #3a9960;
+            --red:      #c0392b;
             --muted:    #7a6e65;
             --radius:   14px;
             --shadow:   0 2px 12px rgba(59,47,37,.08);
@@ -30,7 +30,6 @@
             padding: 32px 20px 60px;
         }
 
-        /* ── Header ── */
         .header {
             display: flex;
             align-items: center;
@@ -42,7 +41,6 @@
         .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -.3px; }
         .header h1 span { color: var(--green); }
 
-        /* ── Add-panel toggle ── */
         #toggle-panel-btn {
             display: flex;
             align-items: center;
@@ -62,14 +60,13 @@
         #toggle-panel-btn svg { flex-shrink: 0; transition: transform .25s; }
         #toggle-panel-btn.open svg { transform: rotate(45deg); }
 
-        /* ── Slide-down panel ── */
         .add-panel {
             overflow: hidden;
             max-height: 0;
             transition: max-height .35s ease, opacity .3s ease;
             opacity: 0;
         }
-        .add-panel.open { max-height: 600px; opacity: 1; }
+        .add-panel.open { max-height: 620px; opacity: 1; }
 
         .add-panel-inner {
             background: #fff;
@@ -79,10 +76,8 @@
             margin-bottom: 24px;
             box-shadow: var(--shadow);
         }
-
         .add-panel-inner h2 { font-size: 15px; font-weight: 700; margin-bottom: 18px; }
 
-        /* ── Connection status badge ── */
         .token-row {
             display: flex;
             align-items: center;
@@ -104,7 +99,6 @@
         }
         .token-dot.ok { background: var(--green); }
 
-        /* ── Form fields ── */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -114,12 +108,8 @@
         @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
 
         .field { display: flex; flex-direction: column; gap: 5px; }
-        .field label {
-            font-size: 12px; font-weight: 600; color: var(--muted);
-            letter-spacing: .3px; text-transform: uppercase;
-        }
-        .field input,
-        .field textarea {
+        .field label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .3px; text-transform: uppercase; }
+        .field input, .field textarea {
             width: 100%;
             padding: 10px 13px;
             background: var(--bg);
@@ -132,14 +122,11 @@
             transition: border-color .18s;
             resize: vertical;
         }
-        .field input:focus,
-        .field textarea:focus { border-color: var(--brown); }
-        .field input::placeholder,
-        .field textarea::placeholder { color: #bbb3aa; }
+        .field input:focus, .field textarea:focus { border-color: var(--brown); }
+        .field input::placeholder, .field textarea::placeholder { color: #bbb3aa; }
         .field-full { grid-column: 1 / -1; }
         .html-area { min-height: 140px; font-size: 12px; font-family: 'Courier New', monospace; line-height: 1.5; }
 
-        /* ── Submit & status ── */
         .form-footer { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
         #submit-btn {
@@ -159,35 +146,27 @@
 
         #status-msg { font-size: 13px; font-weight: 500; min-height: 20px; }
         #status-msg.ok  { color: var(--green); }
-        #status-msg.err { color: #c0392b; }
+        #status-msg.err { color: var(--red); }
 
-        /* ── List ── */
         .list-header {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: .5px;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 12px;
+            font-size: 12px; font-weight: 700; letter-spacing: .5px;
+            text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
         }
 
         ul#research-list {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            list-style: none; padding: 0;
+            display: flex; flex-direction: column; gap: 10px;
         }
         ul#research-list li {
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
             padding: 11px 20px;
             background: var(--brown);
             color: #fff;
@@ -203,14 +182,10 @@
 
         details { display: inline-block; }
         summary {
-            list-style: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            padding: 10px;
+            list-style: none; cursor: pointer;
+            display: flex; align-items: center; padding: 8px;
         }
         summary::-webkit-details-marker { display: none; }
-
         .arrow {
             display: inline-block;
             width: 0; height: 0;
@@ -220,7 +195,6 @@
             transition: transform .2s;
         }
         details[open] .arrow { transform: rotate(180deg); }
-
         .conclusions {
             margin-top: 6px;
             padding: 12px 14px;
@@ -234,6 +208,123 @@
             box-shadow: var(--shadow);
         }
         .conclusions strong { color: var(--brown); }
+
+        /* ── Row action icons (appear on hover) ── */
+        .row-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity .15s;
+        }
+        ul#research-list li:hover .row-actions { opacity: 1; }
+
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px; height: 30px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+            flex-shrink: 0;
+        }
+        .icon-btn:hover { background: var(--card); border-color: var(--brown); }
+        .icon-btn.delete:hover { background: #fdecea; border-color: var(--red); }
+
+        /* ── Inline edit row ── */
+        .edit-row {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            flex-basis: 100%;
+            margin-top: 4px;
+        }
+        .edit-row.open { display: flex; }
+        .edit-row input {
+            flex: 1;
+            padding: 8px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            color: var(--brown);
+            outline: none;
+            min-width: 0;
+        }
+        .edit-row input:focus { border-color: var(--brown); }
+        .edit-save-btn {
+            padding: 7px 16px;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .edit-save-btn:hover { background: var(--green-dk); }
+        .edit-cancel-btn {
+            padding: 7px 14px;
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .edit-cancel-btn:hover { border-color: var(--brown); color: var(--brown); }
+
+        /* ── Delete confirm modal ── */
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.35);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .confirm-overlay.open { display: flex; }
+        .confirm-box {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            max-width: 360px;
+            width: 90%;
+            box-shadow: 0 8px 40px rgba(0,0,0,.2);
+            text-align: center;
+        }
+        .confirm-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+        .confirm-box p  { font-size: 13px; color: var(--muted); margin-bottom: 22px; line-height: 1.5; }
+        .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+        .confirm-del-btn {
+            padding: 10px 22px;
+            background: var(--red);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px; font-weight: 700;
+            cursor: pointer;
+        }
+        .confirm-del-btn:disabled { opacity: .6; cursor: not-allowed; }
+        .confirm-cancel-btn {
+            padding: 10px 22px;
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .confirm-cancel-btn:hover { border-color: var(--brown); color: var(--brown); }
 
         .spinner {
             display: inline-block;
@@ -249,7 +340,6 @@
 </head>
 <body>
 
-    <!-- ── Header ── -->
     <div class="header">
         <h1>Dressly <span>Researches</span></h1>
         <button id="toggle-panel-btn" onclick="togglePanel()">
@@ -261,18 +351,13 @@
         </button>
     </div>
 
-    <!-- ── Add panel ── -->
     <div class="add-panel" id="add-panel">
         <div class="add-panel-inner">
-            <h2>📄 New Research Entry</h2>
-
-            <!-- Connection status — driven by config.js -->
+            <h2>New Research Entry</h2>
             <div class="token-row">
                 <div class="token-dot" id="token-dot"></div>
                 <span id="token-status-text">Checking connection…</span>
             </div>
-
-            <!-- Form: label + filename + HTML content -->
             <div class="form-grid">
                 <div class="field">
                     <label>Button Label</label>
@@ -284,10 +369,9 @@
                 </div>
                 <div class="field field-full">
                     <label>HTML Content (full file)</label>
-                    <textarea class="html-area" id="f-content" placeholder="Paste the full HTML content of the research file here…"></textarea>
+                    <textarea class="html-area" id="f-content" placeholder="Paste the full HTML content here…"></textarea>
                 </div>
             </div>
-
             <div class="form-footer">
                 <button id="submit-btn" onclick="submitResearch()">Publish to GitHub</button>
                 <span id="status-msg"></span>
@@ -295,182 +379,216 @@
         </div>
     </div>
 
-    <!-- ── Research list ── -->
     <p class="list-header">All Researches</p>
 
+    <!-- RESEARCH_LIST_START -->
     <ul id="research-list">
-        <li>
+        <li data-filename="dressly_final_brief_v2.html">
             <a href="dressly_final_brief_v2.html" class="btn">Рісьорч Дімончіка 17.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> Дімончік старався, всім читати</div>
-            </details>
+            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Дімончік старався, всім читати</div></details>
+            <div class="row-actions">
+                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="edit-row"></div>
         </li>
-        <li>
+        <li data-filename="dressly-all-philosophies-research.html">
             <a href="dressly-all-philosophies-research.html" class="btn">Eastern philosophy research youtube 15.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe</div>
-            </details>
+            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe</div></details>
+            <div class="row-actions">
+                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="edit-row"></div>
         </li>
-        <li>
+        <li data-filename="dressly-eastern-philosophy-research.html">
             <a href="dressly-eastern-philosophy-research.html" class="btn">Eastern philosophy research reddit 15.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe</div>
-            </details>
+            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Ідея використання східної культури як підсилення capsule wardrobe</div></details>
+            <div class="row-actions">
+                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="edit-row"></div>
         </li>
-        <li>
+        <li data-filename="reddit-research-08.04.2026.html">
             <a href="reddit-research-08.04.2026.html" class="btn">Reddit research 08.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> Дослівні тригери для рекламних хуків. Топ 5 скарг.</div>
-            </details>
+            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Дослівні тригери для рекламних хуків. Топ 5 скарг.</div></details>
+            <div class="row-actions">
+                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="edit-row"></div>
         </li>
-        <li>
+        <li data-filename="dressly-youtube-ua-brief.html">
             <a href="dressly-youtube-ua-brief.html" class="btn">Youtube research 08.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> Симульований глибокий аналіз коментарів з каналів Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style. Топ-3 теми за емоційною інтенсивністю: довжина рукава (фізична фрустрація), чорний колір що "старить" (відкриття, що ламає систему), "відчуття невидимості" (екзистенційний біль).</div>
-            </details>
+            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> Симульований глибокий аналіз коментарів з каналів Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style.</div></details>
+            <div class="row-actions">
+                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="edit-row"></div>
         </li>
-        <li>
+        <li data-filename="7-hidden-shopping-frictions.html">
             <a href="7-hidden-shopping-frictions.html" class="btn">7 hidden shopping frictions 08.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> 7 больових точок при онлайн-шопінгу. Глибинний аналіз фрикцій, з якими стикаються жінки 35+ під час пошуку та купівлі одягу онлайн. Кожна точка прив'язана до конкретної функції Dressly та креативної ідеї для реклами.</div>
-            </details>
+            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> 7 больових точок при онлайн-шопінгу.</div></details>
+            <div class="row-actions">
+                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="edit-row"></div>
         </li>
-        <li>
+        <li data-filename="strategic-positioning-08.04.2026.html">
             <a href="strategic-positioning-08.04.2026.html" class="btn">Strategic positioning research 08.04.2026</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> П'ять непрямолінійних кутів, що виходять далеко за межі «AI стайлінгу». Кожен атакує різний психологічний шар тієї самої жінки. Підкріплені ринковими даними та першоджерелами.</div>
-            </details>
+            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> П'ять непрямолінійних кутів, що виходять далеко за межі «AI стайлінгу».</div></details>
+            <div class="row-actions">
+                <button class="icon-btn" title="Edit label" onclick="startEdit(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="edit-row"></div>
         </li>
     </ul>
+    <!-- RESEARCH_LIST_END -->
+
+    <!-- Delete confirm modal -->
+    <div class="confirm-overlay" id="confirm-overlay">
+        <div class="confirm-box">
+            <h3>Delete this entry?</h3>
+            <p id="confirm-desc"></p>
+            <div class="confirm-actions">
+                <button class="confirm-cancel-btn" onclick="closeConfirm()">Cancel</button>
+                <button class="confirm-del-btn" id="confirm-del-btn">Delete</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-    // ─────────────────────────────────────────────
-    //  Config — injected by config.js at deploy time
-    //  Falls back gracefully if config.js is missing
-    // ─────────────────────────────────────────────
+    // ── Config ──────────────────────────────────────────────────────────────
     const CFG = (typeof window.DRESSLY_CONFIG !== 'undefined')
         ? window.DRESSLY_CONFIG
         : { owner: '', repo: '', branch: 'main', token: '' };
 
-    // ─────────────────────────────────────────────
-    //  Init — show connection status on load
-    // ─────────────────────────────────────────────
     (function init() {
         const dot = document.getElementById('token-dot');
         const txt = document.getElementById('token-status-text');
         if (CFG.token && CFG.owner && CFG.repo) {
             dot.classList.add('ok');
-            txt.textContent = `Connected to ${CFG.owner}/${CFG.repo} (${CFG.branch})`;
+            txt.textContent = 'Connected to ' + CFG.owner + '/' + CFG.repo + ' (' + CFG.branch + ')';
         } else {
             txt.textContent = 'Not connected — config.js missing or token not set';
         }
     })();
 
-    // ─────────────────────────────────────────────
-    //  UI toggles
-    // ─────────────────────────────────────────────
     function togglePanel() {
-        const panel = document.getElementById('add-panel');
-        const btn   = document.getElementById('toggle-panel-btn');
-        panel.classList.toggle('open');
-        btn.classList.toggle('open');
+        document.getElementById('add-panel').classList.toggle('open');
+        document.getElementById('toggle-panel-btn').classList.toggle('open');
     }
 
-    // ─────────────────────────────────────────────
-    //  GitHub API helpers
-    // ─────────────────────────────────────────────
-    async function ghFetch(path, method, body) {
-        const res = await fetch(
-            `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`,
-            {
-                method,
-                headers: {
-                    'Authorization': `Bearer ${CFG.token}`,
-                    'Accept': 'application/vnd.github+json',
-                    'Content-Type': 'application/json',
-                    'X-GitHub-Api-Version': '2022-11-28'
-                },
-                body: body ? JSON.stringify(body) : undefined
-            }
-        );
-        return res;
+    // ── GitHub helpers ───────────────────────────────────────────────────────
+    function ghHeaders() {
+        return {
+            'Authorization': 'Bearer ' + CFG.token,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json',
+            'X-GitHub-Api-Version': '2022-11-28'
+        };
     }
 
-    async function getFileSHA(path) {
-        const res = await ghFetch(path, 'GET', null);
+    function ghUrl(path) {
+        return 'https://api.github.com/repos/' + CFG.owner + '/' + CFG.repo + '/contents/' + path;
+    }
+
+    function toB64(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function fromB64(b64) {
+        return decodeURIComponent(escape(atob(b64.replace(/\n/g, ''))));
+    }
+
+    async function getFile(path) {
+        const res = await fetch(ghUrl(path), { headers: ghHeaders() });
         if (res.status === 404) return null;
-        if (!res.ok) throw new Error(`GitHub GET error ${res.status}`);
-        const data = await res.json();
-        return data.sha || null;
+        if (!res.ok) throw new Error('GitHub GET error ' + res.status);
+        return res.json();
     }
 
     async function putFile(path, content, message, sha) {
-        const body = {
-            message,
-            content: btoa(unescape(encodeURIComponent(content))), // UTF-8-safe base64
-            branch: CFG.branch
-        };
+        const body = { message, content: toB64(content), branch: CFG.branch };
         if (sha) body.sha = sha;
-        const res = await ghFetch(path, 'PUT', body);
+        const res = await fetch(ghUrl(path), {
+            method: 'PUT',
+            headers: ghHeaders(),
+            body: JSON.stringify(body)
+        });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
-            throw new Error(err.message || `GitHub PUT error ${res.status}`);
+            throw new Error(err.message || 'GitHub PUT error ' + res.status);
         }
         return res.json();
     }
 
-    // ─────────────────────────────────────────────
-    //  index.html self-update helpers
-    // ─────────────────────────────────────────────
-    function buildNewLi(label, filename) {
-        return `        <li>
-            <a href="${filename}" class="btn">${label}</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> </div>
-            </details>
-        </li>`;
+    async function deleteFile(path, sha, message) {
+        const res = await fetch(ghUrl(path), {
+            method: 'DELETE',
+            headers: ghHeaders(),
+            body: JSON.stringify({ message, sha, branch: CFG.branch })
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'GitHub DELETE error ' + res.status);
+        }
     }
 
-    function appendLiToSource(htmlSource, newLi) {
-        const marker = '</ul>';
-        const idx = htmlSource.lastIndexOf(marker);
-        if (idx === -1) throw new Error('Could not find         <li>
-            <a href="123.html" class="btn">123</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> </div>
-            </details>
-        </li>
-    </ul> in index.html');
-        return htmlSource.slice(0, idx) + newLi + '\n    ' + htmlSource.slice(idx);
+    async function fetchIndexSource() {
+        const data = await getFile('index.html');
+        if (!data) throw new Error('index.html not found on GitHub');
+        return { sha: data.sha, html: fromB64(data.content) };
     }
 
-    function appendLiToDOM(label, filename) {
-        const ul = document.getElementById('research-list');
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <a href="${filename}" class="btn">${label}</a>
-            <details>
-                <summary><span class="arrow"></span></summary>
-                <div class="conclusions"><strong>Висновки:</strong> </div>
-            </details>`;
-        ul.appendChild(li);
-        li.style.transition = 'background .4s';
-        li.style.background = '#e8f7ee';
-        setTimeout(() => { li.style.background = ''; }, 1400);
+    // ── index.html source manipulation ──────────────────────────────────────
+    // Uses <!-- RESEARCH_LIST_END --> marker — no false matches possible
+    function injectEntry(source, liHtml) {
+        const MARKER = '<!-- RESEARCH_LIST_END -->';
+        const mIdx = source.indexOf(MARKER);
+        if (mIdx === -1) throw new Error('Marker RESEARCH_LIST_END not found in index.html');
+        const ulClose = source.lastIndexOf('</ul>', mIdx);
+        if (ulClose === -1) throw new Error('Could not locate </ul> before marker');
+        return source.slice(0, ulClose) + liHtml + '\n    </ul>\n    ' + source.slice(mIdx);
     }
 
-    // ─────────────────────────────────────────────
-    //  Status / loading helpers
-    // ─────────────────────────────────────────────
+    function removeEntry(source, filename) {
+        const esc = filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return source.replace(
+            new RegExp('\\s*<li data-filename="' + esc + '">[\\s\\S]*?</li>', 'g'),
+            ''
+        );
+    }
+
+    function renameEntry(source, filename, newLabel) {
+        const esc = filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return source.replace(
+            new RegExp('(<li data-filename="' + esc + '">[\\s\\S]*?<a href="' + esc + '" class="btn">)([^<]*)(</a>)'),
+            '$1' + newLabel + '$3'
+        );
+    }
+
+    // ── Build <li> HTML ──────────────────────────────────────────────────────
+    const EDIT_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+    const DEL_ICON  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" stroke="#c0392b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    function buildLiHtml(label, filename) {
+        return '<li data-filename="' + filename + '">\n' +
+            '            <a href="' + filename + '" class="btn">' + label + '</a>\n' +
+            '            <details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>\u0412\u0438\u0441\u043d\u043e\u0432\u043a\u0438:</strong> </div></details>\n' +
+            '            <div class="row-actions">\n' +
+            '                <button class="icon-btn" title="Edit label" onclick="startEdit(this)">' + EDIT_ICON + '</button>\n' +
+            '                <button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)">' + DEL_ICON + '</button>\n' +
+            '            </div>\n' +
+            '            <div class="edit-row"></div>\n' +
+            '        </li>';
+    }
+
+    // ── Status / loading ─────────────────────────────────────────────────────
     function setStatus(msg, type) {
         const el = document.getElementById('status-msg');
         el.textContent = msg;
@@ -480,65 +598,161 @@
     function setBtnLoading(loading) {
         const btn = document.getElementById('submit-btn');
         btn.disabled = loading;
-        btn.innerHTML = loading
-            ? '<span class="spinner"></span> Publishing…'
-            : 'Publish to GitHub';
+        btn.textContent = loading ? 'Publishing…' : 'Publish to GitHub';
     }
 
-    // ─────────────────────────────────────────────
-    //  Main submit
-    // ─────────────────────────────────────────────
+    // ── ADD ──────────────────────────────────────────────────────────────────
     async function submitResearch() {
         if (!CFG.token || !CFG.owner || !CFG.repo) {
-            setStatus('No GitHub config found. Re-deploy the site to inject config.js.', 'err');
+            setStatus('No GitHub config — re-deploy to inject config.js', 'err');
             return;
         }
-
         const label    = document.getElementById('f-label').value.trim();
         const filename = document.getElementById('f-filename').value.trim();
         const content  = document.getElementById('f-content').value;
 
-        if (!label)    { setStatus('Enter a button label.', 'err'); return; }
-        if (!filename) { setStatus('Enter a filename.', 'err'); return; }
-        if (!content)  { setStatus('Paste the HTML content.', 'err'); return; }
-        if (!/\.html?$/.test(filename)) { setStatus('Filename must end in .html', 'err'); return; }
+        if (!label)                      { setStatus('Enter a button label.', 'err'); return; }
+        if (!filename)                   { setStatus('Enter a filename.', 'err'); return; }
+        if (!content)                    { setStatus('Paste the HTML content.', 'err'); return; }
+        if (!/\.html?$/i.test(filename)) { setStatus('Filename must end in .html', 'err'); return; }
 
         setBtnLoading(true);
-        setStatus('', '');
+        setStatus('Uploading research file…');
 
         try {
-            // 1. Upload new research file
-            setStatus('Uploading research file…');
-            const newFileSHA = await getFileSHA(filename);
-            await putFile(filename, content, `Add research: ${label}`, newFileSHA);
+            // 1. Upload the research file
+            const existing = await getFile(filename);
+            await putFile(filename, content, 'Add research: ' + label, existing ? existing.sha : null);
 
-            // 2. Fetch current index.html from GitHub
-            setStatus('Fetching index.html…');
-            const idxRes = await ghFetch('index.html', 'GET', null);
-            if (!idxRes.ok) throw new Error(`Could not fetch index.html (${idxRes.status})`);
-            const idxData = await idxRes.json();
-            const idxSHA  = idxData.sha;
-            const idxHTML = decodeURIComponent(escape(atob(idxData.content.replace(/\n/g, ''))));
-
-            // 3. Inject new <li> and push back
+            // 2. Inject entry into index.html and push
             setStatus('Updating index.html…');
-            const updatedHTML = appendLiToSource(idxHTML, buildNewLi(label, filename));
-            await putFile('index.html', updatedHTML, `Update index: add ${label}`, idxSHA);
+            const { sha, html } = await fetchIndexSource();
+            await putFile('index.html', injectEntry(html, buildLiHtml(label, filename)), 'Update index: add ' + label, sha);
 
-            // 4. Update live DOM + reset form
-            appendLiToDOM(label, filename);
+            // 3. Add to DOM immediately
+            addLiToDOM(label, filename);
+
+            // 4. Reset form
             document.getElementById('f-label').value    = '';
             document.getElementById('f-filename').value = '';
             document.getElementById('f-content').value  = '';
 
-            setStatus('✓ Published successfully! GitHub Pages will update in ~30s.', 'ok');
+            setStatus('Published! GitHub Pages updates in ~30s.', 'ok');
         } catch (err) {
             console.error(err);
-            setStatus(`Error: ${err.message}`, 'err');
+            setStatus('Error: ' + err.message, 'err');
         } finally {
-            setBtnLoading(false);
+            setBtnLoading(false); // always re-enables the button
         }
     }
+
+    function addLiToDOM(label, filename) {
+        const ul = document.getElementById('research-list');
+        const li = document.createElement('li');
+        li.dataset.filename = filename;
+        li.innerHTML =
+            '<a href="' + filename + '" class="btn">' + label + '</a>' +
+            '<details><summary><span class="arrow"></span></summary><div class="conclusions"><strong>Висновки:</strong> </div></details>' +
+            '<div class="row-actions">' +
+            '<button class="icon-btn" title="Edit label" onclick="startEdit(this)">' + EDIT_ICON + '</button>' +
+            '<button class="icon-btn delete" title="Delete" onclick="confirmDelete(this)">' + DEL_ICON + '</button>' +
+            '</div>' +
+            '<div class="edit-row"></div>';
+        ul.appendChild(li);
+        li.style.transition = 'background .4s';
+        li.style.background = '#e8f7ee';
+        setTimeout(function() { li.style.background = ''; }, 1400);
+    }
+
+    // ── EDIT ─────────────────────────────────────────────────────────────────
+    function startEdit(btn) {
+        const li      = btn.closest('li');
+        const editRow = li.querySelector('.edit-row');
+        if (editRow.classList.contains('open')) return;
+        const current = li.querySelector('a.btn').textContent.trim();
+        editRow.innerHTML =
+            '<input type="text" class="edit-input" value="">' +
+            '<button class="edit-save-btn" onclick="saveEdit(this)">Save</button>' +
+            '<button class="edit-cancel-btn" onclick="cancelEdit(this)">Cancel</button>';
+        editRow.querySelector('.edit-input').value = current;
+        editRow.classList.add('open');
+        editRow.querySelector('.edit-input').focus();
+    }
+
+    function cancelEdit(btn) {
+        const editRow = btn.closest('.edit-row');
+        editRow.classList.remove('open');
+        editRow.innerHTML = '';
+    }
+
+    async function saveEdit(btn) {
+        const editRow  = btn.closest('.edit-row');
+        const li       = editRow.closest('li');
+        const anchor   = li.querySelector('a.btn');
+        const filename = li.dataset.filename;
+        const newLabel = editRow.querySelector('.edit-input').value.trim();
+        if (!newLabel) { alert('Label cannot be empty.'); return; }
+
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        try {
+            const { sha, html } = await fetchIndexSource();
+            await putFile('index.html', renameEntry(html, filename, newLabel), 'Rename: ' + filename, sha);
+            anchor.textContent = newLabel;
+            cancelEdit(btn);
+        } catch (err) {
+            alert('Error: ' + err.message);
+            btn.disabled = false;
+            btn.textContent = 'Save';
+        }
+    }
+
+    // ── DELETE ───────────────────────────────────────────────────────────────
+    var _deleteTarget = null;
+
+    function confirmDelete(btn) {
+        _deleteTarget = btn.closest('li');
+        const label = _deleteTarget.querySelector('a.btn').textContent.trim();
+        const filename = _deleteTarget.dataset.filename;
+        document.getElementById('confirm-desc').textContent =
+            '"' + label + '" will be removed from the list and the file deleted from GitHub.';
+        var delBtn = document.getElementById('confirm-del-btn');
+        delBtn.disabled = false;
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = function() { executeDelete(filename); };
+        document.getElementById('confirm-overlay').classList.add('open');
+    }
+
+    function closeConfirm() {
+        document.getElementById('confirm-overlay').classList.remove('open');
+        _deleteTarget = null;
+    }
+
+    async function executeDelete(filename) {
+        const delBtn = document.getElementById('confirm-del-btn');
+        delBtn.disabled = true;
+        delBtn.textContent = 'Deleting…';
+        try {
+            // Remove from index.html
+            const { sha, html } = await fetchIndexSource();
+            await putFile('index.html', removeEntry(html, filename), 'Remove entry: ' + filename, sha);
+
+            // Delete the file (best-effort)
+            const fileData = await getFile(filename);
+            if (fileData) await deleteFile(filename, fileData.sha, 'Delete: ' + filename);
+
+            if (_deleteTarget) _deleteTarget.remove();
+            closeConfirm();
+        } catch (err) {
+            alert('Error: ' + err.message);
+            delBtn.disabled = false;
+            delBtn.textContent = 'Delete';
+        }
+    }
+
+    document.getElementById('confirm-overlay').addEventListener('click', function(e) {
+        if (e.target === this) closeConfirm();
+    });
     </script>
 
 </body>
