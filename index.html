@@ -888,7 +888,7 @@
 // RESEARCH_TOKEN is the default token baked into the file.
 // Any token saved via the settings modal overrides it.
 // ─────────────────────────────────────────────
-const RESEARCH_TOKEN = 'RESEARCH_TOKEN'; // ← set this value before pushing to GitHub
+const RESEARCH_TOKEN = 'REPLACE_WITH_YOUR_TOKEN'; // ← set this value before pushing to GitHub
 
 const CFG_KEY = 'dressly_gh_config';
 let cfg = { token: RESEARCH_TOKEN, repo: 'pavlobilokin-research/research-pavlo', branch: 'main', folder: 'data' };
@@ -911,10 +911,9 @@ function saveCfg() {
 // ─────────────────────────────────────────────
 function ghHeaders() {
   return {
-    'Authorization': `Bearer ${cfg.token}`,
+    'Authorization': `token ${cfg.token}`,
     'Accept': 'application/vnd.github+json',
     'Content-Type': 'application/json',
-    'X-GitHub-Api-Version': '2022-11-28'
   };
 }
 
@@ -1427,7 +1426,7 @@ async function testGhConnection() {
   st.className = 'modal-status saving';
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}`, {
-      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' }
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' }
     });
     if (!res.ok) throw new Error(`Status ${res.status}`);
     st.textContent = '✓ Connected!';
