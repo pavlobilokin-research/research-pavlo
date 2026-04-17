@@ -491,23 +491,25 @@
             display: none;
             padding: 10px 16px;
             border-top: 1px solid var(--border);
+            flex-direction: column;
             gap: 8px;
-            align-items: center;
         }
         .inline-edit.open { display: flex; }
-        .inline-edit input {
-            flex: 1;
+        .inline-edit input, .inline-edit textarea {
+            width: 100%;
             background: var(--bg3);
-            border: 1px solid var(--border2);
+            border: 1px solid var(--border);
             border-radius: 6px;
             padding: 6px 10px;
             color: var(--text);
             font-family: 'DM Sans', sans-serif;
             font-size: 12px;
             outline: none;
-            min-width: 0;
+            transition: border .15s;
+            resize: none;
         }
-        .inline-edit input:focus { border-color: var(--accent); }
+        .inline-edit input:focus, .inline-edit textarea:focus { border-color: var(--accent); }
+        .inline-edit-row { display: flex; gap: 8px; align-items: center; }
 
         .spinner {
             display: inline-block;
@@ -612,6 +614,18 @@
         <div class="confirm-box">
             <h3>Delete entry?</h3>
             <p id="confirm-desc"></p>
+            <div style="margin-bottom:18px">
+                <input type="text" id="confirm-keyword" autocomplete="off"
+                    placeholder="Confirm to proceed"
+                    style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+                           padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;
+                           outline:none;transition:border .15s"
+                    oninput="this.style.borderColor='var(--border)'"
+                    onfocus="this.style.borderColor='var(--border2)'"
+                    onblur="this.style.borderColor='var(--border)'"
+                    onkeydown="if(event.key==='Enter')document.getElementById('confirm-del-btn').click()">
+                <div id="confirm-keyword-err" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--red);margin-top:6px;min-height:16px"></div>
+            </div>
             <div class="confirm-actions">
                 <button class="btn-ghost" onclick="closeConfirm()">Cancel</button>
                 <button class="btn-danger" id="confirm-del-btn">Delete</button>
@@ -629,13 +643,13 @@
     // Each entry: { label, filename, desc }
     // ENTRIES_START
     const STATIC_ENTRIES = [
-        { label: "Рісьорч Дімончіка 17.04.2026", filename: "dressly_final_brief_v2.html", desc: "Дімончік старався, всім читати" },
-        { label: "Eastern philosophy research youtube 15.04.2026", filename: "dressly-all-philosophies-research.html", desc: "Ідея використання східної культури як підсилення capsule wardrobe" },
-        { label: "Eastern philosophy research reddit 15.04.2026", filename: "dressly-eastern-philosophy-research.html", desc: "Ідея використання східної культури як підсилення capsule wardrobe" },
-        { label: "Reddit research 08.04.2026", filename: "reddit-research-08.04.2026.html", desc: "Дослівні тригери для рекламних хуків. Топ 5 скарг." },
-        { label: "Youtube research 08.04.2026", filename: "dressly-youtube-ua-brief.html", desc: "Симульований глибокий аналіз коментарів з каналів Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style." },
-        { label: "7 hidden shopping frictions 08.04.2026", filename: "7-hidden-shopping-frictions.html", desc: "7 больових точок при онлайн-шопінгу. Кожна точка прив'язана до конкретної функції Dressly." },
-        { label: "Strategic positioning research 08.04.2026", filename: "strategic-positioning-08.04.2026.html", desc: "П'ять непрямолінійних кутів. Підкріплені ринковими даними та першоджерелами." }
+        { label: "Рісьорч Дімончіка 17.04.2026",              filename: "dressly_final_brief_v2.html",              desc: "Дімончік старався, всім читати" },
+        { label: "Eastern philosophy research youtube 15.04.2026", filename: "dressly-all-philosophies-research.html",  desc: "Ідея використання східної культури як підсилення capsule wardrobe" },
+        { label: "Eastern philosophy research reddit 15.04.2026",  filename: "dressly-eastern-philosophy-research.html", desc: "Ідея використання східної культури як підсилення capsule wardrobe" },
+        { label: "Reddit research 08.04.2026",                 filename: "reddit-research-08.04.2026.html",           desc: "Дослівні тригери для рекламних хуків. Топ 5 скарг." },
+        { label: "Youtube research 08.04.2026",                filename: "dressly-youtube-ua-brief.html",            desc: "Симульований глибокий аналіз коментарів з каналів Alyssa Beltempo, Justine Leconte, Erin Elizabeth, Busbee Style." },
+        { label: "7 hidden shopping frictions 08.04.2026",    filename: "7-hidden-shopping-frictions.html",         desc: "7 больових точок при онлайн-шопінгу. Кожна точка прив'язана до конкретної функції Dressly." },
+        { label: "Strategic positioning research 08.04.2026", filename: "strategic-positioning-08.04.2026.html",    desc: "П'ять непрямолінійних кутів. Підкріплені ринковими даними та першоджерелами." }
     ];
     // ENTRIES_END
 
@@ -665,7 +679,9 @@
             const emoji = getEmoji(e.filename);
             const descHtml = e.desc ? '<div class="card-conclusions">' + e.desc + '</div>' : '';
             return '<div class="card" data-filename="' + e.filename + '">' +
-                '<div class="card-thumb"><span style="position:relative;z-index:1">' + emoji + '</span></div>' +
+                '<a href="' + e.filename + '" target="_blank" class="card-thumb" onclick="event.stopPropagation()" style="display:flex;align-items:center;justify-content:center;text-decoration:none">' +
+                '<span style="position:relative;z-index:1">' + emoji + '</span>' +
+                '</a>' +
                 '<div class="card-body">' +
                     '<div class="card-label">Research</div>' +
                     '<div class="card-title">' + e.label + '</div>' +
@@ -835,12 +851,17 @@
         if (!entry || editRow.classList.contains('open')) return;
 
         editRow.innerHTML =
-            '<input type="text" class="edit-input" value="">' +
-            '<button class="btn-primary" style="padding:5px 12px;font-size:12px" onclick="saveEdit(this)">Save</button>' +
-            '<button class="btn-ghost"  style="padding:5px 10px;font-size:12px" onclick="cancelEdit(this)">✕</button>';
-        editRow.querySelector('.edit-input').value = entry.label;
+            '<input type="text" class="edit-label" placeholder="Title">' +
+            '<textarea class="edit-desc" rows="2" placeholder="Description (optional)"></textarea>' +
+            '<div class="inline-edit-row">' +
+                '<button class="btn-primary" style="padding:5px 12px;font-size:12px" onclick="saveEdit(this)">Save</button>' +
+                '<button class="btn-ghost"   style="padding:5px 10px;font-size:12px" onclick="cancelEdit(this)">Cancel</button>' +
+                '<span class="edit-status" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:4px"></span>' +
+            '</div>';
+        editRow.querySelector('.edit-label').value = entry.label;
+        editRow.querySelector('.edit-desc').value  = entry.desc || '';
         editRow.classList.add('open');
-        editRow.querySelector('.edit-input').focus();
+        editRow.querySelector('.edit-label').focus();
     }
 
     function cancelEdit(btn) {
@@ -853,21 +874,26 @@
         const row      = btn.closest('.inline-edit');
         const card     = row.closest('.card');
         const filename = card.dataset.filename;
-        const newLabel = row.querySelector('.edit-input').value.trim();
+        const newLabel = row.querySelector('.edit-label').value.trim();
+        const newDesc  = row.querySelector('.edit-desc').value.trim();
+        const status   = row.querySelector('.edit-status');
         const entry    = STATIC_ENTRIES.find(function(e) { return e.filename === filename; });
-        if (!entry || !newLabel) return;
+        if (!entry || !newLabel) { if (status) status.textContent = 'Label required'; return; }
 
         btn.disabled = true;
         btn.textContent = '…';
+        if (status) status.textContent = 'Saving…';
         try {
             const { sha, html } = await fetchIndexSource();
             entry.label = newLabel;
-            await putFile('index.html', updateEntriesInSource(html, STATIC_ENTRIES), 'Rename: ' + filename, sha);
+            entry.desc  = newDesc;
+            await putFile('index.html', updateEntriesInSource(html, STATIC_ENTRIES), 'Edit: ' + filename, sha);
             renderCards();
         } catch (err) {
             alert('Error: ' + err.message);
             btn.disabled = false;
             btn.textContent = 'Save';
+            if (status) status.textContent = '';
         }
     }
 
@@ -880,19 +906,35 @@
         const entry = STATIC_ENTRIES.find(function(e) { return e.filename === _deleteFilename; });
         document.getElementById('confirm-desc').textContent =
             '"' + (entry ? entry.label : _deleteFilename) + '" will be removed from the list and deleted from GitHub.';
+        document.getElementById('confirm-keyword').value = '';
+        document.getElementById('confirm-keyword').style.borderColor = 'var(--border)';
+        document.getElementById('confirm-keyword-err').textContent = '';
         var delBtn = document.getElementById('confirm-del-btn');
         delBtn.disabled = false;
         delBtn.textContent = 'Delete';
         delBtn.onclick = executeDelete;
         document.getElementById('confirm-overlay').classList.add('open');
+        setTimeout(function() { document.getElementById('confirm-keyword').focus(); }, 120);
     }
 
     function closeConfirm() {
         document.getElementById('confirm-overlay').classList.remove('open');
+        document.getElementById('confirm-keyword').value = '';
+        document.getElementById('confirm-keyword-err').textContent = '';
         _deleteFilename = null;
     }
 
+    // Gate — delete keyword injected via config.js at deploy time
+    function _gk() { return (CFG.password || ''); }
+
     async function executeDelete() {
+        const kw = document.getElementById('confirm-keyword').value.trim().toLowerCase();
+        if (kw !== _gk()) {
+            document.getElementById('confirm-keyword').style.borderColor = 'var(--red)';
+            document.getElementById('confirm-keyword-err').textContent = 'Incorrect — try again.';
+            document.getElementById('confirm-keyword').focus();
+            return;
+        }
         const filename = _deleteFilename;
         const delBtn = document.getElementById('confirm-del-btn');
         delBtn.disabled = true;
