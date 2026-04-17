@@ -885,12 +885,21 @@
 <script>
 // ─────────────────────────────────────────────
 // CONFIG (loaded from localStorage, persisted per-browser)
+// RESEARCH_TOKEN is the default token baked into the file.
+// Any token saved via the settings modal overrides it.
 // ─────────────────────────────────────────────
+const RESEARCH_TOKEN = 'REPLACE_WITH_YOUR_TOKEN'; // ← set this value before pushing to GitHub
+
 const CFG_KEY = 'dressly_gh_config';
-let cfg = { token: '', repo: '', branch: 'main', folder: 'data' };
+let cfg = { token: RESEARCH_TOKEN, repo: 'pavlobilokin-research/research-pavlo', branch: 'main', folder: 'data' };
 
 function loadCfg() {
-  try { Object.assign(cfg, JSON.parse(localStorage.getItem(CFG_KEY)) || {}); } catch {}
+  try {
+    const saved = JSON.parse(localStorage.getItem(CFG_KEY)) || {};
+    // localStorage overrides defaults, but fall back to RESEARCH_TOKEN if no token saved
+    Object.assign(cfg, saved);
+    if (!cfg.token) cfg.token = RESEARCH_TOKEN;
+  } catch {}
 }
 
 function saveCfg() {
