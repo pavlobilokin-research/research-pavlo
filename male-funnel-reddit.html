@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dressly · Male Funnel — Reddit VoC Research</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0e0f12; --surface:#16181d; --surface2:#1d2026; --line:#2a2e37;
+    --tx:#e9eaed; --tx2:#a9adb8; --tx3:#6f7480;
+    --accent:#ff5c4d; --accent2:#7f77dd;
+    --skin:#d85a30; --over:#7f77dd; --buy:#1d9e75; --budget:#ba7517;
+    --conf:#d4537e; --trans:#378add; --age:#888780; --occ:#3b82f6; --women:#e0568f;
+    --r:14px; --r2:10px;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  header.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-size:42px;line-height:1.1;font-weight:600;letter-spacing:-.02em;margin-bottom:14px}
+  h1 .thin{color:var(--tx2);font-weight:400}
+  .sub{font-size:18px;color:var(--tx2);max-width:700px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .chip{font-size:12.5px;color:var(--tx2);background:var(--surface);border:1px solid var(--line);padding:6px 13px;border-radius:999px}
+  .chip b{color:var(--tx)}
+
+  section{padding:52px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--tx3);font-weight:600;margin-bottom:12px}
+  h2{font-size:28px;font-weight:600;letter-spacing:-.01em;margin-bottom:10px}
+  h2 + .lede{font-size:17px;color:var(--tx2);max-width:760px;margin-bottom:30px}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+  .kpi .n{font-size:32px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .kpi .l{font-size:13px;color:var(--tx2);margin-top:8px}
+  .kpi .n.accent{color:var(--accent)}
+
+  .note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:var(--r2);padding:16px 20px;font-size:14.5px;color:var(--tx2)}
+  .note b{color:var(--tx)}
+
+  .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px 26px 18px}
+  .chart-wrap{position:relative;height:300px}
+
+  .insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .ins{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;border-top:3px solid var(--accent)}
+  .ins h3{font-size:17px;font-weight:600;margin-bottom:8px}
+  .ins p{font-size:14.5px;color:var(--tx2)}
+
+  /* featured women-on-men */
+  .featured{background:var(--surface);border:1px solid var(--women);border-radius:var(--r);padding:30px}
+  .featured .lede{margin-bottom:22px}
+
+  .angle{margin-bottom:42px}
+  .angle-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:6px}
+  .angle-badge{flex:none;width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:#0e0f12}
+  .angle-head h3{font-size:21px;font-weight:600;letter-spacing:-.01em}
+  .angle-head .vp{font-size:13px;color:var(--tx3);margin-top:2px}
+  .angle-note{font-size:14.5px;color:var(--tx2);margin:0 0 18px 56px}
+  .quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}
+  .q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);padding:18px 20px;position:relative;transition:border-color .15s,transform .15s}
+  .q:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .q .txt{font-family:var(--serif);font-size:16px;line-height:1.5;color:var(--tx);margin-bottom:14px;cursor:pointer}
+  .q .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:var(--tx3)}
+  .q .src{color:var(--tx3)}
+  .q .src a{color:var(--tx2);text-decoration:none;border-bottom:1px dotted var(--tx3)}
+  .q .src a:hover{color:var(--accent)}
+  .q .meta{display:inline-flex;align-items:center;gap:10px;color:var(--tx2);font-variant-numeric:tabular-nums}
+  .q .meta b{color:var(--accent)}
+  .usehint{display:inline-block;font-size:11.5px;color:var(--tx2);background:var(--surface2);padding:3px 9px;border-radius:6px;margin-top:10px}
+
+  .matrix{display:grid;gap:14px}
+  .mrow{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;display:grid;grid-template-columns:38px 1fr;gap:16px;align-items:start}
+  .mrow .num{width:38px;height:38px;border-radius:10px;background:var(--surface2);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px}
+  .mrow h3{font-size:17px;font-weight:600;margin-bottom:5px}
+  .mrow p{font-size:14.5px;color:var(--tx2)}
+  .mrow .hook{font-family:var(--serif);font-style:italic;color:var(--tx);font-size:15px}
+
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);font-weight:600}
+  td:first-child{font-weight:600;white-space:nowrap}
+
+  .care{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--budget);border-radius:var(--r2);padding:18px 22px;margin-bottom:14px}
+  .care h3{font-size:15px;font-weight:600;margin-bottom:5px;color:var(--budget)}
+  .care p{font-size:14px;color:var(--tx2)}
+
+  footer{padding:40px 0 70px;color:var(--tx3);font-size:13px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--buy);color:#04342c;font-weight:600;font-size:13.5px;padding:11px 20px;border-radius:10px;opacity:0;transition:all .25s;pointer-events:none}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:600px){h1{font-size:31px}h2{font-size:23px}.angle-note{margin-left:0}}
+</style>
+</head>
+<body>
+
+<header class="hero"><div class="wrap">
+  <div class="kicker">Dressly · Performance Research · Reddit</div>
+  <h1>Male funnel, частина 2: <span class="thin">що чоловіки (і їхні жінки)<br>пишуть про одяг на Reddit</span></h1>
+  <p class="sub">Продовження YouTube-дослідження по тих самих кутах — тепер у текстовому, відвертішому середовищі. Реальні пости з популярних сабреддитів, з прямою мовою чоловіків та окремою секцією: жінки про стиль своїх чоловіків.</p>
+  <div class="meta-row">
+    <span class="chip"><b>327</b> постів відібрано</span>
+    <span class="chip"><b>8</b> сабреддитів</span>
+    <span class="chip"><b>132 600</b> upvotes</span>
+    <span class="chip"><b>36 800</b> коментарів-тредів</span>
+    <span class="chip">Зібрано <b>11.06.2026</b></span>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="note"><b>Як читати:</b> на відміну від YouTube (повний скрейп коментарів), Reddit зібрано пошуком по топ-постах через публічний архів. Це <b>якісний</b> зріз — болі та формулювання, не частотна статистика. Кожна цитата має посилання на оригінальний тред. Цифри (↑) — upvotes, маркер резонансу.</div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Покриття</div>
+  <h2>Звідки дані</h2>
+  <p class="lede">r/malefashionadvice — ядро (чоловіки самі описують болі), плюс нішеві та «партнерські» сабреддити для специфічних кутів.</p>
+  <div class="chart-card">
+    <div class="chart-wrap"><canvas id="subChart" role="img" aria-label="Кількість постів за сабреддитами"></canvas></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Головне відкриття Reddit</div>
+  <h2>Те, чого не було видно на YouTube</h2>
+  <div class="insights">
+    <div class="ins"><h3>Жінки активно «лагодять» стиль чоловіків</h3><p>Цілий клас постів: «How do I get my boyfriend to dress better?». Це окремий <b>канал залучення</b> — продукт як подарунок / ініціатива партнерки, а не лише самостійне рішення чоловіка.</p></div>
+    <div class="ins"><h3>Тригер життєвих подій</h3><p>Розлучення, нова робота, переїзд, перше побачення після паузи — «recently divorced, first date this week». Високий намір у конкретний момент = таргет на life-events.</p></div>
+    <div class="ins"><h3>Статус і повага на роботі</h3><p>«Have you changed your style to gain more respect at work?» Дослідження про «компетентність за секунду». Професійний/статусний кут на Reddit сильніший, ніж на YouTube.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Спеціальна секція · клікни цитату, щоб скопіювати</div>
+  <h2 style="color:var(--women)">Жінки про стиль своїх чоловіків</h2>
+  <div class="featured">
+    <p class="lede">Те, що ти просив окремо. Жінки відверто описують проблему — і це готові інсайти для «partner-driven» креативів та подарункового позиціонування.</p>
+    <div class="quotes" data-angle="women">
+      <div class="q"><div class="txt">"He's successful, kind, funny — everything a girl could ask for. BUT he only wears athleisure. I saw him in a nice button-up and it elevated his look A TON. I was much more attracted to him."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1hlgv44" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>618↑</b> · 410c</span></div></div>
+      <div class="q"><div class="txt">"I (F25) have been with my boyfriend 4 years. Lately he has slowly stopped putting effort into his appearance… I was hoping to encourage him to glow up with me."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1ddra8r" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>617↑</b> · 306c</span></div></div>
+      <div class="q"><div class="txt">"My sisters and I (all female) decided to give my dad (65) a makeover. We didn't know what we were doing. All we knew is that we wanted him to dress better."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/oddb3a" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>1698↑</b> · 60c</span></div></div>
+      <div class="q"><div class="txt">"My partner is very stylish in casual wear… but the only men I see on my feed are very slim/straight-bodied, so the clothes don't fit him the same. I don't want him feeling like he can't rock a style."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/13yqu56" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>892↑</b> · 164c</span></div></div>
+      <div class="q"><div class="txt">"I want to help my boyfriend (22, 5'6) with his wardrobe. He tends to go for loose-fitting athletic clothes… he has opposite issues with fitting since he's on the shorter side."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/ppvq7p" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>474↑</b> · 126c</span></div></div>
+      <div class="q"><div class="txt">"Asking for my partner and work friend who expressed frustration with workwear. We dislike polos — they look like someone's parent is still dressing them up."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1tftrzn" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>227↑</b> · 193c</span></div></div>
+    </div>
+    <span class="usehint">Use as: partner-driven кут · «gift Dressly to him» · UGC «I helped my bf glow up»</span>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Банк цитат · пряма мова чоловіків</div>
+  <h2>Болі чоловіків по кутах</h2>
+  <p class="lede">Ті самі кути, що в YouTube-звіті. Reddit дає довшу, відвертішу пряму мову. Клік по тексту — копіює; клік по сабреддиту — відкриває тред.</p>
+
+  <!-- 1 overwhelm -->
+  <div class="angle">
+    <div class="angle-head"><div class="angle-badge" style="background:var(--over)">1</div>
+      <div><h3>«Я просто загубився»</h3><div class="vp">Розгубленість · no-judgment провідник</div></div></div>
+    <p class="angle-note">Найсильніше на Reddit і в усіх віках: 34, 62, після переїзду. Прямий попит на стиліста.</p>
+    <div class="quotes">
+      <div class="q"><div class="txt">"Confused ramblings from an old fart (34) who doesn't know how fashion works anymore. What is 'fashionable' in 2022? I think I am lost."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/s0ne6g" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>2234↑</b> · 504c</span></div></div>
+      <div class="q"><div class="txt">"About to turn 62… I have no idea how to dress up this 'old man body' that once wore Hugo Boss so well. I'm completely lost when it comes to shopping."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/g8fq59" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>901↑</b> · 140c</span></div></div>
+      <div class="q"><div class="txt">"Moved to Seattle 2 months ago. Everything I own is for 110° weather and I have no idea how to dress for rain. I look like a tourist. My color palette is all wrong."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1rozyi0" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>400↑</b> · 146c</span></div></div>
+      <div class="q"><div class="txt">"I am mid-20s, I have no sense of style at all… grew up poor wearing 5-dollar t-shirts. Should I hire a stylist?"</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/x69kbf" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>609↑</b> · 208c</span></div></div>
+    </div>
+    <span class="usehint">Use as: проблемний хук → 60-сек квіз як «твій стиліст»</span>
+  </div>
+
+  <!-- 2 body_fit -->
+  <div class="angle">
+    <div class="angle-head"><div class="angle-badge" style="background:var(--skin)">2</div>
+      <div><h3>«Нічого на мене не сідає»</h3><div class="vp">Тіло / фіт · персоналізація під фігуру</div></div></div>
+    <p class="angle-note">Підтверджує головний YouTube-біль. Конкретика: задовгі футболки, скінні не заправити, великий живіт, дад-бод.</p>
+    <div class="quotes">
+      <div class="q"><div class="txt">"Why are t-shirts so long nowadays? They cover my ass like I'm wearing a dress and I have short legs. My waist is skinny so it never tucks neatly."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1kmtpjs" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>376↑</b> · 193c</span></div></div>
+      <div class="q"><div class="txt">"I really don't enjoy spending 20 minutes in a shop trying things on, only to find that nothing there fits me at all."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/svo5io" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>1525↑</b> · 134c</span></div></div>
+      <div class="q"><div class="txt">"I'm 6'2 and 230 with a bigger stomach and it affects my clothing options. It's hard to find pants that fit me."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1sa6jw6" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>107↑</b> · 48c</span></div></div>
+      <div class="q"><div class="txt">"39 and getting divorced… going to the gym to replace some dad-bod with muscle, but perpetually struggling to find jeans that fit flatteringly."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/aua0wz" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>371↑</b> · 131c</span></div></div>
+    </div>
+    <span class="usehint">Use as: body-type splits · «clothes built for your body, not a model's»</span>
+  </div>
+
+  <!-- 3 confidence -->
+  <div class="angle">
+    <div class="angle-head"><div class="angle-badge" style="background:var(--conf)">3</div>
+      <div><h3>«Мене все одно оцінюють»</h3><div class="vp">Впевненість / сприйняття · статус</div></div></div>
+    <p class="angle-note">Reddit рефлексує глибше: сором, синдром самозванця, страх осуду.</p>
+    <div class="quotes">
+      <div class="q"><div class="txt">"In a split second, clothes make a person more competent in the eyes of others. Faces were judged more competent when clothing looked 'richer' — and the bias remained even when told to ignore it."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/e8h53y" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>1548↑</b> · 164c</span></div></div>
+      <div class="q"><div class="txt">"My career fair is Tuesday and I'm insecure about my suit — others are rocking $1000 suits and I don't want that to be why they get the internship and I don't."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/d6vcta" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>732↑</b> · 296c</span></div></div>
+      <div class="q"><div class="txt">"I've always been an insecure person… I had issues being confident in myself. Why I'm quitting fashion."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/c7o16f" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>1296↑</b> · 203c</span></div></div>
+      <div class="q"><div class="txt">"I sometimes feel like a fraud when I dress nice."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/e204o0" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>437↑</b> · 78c</span></div></div>
+    </div>
+    <span class="usehint">Use as: статусний / «first impression» хук під роботу та побачення</span>
+  </div>
+
+  <!-- 4 transform -->
+  <div class="angle">
+    <div class="angle-head"><div class="angle-badge" style="background:var(--trans)">4</div>
+      <div><h3>«Це мене змінило»</h3><div class="vp">Трансформація / glow-up · соц-доказ</div></div></div>
+    <p class="angle-note">Готові before/after скрипти для UGC.</p>
+    <div class="quotes">
+      <div class="q"><div class="txt">"I made this account to ask for advice on clothes to hide my extremely skinny arms and small figure… Today was a game changer for me."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/6n9cwh" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>1213↑</b> · 134c</span></div></div>
+      <div class="q"><div class="txt">"30/M who dressed like a 40-year-old dad gets new glasses. I definitely feel a lot better. I can't even look at myself with the old glasses anymore."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/9dysuy" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>990↑</b> · 89c</span></div></div>
+      <div class="q"><div class="txt">"He still dressed like a kid and most of his clothes were from his college years… Why your friends are scared to dress better."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/374gsh" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>213↑</b> · 112c</span></div></div>
+      <div class="q"><div class="txt">"My transformation from 'swag' to class. Thank you MFA."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/15rlsv" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>327↑</b> · 223c</span></div></div>
+    </div>
+    <span class="usehint">Use as: UGC testimonial · «dressed like a kid → dressed like a man»</span>
+  </div>
+
+  <!-- 5 occasion -->
+  <div class="angle">
+    <div class="angle-head"><div class="angle-badge" style="background:var(--occ)">5</div>
+      <div><h3>«Що вдягти на ___»</h3><div class="vp">Привід · робота / побачення / life-event</div></div></div>
+    <p class="angle-note">Тригери конкретних подій — найвищий момент наміру.</p>
+    <div class="quotes">
+      <div class="q"><div class="txt">"I've never been in style but recently divorced and have my first date this week. I'm a dad and wear Dad clothes but now 50% of the time I need to dress like a not-dad."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1ft0s31" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>103↑</b> · 148c</span></div></div>
+      <div class="q"><div class="txt">"When did business casual become so weirdly vague? I'm trying to dress like I put in effort without looking like I misunderstood the assignment."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1rpu7if" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>229↑</b> · 89c</span></div></div>
+      <div class="q"><div class="txt">"New job at a big company — by a misunderstanding they thought I'd know fashion and assigned me to their Ralph Lauren store. I am completely lost. How can I quickly become a fashion connoisseur?"</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1djhhsf" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>179↑</b> · 143c</span></div></div>
+      <div class="q"><div class="txt">"30s, male, tall, divorce — desperately need help rebuilding my wardrobe without spending too much."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1sev0v4" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>14↑</b> · 30c</span></div></div>
+    </div>
+    <span class="usehint">Use as: life-event таргет · «new job / newly single / new city»</span>
+  </div>
+
+  <!-- 6 age -->
+  <div class="angle">
+    <div class="angle-head"><div class="angle-badge" style="background:var(--age)">6</div>
+      <div><h3>«У моєму віці» + повага</h3><div class="vp">40+ · age-appropriate · статус на роботі</div></div></div>
+    <p class="angle-note">Сильний професійний кут: одяг = повага й сприйнятий вік.</p>
+    <div class="quotes">
+      <div class="q"><div class="txt">"Have you changed your style to gain more respect at work? People a few years ahead of me seemed to have something figured out that I missed."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/b4pz8i" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>1321↑</b> · 304c</span></div></div>
+      <div class="q"><div class="txt">"I am feeling older than I am, and I believe part of it is the way I dress. An employee guessing my age added another 10 years."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/gu4a4d" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>536↑</b> · 141c</span></div></div>
+      <div class="q"><div class="txt">"(M40) New office, I am extremely overdressed… I still want to look decent without looking like I'm working on my mower."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1g4b64j" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>286↑</b> · 179c</span></div></div>
+    </div>
+    <span class="usehint">Use as: «dress your real age, get the respect» · 40+ кампанія</span>
+  </div>
+
+  <!-- 7 budget -->
+  <div class="angle">
+    <div class="angle-head"><div class="angle-badge" style="background:var(--budget)">7</div>
+      <div><h3>«Виглядати добре, не збанкрутувавши»</h3><div class="vp">Бюджет · ціна-якість</div></div></div>
+    <p class="angle-note">Ціла спільнота (r/frugalmalefashion) живе цим болем. Парадокс: пошук дешевого = більше витрат.</p>
+    <div class="quotes">
+      <div class="q"><div class="txt">"As a college student, I regret ever subscribing… I'm far more broke than before. I got addicted to online shopping and scouting for deals."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/frugalmalefashion/comments/238fwf" target="_blank">r/frugalmalefashion</a></span><span class="meta"><b>495↑</b> · 178c</span></div></div>
+      <div class="q"><div class="txt">"One year ago I made a resolution to dress better without going broke."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/frugalmalefashion/comments/venvj0" target="_blank">r/frugalmalefashion</a></span><span class="meta"><b>1973↑</b> · 133c</span></div></div>
+      <div class="q"><div class="txt">"For your average broke college student, what should you splurge on and what can you buy at any bargain store?"</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/frugalmalefashion/comments/85h7gh" target="_blank">r/frugalmalefashion</a></span><span class="meta"><b>457↑</b> · 234c</span></div></div>
+    </div>
+    <span class="usehint">Use as: «look expensive, spend smart» + price-filter demo</span>
+  </div>
+
+  <!-- 8 where_buy -->
+  <div class="angle">
+    <div class="angle-head"><div class="angle-badge" style="background:var(--buy)">8</div>
+      <div><h3>«Де взагалі це купувати»</h3><div class="vp">Де купити / параліч вибору</div></div></div>
+    <p class="angle-note">Не «name of the pants», як на YouTube, а параліч від кількості опцій — Dressly звужує вибір.</p>
+    <div class="quotes">
+      <div class="q"><div class="txt">"I know very little about clothing. Where can normal people go to buy quality clothing?"</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1rgsuab" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>133↑</b> · 108c</span></div></div>
+      <div class="q"><div class="txt">"I got lost trying to find high-rise pleated trousers — after going through 30+ companies, I am lost at where to start."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1s9j938" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>27↑</b> · 45c</span></div></div>
+      <div class="q"><div class="txt">"I'm between sizes — swimming in the small, but the XS gets tight in the back… not sure where else to look."</div><div class="foot"><span class="src"><a href="https://www.reddit.com/r/malefashionadvice/comments/1t4wfm5" target="_blank">r/malefashionadvice</a></span><span class="meta"><b>63↑</b> · 42c</span></div></div>
+    </div>
+    <span class="usehint">Use as: «stop scrolling 30 stores — Dressly picks for your size»</span>
+  </div>
+
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Синтез</div>
+  <h2>YouTube ↔ Reddit: що підтвердилось, що нове</h2>
+  <table>
+    <thead><tr><th>Кут</th><th>YouTube</th><th>Reddit</th><th>Висновок</th></tr></thead>
+    <tbody>
+      <tr><td>Тіло / фіт</td><td>Біль №1</td><td>Підтверджує (фіт, задовгі футболки, живіт)</td><td>Залізний головний кут</td></tr>
+      <tr><td>Розгубленість</td><td>Сильна</td><td>Сильніша, в усіх віках</td><td>No-judgment — топ для top-funnel</td></tr>
+      <tr><td>Де купити</td><td>«Name of pants» (намір)</td><td>Параліч вибору (30+ магазинів)</td><td>Два різні хуки під два майндсети</td></tr>
+      <tr><td>Статус / повага</td><td>Слабко</td><td><b>Сильно</b> (робота, компетентність)</td><td>Новий професійний кут для 28–45</td></tr>
+      <tr><td>Жінки про чоловіків</td><td>Майже нема</td><td><b>Цілий клас постів</b></td><td>Новий канал: partner-driven / подарунок</td></tr>
+      <tr><td>Life-events</td><td>«Back to office»</td><td>Розлучення, переїзд, нова робота</td><td>Таргет на тригерні моменти</td></tr>
+    </tbody>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Дія</div>
+  <h2>Нові кути тестів (з Reddit)</h2>
+  <div class="matrix">
+    <div class="mrow"><div class="num">1</div><div><h3>Partner-driven / подарунок</h3><p>Креатив від імені жінки. Окремий landing «gift Dressly to him».</p><p class="hook">"He's everything I could ask for — but he only owns gym clothes."</p></div></div>
+    <div class="mrow"><div class="num">2</div><div><h3>Статус на роботі</h3><p>Кут компетентності/поваги для 28–45, B2B-ish моменти.</p><p class="hook">"In a split second, your clothes decide if you look competent."</p></div></div>
+    <div class="mrow"><div class="num">3</div><div><h3>Life-event таргет</h3><p>Креативи й аудиторії під розлучення / нову роботу / переїзд / повернення в дейтинг.</p><p class="hook">"Newly single at 39? Time to dress like a not-dad."</p></div></div>
+    <div class="mrow"><div class="num">4</div><div><h3>Anti-paralysis</h3><p>Проти «30+ магазинів і я загубився». Dressly = звужений вибір під розмір.</p><p class="hook">"Stop scrolling 30 stores. Get picks that fit you."</p></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Методологія</div>
+  <h2>Застереження</h2>
+  <div class="care"><h3>Якісне, не частотне</h3><p>Reddit зібрано пошуком по топ-постах (публічний архів Arctic Shift), бо reddit.com блокує прямий доступ. Це зріз формулювань і болів, а не репрезентативна частота — на відміну від повного YouTube-скрейпу.</p></div>
+  <div class="care"><h3>Перекіс у бік MFA</h3><p>257 із 327 постів — r/malefashionadvice (аудиторія вже зацікавлена стилем). «Жінки про чоловіків» і нішеві сабреддити менші за обсягом, але саме вони дають найновіші інсайти.</p></div>
+  <div class="care"><h3>Upvotes ≠ частка ринку</h3><p>↑ показує резонанс формулювання в спільноті. Топ-цитати = кандидати на A/B-тест хуків.</p></div>
+</div></section>
+
+<footer><div class="wrap">
+  Dressly · Performance Research · Male funnel VoC (Reddit) · 8 сабреддитів, 327 постів, джерело: Arctic Shift archive · 11.06.2026 · парна до YouTube-звіту
+</div></footer>
+
+<div class="toast" id="toast">Скопійовано ✓</div>
+
+<script>
+  new Chart(document.getElementById('subChart'), {
+    type:'bar',
+    data:{labels:['r/malefashionadvice','r/frugalmalefashion','r/findfashion','r/AskWomen','r/femalefashionadvice','r/bigmenfashionadvice','r/shortguys','r/AskMen'],
+      datasets:[{data:[257,33,11,9,7,5,4,1],
+        backgroundColor:['#ff5c4d','#ba7517','#1d9e75','#e0568f','#d4537e','#d85a30','#7f77dd','#888780'],
+        borderRadius:6, barThickness:20}]},
+    options:{indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.x+' постів'}}},
+      scales:{x:{grid:{color:'#2a2e37'},ticks:{color:'#a9adb8'}}, y:{grid:{display:false},ticks:{color:'#e9eaed',font:{size:12}}}}}
+  });
+
+  const toast=document.getElementById('toast'); let tmr;
+  document.querySelectorAll('.q .txt').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const t=el.innerText.replace(/^"|"$/g,'');
+      navigator.clipboard && navigator.clipboard.writeText(t);
+      toast.classList.add('on'); clearTimeout(tmr);
+      tmr=setTimeout(()=>toast.classList.remove('on'),1500);
+    });
+  });
+</script>
+</body>
+</html>
