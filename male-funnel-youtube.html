@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dressly · Male Funnel — YouTube VoC Research</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0e0f12; --surface:#16181d; --surface2:#1d2026; --line:#2a2e37;
+    --tx:#e9eaed; --tx2:#a9adb8; --tx3:#6f7480;
+    --accent:#c9a25e; --accent2:#7f77dd;
+    --skin:#d85a30; --over:#7f77dd; --buy:#1d9e75; --budget:#ba7517;
+    --conf:#d4537e; --trans:#378add; --age:#888780; --occ:#3b82f6; --comfort:#0fae8a;
+    --r:14px; --r2:10px;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  header.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-size:42px;line-height:1.1;font-weight:600;letter-spacing:-.02em;margin-bottom:14px}
+  h1 .thin{color:var(--tx2);font-weight:400}
+  .sub{font-size:18px;color:var(--tx2);max-width:680px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .chip{font-size:12.5px;color:var(--tx2);background:var(--surface);border:1px solid var(--line);padding:6px 13px;border-radius:999px}
+  .chip b{color:var(--tx)}
+
+  section{padding:52px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--tx3);font-weight:600;margin-bottom:12px}
+  h2{font-size:28px;font-weight:600;letter-spacing:-.01em;margin-bottom:10px}
+  h2 + .lede{font-size:17px;color:var(--tx2);max-width:720px;margin-bottom:30px}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+  .kpi .n{font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .kpi .l{font-size:13.5px;color:var(--tx2);margin-top:8px}
+  .kpi .n.accent{color:var(--accent)}
+
+  .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px 26px 18px}
+  .chart-wrap{position:relative;height:380px}
+
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+  th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);font-weight:600}
+  td:first-child{font-weight:600}
+  tr:hover td{background:var(--surface)}
+  .vol{color:var(--tx2);font-variant-numeric:tabular-nums}
+  .tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:6px;background:var(--surface2);color:var(--tx2)}
+
+  .insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .ins{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;border-top:3px solid var(--accent)}
+  .ins h3{font-size:17px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+  .ins .ic{font-size:20px}
+  .ins p{font-size:14.5px;color:var(--tx2)}
+
+  /* QUOTE BANK */
+  .angle{margin-bottom:42px}
+  .angle-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:6px}
+  .angle-badge{flex:none;width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:#0e0f12}
+  .angle-head h3{font-size:21px;font-weight:600;letter-spacing:-.01em}
+  .angle-head .vp{font-size:13px;color:var(--tx3);margin-top:2px}
+  .angle-note{font-size:14.5px;color:var(--tx2);margin:0 0 18px 56px}
+  .quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+  .q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);padding:18px 20px;position:relative;cursor:pointer;transition:border-color .15s,transform .15s}
+  .q:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .q .txt{font-family:var(--serif);font-size:16.5px;line-height:1.5;color:var(--tx);margin-bottom:14px}
+  .q .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:var(--tx3)}
+  .q .src{color:var(--tx3)}
+  .q .likes{display:inline-flex;align-items:center;gap:5px;color:var(--tx2);font-variant-numeric:tabular-nums}
+  .q .likes b{color:var(--accent)}
+  .q .copy{font-size:11px;color:var(--tx3);opacity:0;transition:opacity .15s}
+  .q:hover .copy{opacity:1}
+  .q.copied .copy{opacity:1;color:var(--buy)}
+  .usehint{display:inline-block;font-size:11.5px;color:var(--tx2);background:var(--surface2);padding:3px 9px;border-radius:6px;margin-top:10px}
+
+  /* test matrix */
+  .matrix{display:grid;gap:14px}
+  .mrow{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;display:grid;grid-template-columns:38px 1fr;gap:16px;align-items:start}
+  .mrow .num{width:38px;height:38px;border-radius:10px;background:var(--surface2);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px}
+  .mrow h3{font-size:17px;font-weight:600;margin-bottom:5px}
+  .mrow p{font-size:14.5px;color:var(--tx2)}
+  .mrow .hook{font-family:var(--serif);font-style:italic;color:var(--tx);font-size:15px}
+
+  .care{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--budget);border-radius:var(--r2);padding:18px 22px;margin-bottom:14px}
+  .care h3{font-size:15px;font-weight:600;margin-bottom:5px;color:var(--budget)}
+  .care p{font-size:14px;color:var(--tx2)}
+
+  footer{padding:40px 0 70px;color:var(--tx3);font-size:13px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--buy);color:#04342c;font-weight:600;font-size:13.5px;padding:11px 20px;border-radius:10px;opacity:0;transition:all .25s;pointer-events:none}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:600px){h1{font-size:32px}h2{font-size:23px}.angle-note{margin-left:0}}
+</style>
+</head>
+<body>
+
+<header class="hero"><div class="wrap">
+  <div class="kicker">Dressly · Performance Research</div>
+  <h1>Male funnel: <span class="thin">що 132 тисячі коментарів<br>на YouTube кажуть про чоловіків і одяг</span></h1>
+  <p class="sub">Вижимка voice-of-customer із 6 скрейпів YouTube по чоловічому стилю. Болі, бажання та банк дослівних цитат, готових до використання в креативах.</p>
+  <div class="meta-row">
+    <span class="chip"><b>132 218</b> коментарів</span>
+    <span class="chip"><b>140</b> відео</span>
+    <span class="chip"><b>6</b> воронок-запитів</span>
+    <span class="chip">Ринок: <b>US (EN)</b></span>
+    <span class="chip">Зібрано <b>11.06.2026</b></span>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="eyebrow">Масштаб даних</div>
+  <h2>Що в наборі</h2>
+  <p class="lede">Скрейпи зроблені по 6 пошукових запитах, що покривають весь чоловічий стиль-фанел — від широкого «man fashion» до нішевого «old money».</p>
+  <div class="kpis">
+    <div class="kpi"><div class="n">132 218</div><div class="l">Коментарів проаналізовано</div></div>
+    <div class="kpi"><div class="n accent">10 352</div><div class="l">Прямих питань (намір / потреба)</div></div>
+    <div class="kpi"><div class="n">3 859</div><div class="l">Згадок тіла / фігури / фіту</div></div>
+    <div class="kpi"><div class="n">1 229</div><div class="l">«Де купити / який бренд»</div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Топ болів</div>
+  <h2>Що болить аудиторії — за частотою</h2>
+  <p class="lede">Тіло й фігура — біль №1 із величезним відривом. Це не запит «покажи модний образ», а «що робити з тим тілом, що в мене є». Саме це вирішує AI-стиліст.</p>
+  <div class="chart-card">
+    <div class="chart-wrap"><canvas id="painChart" role="img" aria-label="Болі за кількістю коментарів"></canvas></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Розподіл по воронках</div>
+  <h2>Який запит який біль витягує</h2>
+  <p class="lede">Куди підставляти який креативний кут — за об'ємом трафіку та домінантним болем.</p>
+  <table>
+    <thead><tr><th>Воронка / запит</th><th>Об'єм</th><th>Біль №1</th><th>Куди використати</th></tr></thead>
+    <tbody>
+      <tr><td>men stylist</td><td class="vol">41 243</td><td><span class="tag">тіло / фіт</span></td><td>Найбільший трафік → тест body-type хуків</td></tr>
+      <tr><td>men GRWM</td><td class="vol">41 121</td><td><span class="tag">де купити</span></td><td>Shoppable-кут, молодша аудиторія</td></tr>
+      <tr><td>man fashion</td><td class="vol">34 120</td><td><span class="tag">тіло / привід</span></td><td>Широкий top-funnel, «back to office»</td></tr>
+      <tr><td>man style</td><td class="vol">12 173</td><td><span class="tag">skinny / short</span></td><td>Специфіка під типи фігур</td></tr>
+      <tr><td>old money</td><td class="vol">2 617</td><td><span class="tag">бюджет</span></td><td>«Лук без бюджету», найчистіший сегмент</td></tr>
+      <tr><td>men style types</td><td class="vol">944</td><td><span class="tag">типи фігур</span></td><td>Прямий запит на персональний розбір</td></tr>
+    </tbody>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Головні висновки</div>
+  <h2>Три речі, які варто запам'ятати</h2>
+  <div class="insights">
+    <div class="ins"><h3><span class="ic">🪞</span> Бар'єр — тіло, не стиль</h3><p>Чоловіки не знають, що пасує саме їхній фігурі. Поради «для skinny» бісять («там немає м'язів!»), bigger guys просять «зробіть відео про нас». AI, що підбирає під фігуру — найсильніший кут.</p></div>
+    <div class="ins"><h3><span class="ic">🔗</span> Розрив «де купити»</h3><p>1 229 «name of the pants, I want to buy them immediately». Блогери показують образ і не дають лінків. Dressly, що віддає shoppable-товари, закриває біль, який весь YouTube створює, але не вирішує.</p></div>
+    <div class="ins"><h3><span class="ic">🤝</span> Потреба в провіднику без осуду</h3><p>«I have no idea how to dress», «you're the only one who doesn't make me feel terrible». Це прямий попит на персонального стиліста — позиціонування «60-сек квіз, не треба розбиратись у моді».</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Банк цитат · клікни, щоб скопіювати</div>
+  <h2>Дослівна мова аудиторії під креативи</h2>
+  <p class="lede">Реальні коментарі (EN, як є) згруповані за креативними кутами. Число — лайки (= наскільки болить багатьом). Це готові хуки, підписи й «реакція в кадрі». Натисни на картку, щоб скопіювати текст.</p>
+
+  <!-- ANGLE 1 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--skin)">1</div>
+      <div><h3>«Одяг під твою фігуру»</h3><div class="vp">Кут: body-type · skinny / short / bigger guys · VP — персоналізація</div></div>
+    </div>
+    <p class="angle-note">Найболючіше й найрезонансніше. Окремі креативи під кожен тип фігури з дослівним болем у хуку.</p>
+    <div class="quotes" data-angle="body">
+      <div class="q"><div class="txt">"You don't wanna wear a fit t-shirt if you are skinny — it will make you look even more skinny. I know, because I'm skinny."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>599</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Why is every style tip for skinny guys about hiding your skinniness? That's so flawed."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>35</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"How on planet earth does the YouTube algorithm know that I'm skinny 💀"</div><div class="foot"><span class="src">men stylist</span><span class="likes">♥ <b>18</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Being a bigger guy (5'9", 260lbs) who lifts — fit matters. Oversized clothing is NOT your friend!"</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>5</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"I'm short and stocky and love the gym, but I don't like fitted clothing in fashion."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>351</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"What if you have a big belly but everything else is slim?"</div><div class="foot"><span class="src">men stylist</span><span class="likes">♥ <b>1</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"As a short guy, I can't wear anything loose at the ankle 🥲"</div><div class="foot"><span class="src">men stylist</span><span class="likes">♥ <b>2</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"I'd love a video on how to dress for men with an 'oval' body type."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>—</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: hook перших 2 сек · «POV: every style video ignores your body type»</span>
+  </div>
+
+  <!-- ANGLE 2 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--over)">2</div>
+      <div><h3>«Без поняття, з чого почати»</h3><div class="vp">Кут: розгубленість / no-judgment · VP — простота, провідник</div></div>
+    </div>
+    <p class="angle-note">Прямий попит на стиліста. Емоційний кут «не змушуємо почуватись тупо» знімає сором як бар'єр на вході у квіз.</p>
+    <div class="quotes" data-angle="over">
+      <div class="q"><div class="txt">"I'm almost 30 and I have no idea how to dress."</div><div class="foot"><span class="src">men stylist</span><span class="likes">♥ <b>84</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"You're the only fashion guy who doesn't make me feel terrible that I don't know what I'm doing yet."</div><div class="foot"><span class="src">men stylist</span><span class="likes">♥ <b>18</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Bro can put an outfit together while you struggle to put your life together."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>64</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"My problem is I don't know WHERE to shop. Mall stores are stupid expensive, department stores look cheap."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>—</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"I really wanna think the classic look is what I want, but I don't know how to start."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>—</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"As someone with no sense of style, this opened my mind to try things out."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>—</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: проблемний хук → demo квіза як рішення</span>
+  </div>
+
+  <!-- ANGLE 3 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--buy)">3</div>
+      <div><h3>«Де це купити?!»</h3><div class="vp">Кут: shoppable / намір · VP — конкретні товари з лінками</div></div>
+    </div>
+    <p class="angle-note">Чистий намір купити, який блогери фруструють. Demo: фото речі → Dressly видає той самий лук із посиланнями.</p>
+    <div class="quotes" data-angle="buy">
+      <div class="q"><div class="txt">"What is the name of these pants please — I want to buy them immediately 😊"</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>11</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Where can I buy those trousers?"</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>25</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Could we get a list of where to get each product from? Thank you!"</div><div class="foot"><span class="src">old money</span><span class="likes">♥ <b>10</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Name of pants ??? Pls guys"</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>17</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Ok I need to know the name of those shoes."</div><div class="foot"><span class="src">men GRWM</span><span class="likes">♥ <b>3</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: «blogger won't tell you where — Dressly will» · UGC «I found the exact pieces»</span>
+  </div>
+
+  <!-- ANGLE 4 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--budget)">4</div>
+      <div><h3>«Стиль на бюджеті»</h3><div class="vp">Кут: бюджет · VP — образ дешевше, ніж здається · топ для old money</div></div>
+    </div>
+    <p class="angle-note">Сильне роздратування від «affordable → $300». Фільтр ціни у видачі. В old money воронці бюджет — біль №1.</p>
+    <div class="quotes" data-angle="budget">
+      <div class="q"><div class="txt">"Could you make a 'style on a budget' video — best items for under $100? That would be awesome."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>1322</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"'Affordable' — proceeds to promote a $300 jacket."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>24</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"I'm 43... still dressing like I'm broke and in college. Thanks for the grown-up man advice!"</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>478</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Finding clothing that fits good, looks good AND is affordable is an extreme challenge!"</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>13</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Can I pull this off on a budget 😂😂😭"</div><div class="foot"><span class="src">old money</span><span class="likes">♥ <b>2</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: «old money look без old money бюджету» · price-filter demo</span>
+  </div>
+
+  <!-- ANGLE 5 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--conf)">5</div>
+      <div><h3>«Тебе все одно оцінюють»</h3><div class="vp">Кут: впевненість / сприйняття · VP — повага, перше враження</div></div>
+    </div>
+    <p class="angle-note">Стиль = впевненість і те, як тебе бачать. Працює на емоцію статусу й самоповаги.</p>
+    <div class="quotes" data-angle="conf">
+      <div class="q"><div class="txt">"Regardless of whether you say you don't care what others think — you WILL be judged."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>3</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Dressing well is such a confidence boost; shabby dressing is such an eyesore."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>6</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"He dresses better than me and I am wildly insecure about the way others perceive me."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>2</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"How you dress reflects how much you respect yourself."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>2</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: статусний хук для 25–40 · «dress like you respect yourself»</span>
+  </div>
+
+  <!-- ANGLE 6 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--comfort)">6</div>
+      <div><h3>«Це змінило моє життя»</h3><div class="vp">Кут: трансформація / glow-up · VP — результат, соц-доказ</div></div>
+    </div>
+    <p class="angle-note">Готові скрипти для UGC-тестимоніалів «до/після». Емоція переродження.</p>
+    <div class="quotes" data-angle="trans">
+      <div class="q"><div class="txt">"I started dressing like this and everyone was like 'damn, where you going?' People switch up when they see you doing better for yourself."</div><div class="foot"><span class="src">old money</span><span class="likes">♥ <b>17</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"It's really helping me transform my fits into something more mature."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>59</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"I just want to transform my look — I've been in a boy's look and now want the man look."</div><div class="foot"><span class="src">men GRWM</span><span class="likes">♥ <b>—</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Since I started dressing nice, I feel good."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>2</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: UGC testimonial · before/after reveal</span>
+  </div>
+
+  <!-- ANGLE 7 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--occ)">7</div>
+      <div><h3>«Що вдягти на ___»</h3><div class="vp">Кут: привід · робота / побачення / весілля · VP — капсула + контекст</div></div>
+    </div>
+    <p class="angle-note">Квіз питає привід → персональна воронка. «Back to office» + капсульний гардероб — готовий offer для 30+.</p>
+    <div class="quotes" data-angle="occ">
+      <div class="q"><div class="txt">"Me at 3 AM: tomorrow's my first day in college, what should I wear?"</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>4477</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"I'm going back to the office after being remote for 4 years — thinking capsule for work. This just motivated me."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>414</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"I'm 32 and this is the year I upgrade my entire wardrobe."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>25</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"What if I'm not always on my way to a wedding?"</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>7</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: occasion-based хуки · seasonal «new job / new you»</span>
+  </div>
+
+  <!-- ANGLE 8 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--age)">8</div>
+      <div><h3>«У моєму віці»</h3><div class="vp">Кут: 40+ / зрілі чоловіки · VP — age-appropriate + комфорт</div></div>
+    </div>
+    <p class="angle-note">Менший об'єм, але чіткий сегмент: комфорт + «не виглядати ні неохайно, ні як підліток».</p>
+    <div class="quotes" data-angle="age">
+      <div class="q"><div class="txt">"I'm 40 and suddenly want to dress better after a lifetime of sweatsuits, hoodies and cargo shorts. This is a start."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>2</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"The older you get (56), the more you like comfort. Clothing that fits, looks good AND is affordable is an extreme challenge."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>13</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"So many older men appear in public dressed embarrassingly sloppy. How you dress reflects how you feel about yourself."</div><div class="foot"><span class="src">man style</span><span class="likes">♥ <b>2</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: окрема age-targeted кампанія 40+</span>
+  </div>
+
+  <!-- ANGLE 9 -->
+  <div class="angle">
+    <div class="angle-head">
+      <div class="angle-badge" style="background:var(--comfort)">9</div>
+      <div><h3>«Комфорт &gt; мода»</h3><div class="vp">Кут: тренд комфорту · VP — добре виглядати без зусиль</div></div>
+    </div>
+    <p class="angle-note">Великий зсув: skinny виходить, wider fit + комфорт заходить. Не продавай «модність» — продавай «легко й зручно».</p>
+    <div class="quotes" data-angle="comfort">
+      <div class="q"><div class="txt">"No style ❌ Yes comfort ✔️"</div><div class="foot"><span class="src">men stylist</span><span class="likes">♥ <b>19149</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"Once you start wearing wider-fit pants, you'll never wear skinny jeans again — they're just so comfy."</div><div class="foot"><span class="src">men stylist</span><span class="likes">♥ <b>2238</b></span><span class="copy">копіювати</span></div></div>
+      <div class="q"><div class="txt">"I refuse to leave the house wearing anything I don't feel comfortable in."</div><div class="foot"><span class="src">man fashion</span><span class="likes">♥ <b>—</b></span><span class="copy">копіювати</span></div></div>
+    </div>
+    <span class="usehint">Use as: «look good without trying / without giving up comfort»</span>
+  </div>
+
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Дія</div>
+  <h2>Матриця тестів креативів</h2>
+  <p class="lede">П'ять кутів, готових до брифу — кожен із дослівним хуком із банку вище.</p>
+  <div class="matrix">
+    <div class="mrow"><div class="num">1</div><div><h3>Body-type splits</h3><p>3 окремі креативи: skinny / short / «карга + живіт». Квіз питає тип фігури першим.</p><p class="hook">"Why is every style tip for skinny guys about hiding it?"</p></div></div>
+    <div class="mrow"><div class="num">2</div><div><h3>Where-to-buy demo</h3><p>Фото речі/інфлюенсера → Dressly видає той самий лук із лінками.</p><p class="hook">"The blogger won't tell you where. Dressly will."</p></div></div>
+    <div class="mrow"><div class="num">3</div><div><h3>Budget angle</h3><p>«Стиль під $100» / «old money look без бюджету» з фільтром ціни.</p><p class="hook">"'Affordable' — then shows a $300 jacket. Not here."</p></div></div>
+    <div class="mrow"><div class="num">4</div><div><h3>No-judgment quiz</h3><p>Емоційний кут під 25–35 розгублених. Demo 60-секундного квіза.</p><p class="hook">"You don't have to understand fashion. Just answer 6 questions."</p></div></div>
+    <div class="mrow"><div class="num">5</div><div><h3>Occasion / back to office</h3><p>Привід → персональна капсула як offer.</p><p class="hook">"Back to the office after 4 years remote? Let's build your capsule."</p></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Методологія та застереження</div>
+  <h2>Як читати ці дані</h2>
+  <div class="care"><h3>Відфільтрований шум</h3><p>Віральне мем-відео про шрифти (Wisdom Kaye, 710k лайків — «comic sans») і чистий makeup-контент перекошували частоти слів. У фінальні цифри й цитати вони не входять.</p></div>
+  <div class="care"><h3>Астротурф-бренди</h3><p>Багато підозріло однакових згадок «MARCO MONTI», «Secrets of Exquisite Man», «Terdanta» — це засіяний спам, не органіка. Виключено із сигналу попиту.</p></div>
+  <div class="care"><h3>Лайки ≠ репрезентативність</h3><p>Число лайків показує резонанс конкретного формулювання, а не частку аудиторії. Топ-цитати = найкращі кандидати на A/B-тест хуків, не готова стратегія.</p></div>
+</div></section>
+
+<footer><div class="wrap">
+  Dressly · Performance Research · Male funnel VoC · 6 YouTube-скрейпів (man fashion, man style, men GRWM, men style types, men stylist, old money) · 132 218 коментарів · 11.06.2026
+</div></footer>
+
+<div class="toast" id="toast">Скопійовано ✓</div>
+
+<script>
+  const ctx = document.getElementById('painChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Тіло / фігура / фіт','Привід (робота, дата…)','Бюджет / ціна','Де купити / бренд','Розгубленість «no style»','Гардероб / капсула','Невпевненість','Поєднання кольорів','Вік 40+'],
+      datasets: [{
+        data: [3859,3006,1966,1229,1116,708,556,443,273],
+        backgroundColor: ['#d85a30','#ef9f27','#ba7517','#1d9e75','#7f77dd','#9b94e8','#d4537e','#3b82f6','#888780'],
+        borderRadius: 6, barThickness: 26
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display:false }, tooltip: { callbacks: { label: c => c.parsed.x.toLocaleString() + ' коментарів' } } },
+      scales: {
+        x: { grid: { color:'#2a2e37' }, ticks: { color:'#a9adb8', callback: v => v.toLocaleString() } },
+        y: { grid: { display:false }, ticks: { color:'#e9eaed', font:{size:13} } }
+      }
+    }
+  });
+
+  const toast = document.getElementById('toast');
+  let tmr;
+  document.querySelectorAll('.q').forEach(q => {
+    q.addEventListener('click', () => {
+      const t = q.querySelector('.txt').innerText.replace(/^"|"$/g,'');
+      navigator.clipboard && navigator.clipboard.writeText(t);
+      q.classList.add('copied');
+      q.querySelector('.copy').innerText = 'скопійовано ✓';
+      toast.classList.add('on');
+      clearTimeout(tmr);
+      tmr = setTimeout(() => { toast.classList.remove('on'); q.classList.remove('copied'); q.querySelector('.copy').innerText='копіювати'; }, 1600);
+    });
+  });
+</script>
+</body>
+</html>
